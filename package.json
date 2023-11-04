@@ -1,0 +1,32 @@
+{
+  "name": "innovate",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "crypto-js": "^4.2.0",
+    "framer-motion": "^10.16.4",
+    "jsonwebtoken": "^9.0.2",
+    "ldrs": "^1.0.1",
+    "mongoose": "^8.0.0",
+    "next": "13.5.4",
+    "nodemailer": "^6.9.7",
+    "react": "^18",
+    "react-dom": "^18",
+    "react-hot-toast": "^2.4.1",
+    "react-icons": "^4.11.0",
+    "react-top-loading-bar": "^2.3.1"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10",
+    "eslint": "^8",
+    "eslint-config-next": "13.5.4",
+    "postcss": "^8",
+    "tailwindcss": "^3"
+  }
+}
