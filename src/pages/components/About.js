@@ -5,7 +5,7 @@ import { motion } from 'framer-motion'
 const About = () => {
   return (
     <div className=''>
-            <section className="flex items-center  font-poppins bg-[conic-gradient(at_bottom_right,_var(--tw-gradient-stops))] from-slate-900 via-purple-900 to-slate-900">
+            <section className="flex items-center  font-poppins ">
         <div className="justify-center flex-1 max-w-6xl py-4 mx-auto lg:py-6 md:px-6">
             <motion.div className="px-4 mb-10 md:text-center md:mb-20" initial={{y:200,opacity:0}} whileInView={{y:0,opacity:1}}
             transition={{duration:1}}
