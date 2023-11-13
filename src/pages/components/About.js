@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 
 const About = () => {
   return (
-    <div className=''>
+    <div className='bg-gradient-to-t from-slate-900 via-purple-900 to-gray-900'>
             <section className="flex items-center  font-poppins ">
         <div className="justify-center flex-1 max-w-6xl py-4 mx-auto lg:py-6 md:px-6">
             <motion.div className="px-4 mb-10 md:text-center md:mb-20" initial={{y:200,opacity:0}} whileInView={{y:0,opacity:1}}
@@ -74,7 +74,7 @@ const About = () => {
                         </li>
                     </ul>
                     <a href="#"
-                        className="px-4 py-3 text-white bg-yellow-600 transition-all transform  border-yellow-500 hover:bg-yellow-600 dark:border-yellow-400  hover:border-yellow-800 dark:text-yellow-400 hover:text-gray-100 rounded">
+                        className="px-4 py-3 text-white bg-purple-600 transition-all transform   hover:bg-purple-800     hover:text-gray-100 rounded">
                         Discover more
                     </a>
                 </motion.div>
