@@ -38,8 +38,21 @@ const Signup = () => {
         setEmailt(false);
     }
     const handleSubmit = async (e) => {
+        const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
         if(name===''||email===''||password===''){
             toast.error('Please fill all the fields');
+        }
+        else if(phone.length!==10){
+            toast.error('Please enter a valid phone number');
+        }
+        else if(password.length<6){
+      toast.error('Password must be atleast 6 characters long');
+        }
+        else if(!email.includes('@')||!email.includes('.')){
+            toast.error('Please enter a valid email');
+        }
+        else if(!specialChars.test(password)){
+            toast.error('Password must contain atleast one special character.');
         }
         else{
             setLoading(true);
@@ -78,7 +91,7 @@ const Signup = () => {
         <img src="/login.gif" alt=""  className='w-[100vw] h-[100vh] relative bg-cover'/>
 
      {!loading?<motion.section className='absolute top-36'  drag dragConstraints={{left:0,right:6,top:4,bottom:4}}>
-     <div className="flex flex-col md:w-[50vw] md:h-[65vh] bg-gray-900 text-gray-200 font-mono lg:w-[60vw] lg:h-[65vh] sm:w-[90vw] sm:h-auto w-[90vw] h-auto">
+     <div className="flex flex-col md:w-[50vw] md:h-auto bg-gray-900 text-gray-200 font-mono lg:w-[60vw] lg:h-auto sm:w-[90vw] sm:h-auto w-[90vw] h-auto">
     <div className="flex items-center h-10 px-4 bg-gray-800">
         <div className="h-3 w-3 mr-2 rounded-full bg-red-500"></div>
         <div className="h-3 w-3 mr-2 rounded-full bg-yellow-500"></div>
@@ -86,8 +99,10 @@ const Signup = () => {
     </div>
 
     <div className="flex-1 p-4">
+   
         <h1 className='my-2 mx-2'>To start, could you give us your few details?</h1>
         <motion.div className="flex my-2" initial={{opacity:0}} animate={{opacity:1}} transition={{duration:1}}>
+          
             <div className="mr-2">&gt; <span className='text-green-600'>~</span></div>
             Name :  <input type="text" name="name" value={name} onChange={handleChange} className="flex-1 bg-gray-800 focus:outline-none" placeholder="Enter Your Name" onKeyDown={(e)=>{
                 if(e.key === 'Enter'){
@@ -168,10 +183,9 @@ const Signup = () => {
                 <motion.button className='px-4 py-2 text-white font-semibold bg-transparent border-gray-200 border-2 rounded mx-2' whileHover={{scale:1.1}} whileTap={{scale:0.9,rotate:2}} onClick={Restart}>Restart</motion.button>
             </div>
         </div>
+      
                 </motion.div>
             }
-       
-
     </div>
 </div>
 <h1 className='text-center my-4'>Have an account?<Link href={"/Login"} className='text-green-400'> Login Now !</Link></h1>

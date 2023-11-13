@@ -10,7 +10,7 @@ const Navbar = () => {
   }
   return (
    <>
-   <style jsx global>
+   <style jsx >
 {
   `
   @import url('https://fonts.googleapis.com/css2?family=Kanit&display=swap')

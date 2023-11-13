@@ -1,94 +1,82 @@
 /* eslint-disable react/jsx-no-duplicate-props */
 import React from 'react'
 import { motion } from 'framer-motion'
-import { inView } from 'framer-motion'
+
 const About = () => {
   return (
     <div className=''>
-        <section className="py-10 lg:py-20 bg-black font-poppins ">
-        <div className="max-w-6xl py-4 mx-auto lg:py-6 md:px-6">
-            <div className="flex flex-wrap ">
-                <motion.div className="w-full px-4 mb-10 lg:w-1/2 lg:mb-0 " initial={{opacity:0,x:-500}} whileInView={{opacity:1,x:0}} transition={{duration:1}}>
-                    <div className="lg:max-w-md">
-                        <div className="px-4 pl-4 mb-6 border-l-4 border-yellow-500">
-                            <span className="text-sm uppercase text-gray-400">Who we are?</span>
-                            <h1 className="mt-2 text-3xl font-black text-gray-700 md:text-5xl dark:text-gray-300">
-                                About Us
-                            </h1>
-                        </div>
-                        <p className="px-4 mb-10 text-base leading-7 text-gray-400">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam Lorem ipsum dolor sit
-                            amet.
-                        </p>
-                        <div className="flex flex-wrap items-center">
-                            <div className="w-full px-4 mb-6 sm:w-1/2 md:w-1/2 lg:mb-6">
-                                <div className="p-6 bg-gray-900 rounded">
-                                    <span className="text-yellow-500 dark:text-yellow-400">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" className="w-10 h-10"
-                                            fill="currentColor"  viewBox="0 0 16 16">
-                                            <path
-                                                d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5z" />
-                                            <path
-                                                d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5L9.5 0zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z" />
-                                        </svg>
-                                    </span>
-                                    <p className="mt-4 mb-2 text-3xl font-bold text-gray-400">2097
-                                    </p>
-                                    <h2 className="text-sm text-gray-400">Projects and Plans</h2>
-                                </div>
-                            </div>
-                            <div className="w-full px-4 mb-6 sm:w-1/2 md:w-1/2 lg:mb-6">
-                                <div className="p-6 bg-gray-900 rounded-md">
-                                    <span className="text-yellow-500 dark:text-yellow-400">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" className="w-10 h-10"
-                                            fill="currentColor" viewBox="0 0 16 16">
-                                            <path
-                                                d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
-                                            <path fillRule="evenodd"
-                                                d="M5.216 14A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216z" />
-                                            <path d="M4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z" />
-                                        </svg>
-                                    </span>
-                                    <p className="mt-4 mb-2 text-3xl font-bold text-gray-400">3,590
-                                    </p>
-                                    <h2 className="text-sm text-gray-400">Helped people</h2>
-                                </div>
-                            </div>
-                            <div className="w-full px-4 mb-6 sm:w-1/2 md:w-1/2 lg:mb-6">
-                                <div className="p-6 bg-gray-900 rounded-md">
-                                    <span className="text-yellow-500 dark:text-yellow-400">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" className="w-10 h-10"
-                                            fill="currentColor"  viewBox="0 0 16 16">
-                                            <path
-                                                d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
-                                        </svg>
-                                    </span>
-                                    <p className="mt-4 mb-2 text-3xl font-bold text-gray-400">74
-                                    </p>
-                                    <h2 className="text-sm text-gray-400">Volunteer</h2>
-                                </div>
-                            </div>
-                            <div className="w-full px-4 mb-6 sm:w-1/2 md:w-1/2 lg:mb-6">
-                                <div className="p-6 bg-gray-900 rounded-md">
-                                    <span className="text-yellow-500 dark:text-yellow-400">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" className="w-10 h-10"
-                                            fill="currentColor"  viewBox="0 0 16 16">
-                                            <path
-                                                d="M6 .5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1H9v1.07a7.001 7.001 0 0 1 3.274 12.474l.601.602a.5.5 0 0 1-.707.708l-.746-.746A6.97 6.97 0 0 1 8 16a6.97 6.97 0 0 1-3.422-.892l-.746.746a.5.5 0 0 1-.707-.708l.602-.602A7.001 7.001 0 0 1 7 2.07V1h-.5A.5.5 0 0 1 6 .5zm2.5 5a.5.5 0 0 0-1 0v3.362l-1.429 2.38a.5.5 0 1 0 .858.515l1.5-2.5A.5.5 0 0 0 8.5 9V5.5zM.86 5.387A2.5 2.5 0 1 1 4.387 1.86 8.035 8.035 0 0 0 .86 5.387zM11.613 1.86a2.5 2.5 0 1 1 3.527 3.527 8.035 8.035 0 0 0-3.527-3.527z" />
-                                        </svg>
-                                    </span>
-                                    <p className="mt-4 mb-2 text-3xl font-bold text-gray-400">100
-                                    </p>
-                                    <h2 className="text-sm text-gray-400">Timing</h2>
-                                </div>
-                            </div>
-                        </div>
+            <section className="flex items-center  font-poppins bg-[conic-gradient(at_bottom_right,_var(--tw-gradient-stops))] from-slate-900 via-purple-900 to-slate-900">
+        <div className="justify-center flex-1 max-w-6xl py-4 mx-auto lg:py-6 md:px-6">
+            <motion.div className="px-4 mb-10 md:text-center md:mb-20" initial={{y:200,opacity:0}} whileInView={{y:0,opacity:1}}
+            transition={{duration:1}}
+            >
+                <p className="mb-2 text-lg font-semibold text-yellow-500 dark:text-gray-400">
+                    About Us
+                </p>
+                <h2 className="pb-2 text-2xl font-bold md:text-4xl text-gray-300">
+                    What we do
+                </h2>
+                <div className="flex w-32 mt-1 mb-6 overflow-hidden rounded md:mx-auto md:mb-14">
+                    <div className="flex-1 h-2 bg-yellow-200">
                     </div>
+                    <div className="flex-1 h-2 bg-yellow-400">
+                    </div>
+                    <div className="flex-1 h-2 bg-yellow-300">
+                    </div>
+                </div>
+            </motion.div>
+            <div className="flex flex-wrap ">
+                <motion.div className="w-full px-4 mb-10 lg:w-1/2 lg:mb-0" initial={{x:-200,opacity:0}} whileInView={{x:0,opacity:1}} 
+                transition={{duration:1}}
+                >
+                    <img src="https://wemakedevs.org/static/media/aboutus.02f2915b9ae736e9ef8a.png" alt=""
+                        className="relative z-40 object-cover w-full h-96" />
                 </motion.div>
-                <motion.div className="w-full px-4 mb-10 lg:w-1/2 lg:mb-0" initial={{opacity:0,x:500}} whileInView={{opacity:1,x:0}} transition={{duration:1}}>
-                    <img src="https://i.postimg.cc/9MW8G96J/pexels-the-coach-space-2977565.jpg" alt=""
-                        className="relative z-40 object-cover w-full h-full rounded"/>
+                <motion.div className="w-full px-4 mb-10 lg:w-1/2 lg:mb-0 " initial={{x:200,opacity:0}} whileInView={{x:0,opacity:1}} 
+                transition={{duration:1}}>
+                    <h2
+                        className="py-3 pl-2 mb-4 text-2xl font-bold  border-l-4 border-yellow-500 dark:border-yellow-400 text-gray-200">
+                        We are providing a better facility
+                    </h2>
+                    <p className="mb-4 text-base leading-7 text-gray-200">
+                    We believe that everyone, irrespective of their college or branch, technical or non-technical background can make it big. WeMakeDevs is an initiative built on this thought.
+                    </p>
+                    <ul className="mb-10">
+                        <li className="flex items-center mb-4 text-base text-gray-200">
+                            <span className="mr-3 text-yellow-500 dark:text-yellow-400 ">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                    className="w-5 h-5 bi bi-patch-check-fill" viewBox="0 0 16 16">
+                                    <path
+                                        d="M10.067.87a2.89 2.89 0 0 0-4.134 0l-.622.638-.89-.011a2.89 2.89 0 0 0-2.924 2.924l.01.89-.636.622a2.89 2.89 0 0 0 0 4.134l.637.622-.011.89a2.89 2.89 0 0 0 2.924 2.924l.89-.01.622.636a2.89 2.89 0 0 0 4.134 0l.622-.637.89.011a2.89 2.89 0 0 0 2.924-2.924l-.01-.89.636-.622a2.89 2.89 0 0 0 0-4.134l-.637-.622.011-.89a2.89 2.89 0 0 0-2.924-2.924l-.89.01-.622-.636zm.287 5.984-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7 8.793l2.646-2.647a.5.5 0 0 1 .708.708z" />
+                                </svg>
+                            </span>
+                            Get expert guidance with career, Open Source, and internships, jobs around the world.
+                        </li>
+                        <li className="flex items-center mb-4 text-base text-gray-200">
+                            <span className="mr-3 text-yellow-500 dark:text-yellow-400">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                    className="w-5 h-5 bi bi-patch-check-fill" viewBox="0 0 16 16">
+                                    <path
+                                        d="M10.067.87a2.89 2.89 0 0 0-4.134 0l-.622.638-.89-.011a2.89 2.89 0 0 0-2.924 2.924l.01.89-.636.622a2.89 2.89 0 0 0 0 4.134l.637.622-.011.89a2.89 2.89 0 0 0 2.924 2.924l.89-.01.622.636a2.89 2.89 0 0 0 4.134 0l.622-.637.89.011a2.89 2.89 0 0 0 2.924-2.924l-.01-.89.636-.622a2.89 2.89 0 0 0 0-4.134l-.637-.622.011-.89a2.89 2.89 0 0 0-2.924-2.924l-.89.01-.622-.636zm.287 5.984-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7 8.793l2.646-2.647a.5.5 0 0 1 .708.708z" />
+                                </svg>
+                            </span>
+                            We are also having various events weekly or monthly. Do participate in those events to make your skills enhance.
+                        </li>
+                        <li className="flex items-center mb-4 text-base text-gray-200">
+                            <span className="mr-3 text-yellow-500 dark:text-yellow-400 ">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                    className="w-5 h-5 bi bi-patch-check-fill" viewBox="0 0 16 16">
+                                    <path
+                                        d="M10.067.87a2.89 2.89 0 0 0-4.134 0l-.622.638-.89-.011a2.89 2.89 0 0 0-2.924 2.924l.01.89-.636.622a2.89 2.89 0 0 0 0 4.134l.637.622-.011.89a2.89 2.89 0 0 0 2.924 2.924l.89-.01.622.636a2.89 2.89 0 0 0 4.134 0l.622-.637.89.011a2.89 2.89 0 0 0 2.924-2.924l-.01-.89.636-.622a2.89 2.89 0 0 0 0-4.134l-.637-.622.011-.89a2.89 2.89 0 0 0-2.924-2.924l-.89.01-.622-.636zm.287 5.984-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7 8.793l2.646-2.647a.5.5 0 0 1 .708.708z" />
+                                </svg>
+                            </span>
+                            We provide hands-on training, mentorship for FREE and have an inclusive community.
+                        </li>
+                    </ul>
+                    <a href="#"
+                        className="px-4 py-3 text-white bg-yellow-600 transition-all transform  border-yellow-500 hover:bg-yellow-600 dark:border-yellow-400  hover:border-yellow-800 dark:text-yellow-400 hover:text-gray-100 rounded">
+                        Discover more
+                    </a>
                 </motion.div>
             </div>
         </div>
