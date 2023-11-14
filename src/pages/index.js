@@ -1,9 +1,13 @@
 import React from 'react'
-import Hero from './components/Hero';
+// import Hero from './components/Hero';
 import Hero1 from './components/Hero1';
 import About from './components/About';
 import Stats from './components/Stats';
 import Events from './components/Events';
+import Sponsor from './components/Sponsor';
+import Testimonials from './components/Testimonials';
+import Mentorship from './components/Mentorship';
+import Newsroom from './components/Newsroom';
 const Index = () => {
   // https://res.cloudinary.com/dst73auvn/image/upload/v1699904650/giphy_dmein5.gif
   // https://res.cloudinary.com/dst73auvn/image/upload/v1699904652/1_NuTQuFZpT8RxNEtkSh3W5A_u4fodg.gif
@@ -15,6 +19,10 @@ const Index = () => {
   <About/>
   <Stats/>
   <Events/>
+  <Sponsor/>
+  <Testimonials/>
+  <Mentorship/>
+  <Newsroom/>
   </div>
   </>
   )
