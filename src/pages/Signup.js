@@ -108,9 +108,6 @@ const Signup = () => {
                 if(e.key === 'Enter'){
                     setEmailt(true);
                 }
-                else{
-                    setEmailt(false);
-                }
             }}/>
              </motion.div>
             {emailt&&
@@ -124,9 +121,6 @@ const Signup = () => {
                  Email : <input type="text" name="email" value={email} onChange={handleChange} className="flex-1 bg-gray-800 focus:outline-none" placeholder="Enter Your Email" onKeyDown={(e)=>{
                      if(e.key === 'Enter'){
                          setnum(true);
-                     }
-                     else{
-                            setnum(false);
                      }
                  }} autoFocus/>
                  </div>
@@ -144,9 +138,6 @@ const Signup = () => {
                      if(e.key === 'Enter'){
                          setPasswordt(true);
                      }
-                     else{
-                            setPasswordt(false);
-                     }
                  }} autoFocus/>
                  </div>
                  </motion.div>
@@ -161,9 +152,6 @@ const Signup = () => {
                  Password : <input type="password" name="password" value={password} onChange={handleChange} className="flex-1 bg-gray-800 focus:outline-none" placeholder="Enter Your Password" onKeyDown={(e)=>{
                      if(e.key === 'Enter'){
                          setResult(true);
-                     }
-                     else{
-                            setResult(false);
                      }
                  }} autoFocus/>
                  </div>

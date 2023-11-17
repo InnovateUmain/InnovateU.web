@@ -144,7 +144,6 @@ const Navbar = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ type: "spring", stiffness: 100 }}
               >
-                <Link href={"/components/About"}>
                   <motion.li
                     className=" list-none px-3 py-2 mx-3 mt-2  transition-colors duration-300 transform rounded-md lg:mt-0 text-white  navfont "
                     whileTap={{ scale: 0.9, rotate: 1 }}
@@ -156,7 +155,7 @@ const Navbar = () => {
                       setData2(false);
                     }}
                   >
-                    About
+                    <a href="#about">About</a>
                     {data2 && (
                       <motion.div
                         className="h-1 bg-purple-600 rounded-full "
@@ -166,7 +165,27 @@ const Navbar = () => {
                       ></motion.div>
                     )}
                   </motion.li>
-                </Link>
+                  <motion.li
+                    className=" list-none px-3 py-2 mx-3 mt-2  transition-colors duration-300 transform rounded-md lg:mt-0 text-white  navfont "
+                    whileTap={{ scale: 0.9, rotate: 1 }}
+                    transition={{ type: "spring", stiffness: 400 }}
+                    onMouseEnter={() => {
+                      setData6(true);
+                    }}
+                    onMouseLeave={() => {
+                      setData6(false);
+                    }}
+                  >
+                    <a href="#event">Events</a>
+                    {data6 && (
+                      <motion.div
+                        className="h-1 bg-purple-600 rounded-full "
+                        initial={{ width: 0, opacity: 0 }}
+                        animate={{ width: 30, opacity: 1 }}
+                        transition={{ type: "spring", stiffness: 250 }}
+                      ></motion.div>
+                    )}
+                  </motion.li>
                 <Link href={"/"}>
                   <motion.li
                     className="list-none px-3 py-2 mx-3 mt-2 transition-colors duration-300 transform rounded-md lg:mt-0 text-white  navfont"
@@ -179,7 +198,8 @@ const Navbar = () => {
                       setData1(false);
                     }}
                   >
-                    Our Speakers
+                    <a href=""> Our Speakers</a>
+                   
                     {data1 && (
                       <motion.div
                         className="h-1 bg-purple-600 rounded-full "
@@ -214,7 +234,7 @@ const Navbar = () => {
                     )}
                   </motion.li>
                 </Link>
-                <Link href={"/"}>
+               
                   <motion.li
                     className="px-3 py-2 mx-3 mt-2  transition-colors duration-300 transform rounded-md lg:mt-0 text-white  navfont list-none"
                     whileTap={{ scale: 0.9, rotate: 1 }}
@@ -226,7 +246,7 @@ const Navbar = () => {
                       setData4(false);
                     }}
                   >
-                    News Room
+                   <a href={"#newsroom"}> News Room</a>
                     {data4 && (
                       <motion.div
                         className="h-1 bg-purple-600 rounded-full "
@@ -236,8 +256,8 @@ const Navbar = () => {
                       ></motion.div>
                     )}
                   </motion.li>
-                </Link>
-                <Link href={"/"}>
+               
+                <Link href={"/Signup"}>
                   <motion.li
                     className="px-3 py-2 mx-3 mt-2  transition-colors duration-300 transform rounded-md lg:mt-0 text-white navfont list-none"
                     whileTap={{ scale: 0.9, rotate: 1 }}

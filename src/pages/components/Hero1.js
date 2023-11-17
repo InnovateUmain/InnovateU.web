@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 import { BsFillCalendarCheckFill} from 'react-icons/bs';
 import { RiTwitterXLine} from 'react-icons/ri';
 import { FaMapLocationDot,FaLinkedinIn,FaInstagram } from 'react-icons/fa6';
@@ -70,7 +71,7 @@ const Hero1 = () => {
 
               </div>
               <div className="px-8 sm:items-center sm:justify-center sm:px-0 sm:space-x-5 sm:flex mt-6">
-                 <motion.button
+                <Link href={"/components/Hero"}> <motion.button
                 
                   className="inline-flex  items-center justify-center px-8 py-2 text-lg text-white transition-all duration-200 bg-purple-600 border-2 border-none sm:w-auto rounded-full  dt font-bold mx-2 my-2"
                   whileHover={{ scale: 1.1 }}
@@ -79,6 +80,7 @@ const Hero1 = () => {
                 >
                   Events &gt;
                 </motion.button>
+                </Link>
                 <motion.button
                 
                 className="inline-flex  items-center justify-center px-8 py-2 text-lg text-white transition-all duration-200 bg-purple-600 border-2 border-none sm:w-auto rounded-full  dt font-bold mx-2 my-2"

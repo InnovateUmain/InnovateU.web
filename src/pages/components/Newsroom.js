@@ -2,7 +2,7 @@ import React from 'react'
 
 const Newsroom = () => {
   return (
-    <div>
+    <div id='newsroom'>
         <>
   {/* Hero */}
   <div className="overflow-hidden">
