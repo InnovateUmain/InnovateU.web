@@ -1,10 +1,9 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { BsCheck2Circle} from 'react-icons/bs';
 import { motion } from 'framer-motion';
 import toast,{ Toaster } from 'react-hot-toast';
 import Link from 'next/link';
 import Spinner from './components/Spinner';
-import { set } from 'mongoose';
 const Signup = () => {
     const [emailt, setEmailt] = useState(false);
     const [passwordt, setPasswordt] = useState(false);
@@ -15,6 +14,24 @@ const Signup = () => {
     const [password , setPassword] = useState('');
     const [phone , setPhone] = useState('');
     const [loading , setLoading] = useState(false);
+    const [text, setText] = useState('');
+   
+    const originalText = "To start, could you give us your few details?";
+    const speed = 50;
+  
+    useEffect(() => {
+      let i = 0;
+  
+      const typeWriter = () => {
+        if (i <= originalText.length) {
+          setText(originalText.substring(0, i));
+          i++;
+          setTimeout(typeWriter, speed);
+        }
+      };
+  
+      typeWriter();
+    }, []);
     const handleChange = (e) => {
         if(e.target.name === 'name'){
             setName(e.target.value)
@@ -82,6 +99,8 @@ const Signup = () => {
               }
         }
     }
+
+   
   return (
     <div className='text-white flex justify-center items-center'>
         <Toaster
@@ -100,7 +119,7 @@ const Signup = () => {
 
     <div className="flex-1 p-4">
    
-        <h1 className='my-2 mx-2'>To start, could you give us your few details?</h1>
+        <h1 className='my-2 mx-2' id='h1'>{text}</h1>
         <motion.div className="flex my-2" initial={{opacity:0}} animate={{opacity:1}} transition={{duration:1}}>
           
             <div className="mr-2">&gt; <span className='text-green-600'>~</span></div>
