@@ -71,7 +71,7 @@ const Hero1 = () => {
 
               </div>
               <div className="px-8 sm:items-center sm:justify-center sm:px-0 sm:space-x-5 sm:flex mt-6">
-                <Link href={"/components/Hero"}> <motion.button
+                <Link href={"/Event"}> <motion.button
                 
                   className="inline-flex  items-center justify-center px-8 py-2 text-lg text-white transition-all duration-200 bg-purple-600 border-2 border-none sm:w-auto rounded-full  dt font-bold mx-2 my-2"
                   whileHover={{ scale: 1.1 }}
@@ -81,6 +81,7 @@ const Hero1 = () => {
                   Events &gt;
                 </motion.button>
                 </Link>
+                <Link href={"/Signup"}>
                 <motion.button
                 
                 className="inline-flex  items-center justify-center px-8 py-2 text-lg text-white transition-all duration-200 bg-purple-600 border-2 border-none sm:w-auto rounded-full  dt font-bold mx-2 my-2"
@@ -90,6 +91,7 @@ const Hero1 = () => {
               >
                 Join &gt;
               </motion.button>
+              </Link>
                 <motion.button
                 
                 className="inline-flex  items-center justify-center px-8 py-2 text-lg  transition-all duration-200 bg-purple-600   dt font-bold mx-2 my-2 rounded-full text-white"

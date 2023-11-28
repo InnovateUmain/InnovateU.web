@@ -144,7 +144,7 @@ const Navbar = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ type: "spring", stiffness: 100 }}
               >
-                <Link href={"#about"}>
+                <Link href={"/#about"}>
                   <motion.li
                     className=" list-none px-3 py-2 mx-3 mt-2  transition-colors duration-300 transform rounded-md lg:mt-0 text-white  navfont "
                     whileTap={{ scale: 0.9, rotate: 1 }}
@@ -167,7 +167,7 @@ const Navbar = () => {
                     )}
                   </motion.li>
                   </Link>
-                  <Link href="#event">
+                  <Link href="/#event">
                   <motion.li
                     className=" list-none px-3 py-2 mx-3 mt-2  transition-colors duration-300 transform rounded-md lg:mt-0 text-white  navfont "
                     whileTap={{ scale: 0.9, rotate: 1 }}
@@ -215,7 +215,7 @@ const Navbar = () => {
                   </motion.li>
                 </Link>
 
-                <Link href={"/Event"}>
+                <Link href={"/Team"}>
                   <motion.li
                     className="px-3 py-2 mx-3 mt-2  transition-colors duration-300 transform rounded-md lg:mt-0 text-white navfont list-none "
                     whileTap={{ scale: 0.9, rotate: 1 }}
@@ -238,7 +238,7 @@ const Navbar = () => {
                     )}
                   </motion.li>
                 </Link>
-               <Link  href={"#newsroom"}>
+               <Link  href={"/#newsroom"}>
                   <motion.li
                     className="px-3 py-2 mx-3 mt-2  transition-colors duration-300 transform rounded-md lg:mt-0 text-white  navfont list-none"
                     whileTap={{ scale: 0.9, rotate: 1 }}

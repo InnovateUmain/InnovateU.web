@@ -162,22 +162,22 @@ const Footer = () => {
           </ul>
         </div>
         <div>
-          <p className="font-medium text-gray-200">Company</p>
+          <p className="font-medium text-gray-200">Organization</p>
           <ul className="mt-6 space-y-4 text-sm">
             <li>
-              <a href="#" className="text-gray-200 transition hover:opacity-75">
+              <Link href="/components/Gallery" className="text-gray-200 transition hover:opacity-75">
+                Gallery
+              </Link>
+            </li>
+            <li>
+              <Link href="/#about" className="text-gray-200 transition hover:opacity-75">
                 About
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="#" className="text-gray-200 transition hover:opacity-75">
-                Meet the Team
-              </a>
-            </li>
-            <li>
-              <a href="#" className="text-gray-200 transition hover:opacity-75">
-                Accounts Review
-              </a>
+              <Link href="/Team" className="text-gray-200 transition hover:opacity-75">
+            Meet the Team
+              </Link>
             </li>
           </ul>
         </div>
