@@ -10,6 +10,7 @@ import Mentorship from './components/Mentorship';
 import Newsroom from './components/Newsroom';
 import Partner from './components/Partner';
 import Faq from './components/Faq';
+import Contact from './components/Contact';
 const Index = () => {
   // https://res.cloudinary.com/dst73auvn/image/upload/v1699904650/giphy_dmein5.gif
   // https://res.cloudinary.com/dst73auvn/image/upload/v1699904652/1_NuTQuFZpT8RxNEtkSh3W5A_u4fodg.gif
@@ -27,6 +28,7 @@ const Index = () => {
   <Newsroom/>
   <Partner/>
   <Faq/>
+  <Contact/>
   </div>
   </>
   )

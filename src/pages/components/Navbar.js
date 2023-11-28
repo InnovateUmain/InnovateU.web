@@ -49,10 +49,36 @@ const Navbar = () => {
           .navfont {
             font-family: "Rubik", sans-serif;
           }
+          /* Define the keyframes for rotation */
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Apply the rotation animation to the image */
+.img-rotation {
+
+  /* Apply the animation */
+  animation: rotate linear infinite;
+}
+
+/* Speed control using animation-duration */
+.img-rotation-slow {
+  animation-duration: 10s; /* Adjust the duration for slower rotation */
+}
+
+.img-rotation-fast {
+  animation-duration: 1s; /* Adjust the duration for faster rotation */
+}
+
         `}
       </style>
       <nav
-        className={`fixed top-0 z-50 w-[100vw] rounded ${
+        className={`fixed top-0 z-50 w-[100vw] h-20 flex justify-center items-center rounded ${
           scrolling ? "backdrop-blur-xl" : ""
         }`}
       >
@@ -67,7 +93,7 @@ const Navbar = () => {
               <Link href={"/"}>
                 <h1 className="text-4xl sm:text-2xl lg:text-4xl text-white font-bold herofont">
                   {" "}
-                  Innovate<span className="text-yellow-600 herofont">U</span>
+                  <img src="https://res.cloudinary.com/dawzncoau/image/upload/v1701193584/InnovateU-removebg-preview_sgnisw.png" alt="" className="lg:w-20 lg:h-20 md:w-20 md:h-20 w-14 h-14 lg:h-20 lg:w-20 img-rotation img-rotation-slow" />
                 </h1>
               </Link>
 
@@ -190,7 +216,7 @@ const Navbar = () => {
                     )}
                   </motion.li>
                   </Link>
-                <Link href={"/"}>
+                <Link href={"/components/Speaker"}>
                   <motion.li
                     className="list-none px-3 py-2 mx-3 mt-2 transition-colors duration-300 transform rounded-md lg:mt-0 text-white  navfont"
                     whileTap={{ scale: 0.9, rotate: 1 }}
@@ -286,7 +312,7 @@ const Navbar = () => {
                 </Link>
               </motion.div>
 
-                <Link href={"#partner"} className="mx-4">
+                <Link href={"/#partner"} className="mx-4">
                   <motion.button className=" rounded-full bg-purple-600 px-6 py-2 navfont text-white lg:text-xl md:text-xl" whileTap={{scale:0.8}}>
                     Partner &gt;
                   </motion.button>{" "}
