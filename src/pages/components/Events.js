@@ -1,6 +1,7 @@
 import React from 'react'
 import { FaStar } from "react-icons/fa6";
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 const Events = () => {
         return (
           <div className="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto " id='event'>
@@ -50,7 +51,9 @@ const Events = () => {
           </span>
                     </li>
                   </ul>
-                <motion.button className='mx-4 fontevent font-bold px-4 py-2 rounded-full text-white bg-purple-600' whileTap={{scale:0.9, rotate:2}}>Ongoing Events &gt;</motion.button>
+                  <div className='my-4'>
+                <Link href='/Event' ><motion.button className='mx-4 fontevent font-bold px-4 py-2 rounded-full text-white bg-purple-600' whileTap={{scale:0.9, rotate:2}}>Ongoing Events &gt;</motion.button></Link>
+                </div>
                 </div>
               </div>
           

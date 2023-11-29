@@ -2,7 +2,7 @@ import React from 'react'
 
 const Sponsor = () => {
   return (
-    <div className='bg-black'>
+    <div className='bg-black' id='hiring'>
       <style jsx>
         {`
         @import url('https://fonts.googleapis.com/css2?family=Cabin:wght@600&display=swap');

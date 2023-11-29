@@ -2,24 +2,24 @@ import React from 'react'
 import Link from 'next/link'
 const Footer = () => {
   return (
-    <div>
-      <footer className="bg-black">
-  <div className="mx-auto max-w-screen-xl space-y-8 px-4 py-16 sm:px-6 lg:space-y-16 lg:px-8">
+    <div className=''>
+      <footer className="bg-black ">
+      <div className="mx-auto max-w-screen-xl space-y-8 px-4 py-16 sm:px-6 lg:space-y-16 lg:px-8">
     <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
       <div>
-        <div className="text-teal-600">
+        <div className="text-teal-600 h-20">
         <Link href="/" className="mb-6 inline-block ">
                   <img
                     src="https://res.cloudinary.com/dst73auvn/image/upload/v1698952130/1-removebg-preview_vmo0tz.png"
                     alt="logo"
-                    className="h-20 w-20"
+                    className="h-32 w-32"
                   />
                 </Link>
 
         </div>
-        <p className="mt-4 max-w-xs text-white">
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Esse non
-          cupiditate quae nam molestias.
+        <p className="mt-4 max-w-xs text-white my-4">
+        Explore limitless possibilities with our open-source community! Join a vibrant network of passionate contributors driving innovation. Contribute, collaborate, and shape the future together
+.
         </p>
         <ul className="mt-8 flex gap-6">
           <li>
@@ -132,32 +132,32 @@ const Footer = () => {
       </div>
       <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:col-span-2 lg:grid-cols-4">
         <div>
-          <p className="font-medium text-gray-200">Services</p>
+          <p className="font-medium text-gray-200">Community</p>
           <ul className="mt-6 space-y-4 text-sm">
             <li>
-              <a href="#" className="text-gray-200 transition hover:opacity-75">
-                1on1 Coaching
-              </a>
+              <Link href="/#event" className="text-gray-200 transition hover:opacity-75">
+                Event
+              </Link>
             </li>
             <li>
-              <a href="#" className="text-gray-200 transition hover:opacity-75">
-                Company Review
-              </a>
+              <Link href="/components/Community/Blog" className="text-gray-200 transition hover:opacity-75">
+                Blog
+              </Link>
             </li>
             <li>
-              <a href="#" className="text-gray-200 transition hover:opacity-75">
-                Accounts Review
-              </a>
+              <Link href="/components/Community/Roadmap" className="text-gray-200 transition hover:opacity-75">
+                Roadmaps
+              </Link>
             </li>
             <li>
-              <a href="#" className="text-gray-200 transition hover:opacity-75">
-                HR Consulting
-              </a>
+              <Link href="/components/Community/Workshop" className="text-gray-200 transition hover:opacity-75">
+                Workshop
+              </Link>
             </li>
             <li>
-              <a href="#" className="text-gray-200 transition hover:opacity-75">
-                SEO Optimisation
-              </a>
+              <Link href="/#mentorship" className="text-gray-200 transition hover:opacity-75">
+                Mentorship
+              </Link>
             </li>
           </ul>
         </div>
@@ -185,19 +185,19 @@ const Footer = () => {
           <p className="font-medium text-gray-200">Helpful Links</p>
           <ul className="mt-6 space-y-4 text-sm">
             <li>
-              <a href="#" className="text-gray-200 transition hover:opacity-75">
-                Contact
-              </a>
+              <Link href="/Event" className="text-gray-200 transition hover:opacity-75">
+                Ongoing Events
+              </Link>
             </li>
             <li>
-              <a href="#" className="text-gray-200 transition hover:opacity-75">
+              <Link href="/#faq" className="text-gray-200 transition hover:opacity-75">
                 FAQs
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="#" className="text-gray-200 transition hover:opacity-75">
-                Live Chat
-              </a>
+              <Link href="/Signup" className="text-gray-200 transition hover:opacity-75">
+                Join
+              </Link>
             </li>
           </ul>
         </div>
@@ -210,26 +210,26 @@ const Footer = () => {
               </Link>
             </li>
             <li>
-              <a href="#" className="text-gray-200 transition hover:opacity-75">
-                Returns Policy
-              </a>
+              <Link href="/#partner" className="text-gray-200 transition hover:opacity-75">
+                Partner With Us
+              </Link>
             </li>
             <li>
               <a href="#" className="text-gray-200 transition hover:opacity-75">
-                Refund Policy
+                Code of conduct
               </a>
             </li>
             <li>
-              <a href="#" className="text-gray-200 transition hover:opacity-75">
-                Hiring Statistics
-              </a>
+              <Link href="/#hiring" className="text-gray-200 transition hover:opacity-75">
+                Hiring
+              </Link>
             </li>
           </ul>
         </div>
       </div>
     </div>
     <p className="text-xs text-white">
-      © 2023. InnovateU.tech. All rights reserved.
+      © 2023. InnovateU.Org. All rights reserved.
     </p>
   </div>
 </footer>

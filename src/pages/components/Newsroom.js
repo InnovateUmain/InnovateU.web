@@ -46,7 +46,7 @@ const Newsroom = () => {
               />
               <span className="inline-flex items-center justify-center h-8 w-8 rounded-full ring-2 ring-white bg-gray-900 dark:ring-gray-800">
                 <span className="text-xs font-medium leading-none text-white uppercase">
-                  7k+
+                  12k+
                 </span>
               </span>
             </div>
@@ -58,7 +58,7 @@ const Newsroom = () => {
               Trust pilot
             </div>
             <div className="text-sm text-gray-500">
-              Rated best over 37k reviews
+              Rated best over 7k reviews
             </div>
           </div>
         </div>

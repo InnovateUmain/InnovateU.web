@@ -30,9 +30,7 @@ const Testimonials = () => {
           <div className="flex flex-col  rounded-xl bg-slate-800">
             <div className="flex-auto p-4 md:p-6">
               <p className="text-base italic md:text-lg  text-gray-200">
-                 With Preline, we are able to easily track our performance in
-                full detail. It is become an essential tool for us to grow and
-                engage with our audience. 
+              The innovationU website is a collaborative oasis! The platform links developers all over the world with ease. Learning and sharing are enjoyable because of the encouraging group and the worthwhile projects I was able to participate in. 
               </p>
             </div>
             <div className="p-4  rounded-b-xl md:px-7 bg-slate-700">
@@ -62,9 +60,7 @@ const Testimonials = () => {
           <div className="flex flex-col rounded-xl bg-slate-800">
             <div className="flex-auto p-4 md:p-6">
               <p className="text-base italic md:text-lg text-gray-200">
-                 In September, I will be using this theme for 2 years. I went
-                through multiple updates and changes and I am very glad to see
-                the consistency and effort made by the team. 
+              Excellent work on the open-source community webpage! There are a ton of projects and prospects for collaboration there. Both novice and seasoned developers are encouraged to participate and progress together by the friendly environment and diversified community. 
               </p>
             </div>
             <div className="p-4  rounded-b-xl md:px-7 bg-slate-700">
@@ -81,7 +77,7 @@ const Testimonials = () => {
                     Luisa
                   </p>
                   <p className="text-xs text-gray-400">
-                    Senior Director of Operations | Fitbit
+                    Senior Director of Operations | Redhat
                   </p>
                 </div>
               </div>
@@ -94,9 +90,7 @@ const Testimonials = () => {
           <div className="flex flex-col  rounded-xl bg-slate-900">
             <div className="flex-auto p-4 md:p-6">
               <p className="text-base italic md:text-lg text-gray-200">
-                 Refreshing and Thought provoking design and it changes my view
-                about how I design the websites. Great typography, modern clean
-                white design, nice tones of the color. 
+              For me, finding this open-source community website was pivotal. The projects span a wide range of interests, and the collaborative spirit is contagious. This platform offers an ideal environment for learning and contributing, regardless of your level of experience.
               </p>
             </div>
             <div className="p-4  rounded-b-xl md:px-7 bg-slate-700">

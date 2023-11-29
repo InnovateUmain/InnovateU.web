@@ -39,7 +39,7 @@ const About = () => {
                         We are providing a better facility
                     </h2>
                     <p className="mb-4 text-base leading-7 text-gray-200">
-                    We believe that everyone, irrespective of their college or branch, technical or non-technical background can make it big. WeMakeDevs is an initiative built on this thought.
+                    We as an open-source community collaboratively develop, share, and improve software, fostering innovation, transparency, and collective problem-solving in a collaborative and inclusive environment
                     </p>
                     <ul className="mb-10">
                         <li className="flex items-center mb-4 text-base text-gray-200">
