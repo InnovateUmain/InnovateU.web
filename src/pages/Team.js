@@ -51,6 +51,7 @@ const teamMembers = [
   .fontevent{
     font-family: 'Cabin', sans-serif;
   }
+
   `
 }
           </style>
@@ -59,20 +60,20 @@ const teamMembers = [
      <div className="px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20">
       <div className="max-w-xl mb-10 md:mx-auto sm:text-center lg:max-w-2xl md:mb-12">
         <div>
-          <p className="inline-block px-3 py-px mb-4 text-xs font-semibold tracking-wider text-purple-600 uppercase rounded-full bg-teal-accent-400">
+          <p className="inline-block px-3 py-px mb-4 text-xs font-semibold tracking-wider text-purple-600 uppercase rounded-full bg-teal-accent-400 " >
             Team
           </p>
         </div>
         <div className='flex flex-col justify-center items-center'>
-        <h1 className='text-white fontevent lg:text-5xl md:text-4xl text-4xl'>Our Mentors</h1>
+        <h1 className='text-white fontevent lg:text-5xl md:text-4xl text-4xl '>Our Mentors</h1>
         <div className='h-2 w-56 bg-purple-600 rounded-full my-4 text-center'></div>
         </div>
         
       </div>
-     <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+     <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4 ">
      {teamMembers.map((item) => (
-  <div key={item.name}>
-    <div className="relative overflow-hidden transition duration-300 transform rounded shadow-lg lg:hover:-translate-y-2 hover:shadow-2xl">
+  <div key={item.name} > 
+    <div className="z-10 relative overflow-hidden transition duration-300 transform rounded shadow-lg lg:hover:-translate-y-2 hover:shadow-2xl">
         <div className='object-cover w-full h-56 md:h-64 xl:h-80 rounded-lg bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-blue-700 via-blue-800 to-gray-900'>
         <img
         className="object-cover w-full h-56 md:h-64 xl:h-80 rounded-lg"
@@ -119,7 +120,7 @@ const teamMembers = [
      {teamMembers.map((item) => (
   <div key={item.name}>
     <div className="relative overflow-hidden transition duration-300 transform rounded shadow-lg lg:hover:-translate-y-2 hover:shadow-2xl">
-    <div className='object-cover w-full h-56 md:h-64 xl:h-80 rounded-lg bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-blue-700 via-blue-800 to-gray-900'>
+    <div className='object-cover w-full h-56 md:h-64 xl:h-80 rounded-lg bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-blue-700 via-blue-800 to-gray-900 shadow-gray-100 shadow-inner' >
         <img
         className="object-cover w-full h-56 md:h-64 xl:h-80 rounded-lg"
         src={`${item.image}`}
@@ -166,7 +167,7 @@ const teamMembers = [
      {teamMembers.map((item) => (
   <div key={item.name}>
     <div className="relative overflow-hidden transition duration-300 transform rounded shadow-lg lg:hover:-translate-y-2 hover:shadow-2xl">
-    <div className='object-cover w-full h-56 md:h-64 xl:h-80 rounded-lg bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-blue-700 via-blue-800 to-gray-900'>
+    <div className='object-cover w-full h-56 md:h-64 xl:h-80 rounded-lg bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-blue-700 via-blue-800 to-gray-900 shadow-gray-100 shadow-inner'>
         <img
         className="object-cover w-full h-56 md:h-64 xl:h-80 rounded-lg"
         src={`${item.image}`}

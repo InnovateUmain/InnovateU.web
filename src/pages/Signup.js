@@ -125,7 +125,7 @@ const Signup = () => {
   reverseOrder={false}
 />
         {/* <img src="/login.gif" alt=""  /> */}
-        <video src="https://res.cloudinary.com/dst73auvn/video/upload/v1701241450/Login_bg_p8pvqt.mp4" className='w-[100vw] h-[100vh] object-cover' autoPlay muted></video>
+        <video src="https://res.cloudinary.com/dst73auvn/video/upload/v1701241450/Login_bg_p8pvqt.mp4" className='w-[100vw] h-[100vh] object-cover' autoPlay muted loop></video>
 
      {!loading?<motion.section className='absolute top-36'  drag dragConstraints={{left:0,right:6,top:4,bottom:4}}>
      <div className="flex flex-col md:w-[50vw] md:h-auto bg-gray-900 text-gray-200 font-mono lg:w-[60vw] lg:h-auto sm:w-[90vw] sm:h-auto w-[90vw] h-auto">
@@ -186,11 +186,12 @@ const Signup = () => {
             </div>
                <div className='flex my-2'>
                <div className="mr-2">&gt; <span className='text-green-600'>~</span></div>
-                 Password : <input type="password" name="password" value={password} onChange={handleChange} className="flex-1 bg-gray-800 focus:outline-none" placeholder="Enter Your Password" onKeyDown={(e)=>{
+                 Why Join ?: <textarea  name="password" value={password} onChange={handleChange} className="flex-1 bg-gray-800 focus:outline-none" placeholder="Why you join to opensource community ?" onKeyDown={(e)=>{
                      if(e.key === 'Enter'){
                          setResult(true);
                      }
-                 }} autoFocus/>
+                 }} rows={8} cols={20}>
+                  </textarea>
                  </div>
                  </motion.div>
             }

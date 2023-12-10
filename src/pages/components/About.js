@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 
 const About = () => {
   return (
-    <div className='bg-gradient-to-t from-slate-900 via-purple-900 to-gray-900' id='about'>
+    <div className='bg-gradient-to-t from-slate-900 via-purple-900 to-gray-900 ' id='about'>
             <section className="flex items-center  font-poppins ">
         <div className="justify-center flex-1 max-w-6xl py-4 mx-auto lg:py-6 md:px-6">
             <motion.div className="px-4 mb-10 md:text-center md:mb-20" initial={{y:200,opacity:0}} whileInView={{y:0,opacity:1}}
