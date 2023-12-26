@@ -7,6 +7,9 @@ import Footer from './components/Footer';
 export default function App({ Component, pageProps }) {
   const router=useRouter();
   const [progress, setProgress] = useState(0)
+  useEffect(() => {
+    import("preline");
+  }, [])
   useEffect(()=>{
     router.events.on('routeChangeStart',()=>{
       setProgress(40)

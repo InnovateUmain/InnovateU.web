@@ -1,8 +1,27 @@
 import React, { useEffect, useState } from 'react'
 import { BsCheck2Circle} from 'react-icons/bs';
 import { motion } from 'framer-motion';
-import toast,{ Toaster } from 'react-hot-toast';;
+import toast,{ Toaster } from 'react-hot-toast';
+
+import Link from 'next/link';
 import Spinner from './components/Spinner';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import Modal from '@mui/material/Modal';
+
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid purple',
+  boxShadow: 24,
+  borderRadius: "6px",
+  p: 4,
+};
 const Signup = () => {
     const [emailt, setEmailt] = useState(false);
     const [passwordt, setPasswordt] = useState(false);
@@ -14,6 +33,7 @@ const Signup = () => {
     const [phone , setPhone] = useState('');
     const [loading , setLoading] = useState(false);
     const [text, setText] = useState('');
+    const [open,setOpen]=useState(false);
    
     const originalText = "To start, could you give us your few details?";
     const speed = 50;
@@ -99,7 +119,14 @@ const Signup = () => {
         }
     }
 
-   
+   const handleOpen=()=>{
+setOpen(true);
+
+   }
+   const handleClose=()=>{
+    setOpen(false);
+  }
+
   return (
 
     <div className='text-white flex justify-center items-center'>
@@ -186,12 +213,12 @@ const Signup = () => {
             </div>
                <div className='flex my-2'>
                <div className="mr-2">&gt; <span className='text-green-600'>~</span></div>
-                 Why Join ?: <textarea  name="password" value={password} onChange={handleChange} className="flex-1 bg-gray-800 focus:outline-none" placeholder="Why you join to opensource community ?" onKeyDown={(e)=>{
+                Password?: <input name="password" value={password} onChange={handleChange} className="flex-1 bg-gray-800 focus:outline-none" placeholder="Why you join to opensource community ?" onKeyDown={(e)=>{
                      if(e.key === 'Enter'){
                          setResult(true);
                      }
-                 }} rows={8} cols={20}>
-                  </textarea>
+                 }} />
+                 
                  </div>
                  </motion.div>
             }
@@ -214,8 +241,21 @@ const Signup = () => {
             }
     </div>
 </div>
-{/* <h1 className='text-center my-4'>Have an account?<Link href={"/Login"} className='text-green-400'> Login Now !</Link></h1> */}
+<Button onClick={handleOpen}>Open modal</Button>
+<Modal
+  open={open}
+  onClose={handleClose}
+  aria-labelledby="modal-modal-title"
+  aria-describedby="modal-modal-description"
+>
+  <Box sx={style}>
+  
+  </Box>
+</Modal>
+<h1 className='text-center my-4'>Have an account?<Link href={"/Login"} className='text-green-400'> Login Now !</Link></h1>
      </motion.section>:<Spinner/>}
+     {/* Popup started */}
+     
   </div>
   )
 }

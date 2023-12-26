@@ -24,6 +24,7 @@ if(localStorage.getItem('innovateUuser')){
     const [email , setEmail] = useState('');
     const [password , setPassword] = useState('');
     const [loading , setLoading] = useState(false);
+    const [text,setText]= useState("");
     const handleChange = (e) => {
     
         if(e.target.name === 'email'){
@@ -78,10 +79,26 @@ if(localStorage.getItem('innovateUuser')){
               }
         }
     }
+    const originalText = "To Login, could you give us your few details?";
+    const speed = 50;
+  
+    useEffect(() => {
+      let i = 0;
+  
+      const typeWriter = () => {
+        if (i <= originalText.length) {
+          setText(originalText.substring(0, i));
+          i++;
+          setTimeout(typeWriter, speed);
+        }
+      };
+  
+      typeWriter();
+    }, []);
   return (
     <div className='text-white flex justify-center items-center'>
         <Toaster position="top-center" reverseOrder={false}/>
-        <img src="/login.gif" alt=""  className='w-[100vw] h-[100vh] relative bg-cover'/>
+        <video src="https://res.cloudinary.com/dst73auvn/video/upload/v1701241450/Login_bg_p8pvqt.mp4" className='w-[100vw] h-[100vh] object-cover' autoPlay muted loop></video>
         
      {!loading?<motion.section className='absolute top-36' drag dragConstraints={{left:0,right:6,top:4,bottom:4}}>
      <div className="flex flex-col md:w-[50vw] md:h-auto bg-gray-900 text-gray-200 font-mono lg:w-[60vw] lg:h-auto sm:w-[80vw] sm:h-auto w-[80vw] h-auto">
@@ -94,7 +111,7 @@ if(localStorage.getItem('innovateUuser')){
 
     <div className="flex-1 p-4">
         
-        <h1 className='my-2 mx-2'>To Login, could you give us your few details?</h1>
+        <h1 className='my-2 mx-2'>{text}</h1>
       
         <motion.div className="flex my-2" initial={{opacity:0}} animate={{opacity:1}} transition={{duration:1}}>
        

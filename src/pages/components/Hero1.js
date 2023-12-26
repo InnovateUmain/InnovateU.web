@@ -6,7 +6,7 @@ import { FaMapLocationDot,FaLinkedinIn,FaInstagram } from 'react-icons/fa6';
 import { motion } from 'framer-motion';
 const Hero1 = () => {
   return (
-    <>
+    <div className='h-[100vh] w-[100vw]'>
     <style jsx >
 {
   `
@@ -27,8 +27,10 @@ const Hero1 = () => {
   `
 }
     </style>
-    <section className="pt-12 bg-none sm:pt-16 absolute top-14 w-[100vw] h-[80vh] flex justify-center items-center ">
-          <motion.div className="px-4  sm:px-6 lg:px-8 "
+    <video src="https://res.cloudinary.com/dst73auvn/video/upload/v1701239275/home_bg_ccrlud.mp4" autoPlay muted loop className=' relative w-[100vw] h-[100vh] object-cover' style={{opacity:0.7}}></video>
+    <section className="pt-12 bg-none sm:pt-16 absolute top-14 w-[100vw] h-[80vh] flex justify-center items-center">
+      
+          <motion.div className="lg:px-8 "
           initial={{opacity:0 ,x:-200}}
           animate={{x:0,opacity:1}}
           whileInView={{x:0,opacity:1}}
@@ -109,7 +111,7 @@ const Hero1 = () => {
           <div className="pb-12 bg-none"></div>
         </section>  
       
-    </>
+    </div>
   )
 }
 

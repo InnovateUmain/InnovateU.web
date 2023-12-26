@@ -3,7 +3,19 @@ import { useState } from "react";
 import Link from "next/link";
 import { FaUserAlt } from "react-icons/fa";
 import { motion } from "framer-motion";
-import { set } from "mongoose";
+import { Avatar } from "@mui/material";
+import { deepPurple } from "@mui/material/colors";
+
+import {
+  AiFillCloseCircle,
+} from "react-icons/ai";
+import {
+  MdManageAccounts,
+  MdShoppingCart,
+} from "react-icons/md";
+import {  BiLogOut } from "react-icons/bi";
+import { IoTicket } from "react-icons/io5";
+import { BsCalendar2EventFill } from "react-icons/bs";
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [data1, setData1] = useState(false);
@@ -12,9 +24,16 @@ const Navbar = () => {
   const [data4, setData4] = useState(false);
   const [data5, setData5] = useState(false);
   const [data6, setData6] = useState(false);
+  const [user,setUser] = useState(false);
+  const [dropdown,setDropdown]=useState(false);
+
   const [scrolling, setScrolling] = useState(false);
 
   useEffect(() => {
+    if(localStorage.getItem("innovateUuser")){
+      setUser(true);
+      console.log("TRUE BHAI")
+    }
     function handleScroll() {
       if (window.scrollY > 100) {
         setScrolling(true);
@@ -28,10 +47,16 @@ const Navbar = () => {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
+   
   }, []);
   const handleclick = () => {
     setIsOpen(!isOpen);
   };
+  const logout=()=>{
+localStorage.removeItem("innovateUuser");
+setUser(false);
+setDropdown(false);
+  }
   return (
     <>
       <style jsx>
@@ -82,7 +107,7 @@ const Navbar = () => {
           scrolling ? "backdrop-blur-xl" : ""
         }`}
       >
-        <div className="container px-6 py-4 mx-auto">
+        <div className="container px-6 py-4 mx-auto ">
           <div className="lg:flex lg:items-center lg:justify-between">
             <motion.div
               className="flex items-center justify-between"
@@ -97,7 +122,7 @@ const Navbar = () => {
                 </h1>
               </Link>
 
-              <div className="flex lg:hidden">
+              <div className="flex lg:hidden ">
                 <button
                   onClick={handleclick}
                   type="button"
@@ -312,17 +337,125 @@ const Navbar = () => {
                 </Link>
               </motion.div>
 
-                <Link href={"/#partner"} className="mx-4">
+                {!user&&<Link href={"/#partner"} className="mx-4">
                   <motion.button className=" rounded-full bg-purple-600 px-6 py-2 navfont text-white lg:text-xl md:text-xl" whileTap={{scale:0.8}}>
                     Partner &gt;
                   </motion.button>{" "}
-                </Link>
+                </Link>}
+                {user&&<div className="lg:mx-10  sm:mx-2 hidden lg:block " 
+                onMouseEnter={()=>{
+                  setDropdown(true);
+                }}
+                
+                >
+                  <Avatar sx={{ bgcolor: deepPurple[500] }}>BK</Avatar>
+                  </div>}
+                 { dropdown && <div className="sticky top-0 z-30">
+                <div className="absolute lg:right-8 bg-white shadow-lg lg:top-4 rounded-md px-5 w-44 py-4 z-30 sm:top-0 hidden lg:block" onMouseLeave={()=>{
+                  setDropdown(false)
+                }}>
+                  <span
+                    onClick={() => {
+                      setDropdown(false);
+                    }}
+                    className="absolute top-0 right-2 cursor-pointer text-2xl text-purple-500"
+                  >
+                    <>
+                      <AiFillCloseCircle />
+                    </>
+                  </span>
+                  <Link href={"/components/Profile"}>
+                    <li className="py-1 text-base hover:text-pink-700 list-none font-bold flex">
+                      <MdManageAccounts className="mt-1 mx-2" />
+                      My Profile
+                    </li>
+                  </Link>
+                  <Link href={"/components/MyEvent"}>
+                    <li className="py-1 text-base hover:text-pink-700 list-none font-bold flex">
+                      
+                      <IoTicket className="mt-1 mx-2"/>
+                      My Tickets
+                    </li>
+                  </Link>
+
+                  <Link href={"/components/MyEvent"}>
+                    <li className="py-1 text-base hover:text-pink-700 list-none font-bold flex">
+                      <BsCalendar2EventFill className="mt-1 mx-2"/>
+                      My Events
+                    </li>
+                  </Link>
+
+                  <li
+                    onClick={logout}
+                    className="py-1 text-base hover:text-pink-700 list-none font-bold flex"
+                  >
+                    <BiLogOut className="mt-1 mx-2" />
+                    Logout
+                  </li>
+                </div>
+                </div>}
+               
               
              
             </div>
+            
           </div>
+          
         </div>
+        {user&&<div className="lg:mx-10  sm:mx-2 absolute right-20 lg:hidden" 
+                onMouseEnter={()=>{
+                  setDropdown(true);
+                }}
+                
+                >
+                  <Avatar sx={{ bgcolor: deepPurple[500] }}>BK</Avatar>
+                  </div>}
+                 { dropdown && <div className="sticky top-0 z-30">
+                <div className="absolute right-24 bg-white shadow-lg top-4 rounded-md px-5 w-44 py-4 z-30 block lg:hidden" onMouseLeave={()=>{
+                  setDropdown(false)
+                }}>
+                  <span
+                    onClick={() => {
+                      setDropdown(false);
+                    }}
+                    className="absolute top-0 right-2 cursor-pointer text-2xl text-purple-500"
+                  >
+                    <>
+                      <AiFillCloseCircle />
+                    </>
+                  </span>
+                  <Link href={"/components/Profile"}>
+                    <li className="py-1 text-base hover:text-pink-700 list-none font-bold flex">
+                      <MdManageAccounts className="mt-1 mx-2" />
+                      My Account
+                    </li>
+                  </Link>
+                  <Link href={"/orders"}>
+                    <li className="py-1 text-base hover:text-pink-700 list-none font-bold flex">
+                      
+                      <IoTicket className="mt-1 mx-2"/>
+                      My Tickets
+                    </li>
+                  </Link>
+
+                  <Link href={"/components/MyEvent"}>
+                    <li className="py-1 text-base hover:text-pink-700 list-none font-bold flex">
+                      <BsCalendar2EventFill className="mt-1 mx-2"/>
+                      My Events
+                    </li>
+                  </Link>
+
+                  <li
+                    onClick={logout}
+                    className="py-1 text-base hover:text-pink-700 list-none font-bold flex"
+                  >
+                    <BiLogOut className="mt-1 mx-2" />
+                    Logout
+                  </li>
+                </div>
+                </div>}
       </nav>
+      
     </>
   );
 };
