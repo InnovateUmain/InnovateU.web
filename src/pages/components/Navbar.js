@@ -370,7 +370,7 @@ setDropdown(false);
                       My Profile
                     </li>
                   </Link>
-                  <Link href={"/components/MyEvent"}>
+                  <Link href={"/components/MyTicket"}>
                     <li className="py-1 text-base hover:text-pink-700 list-none font-bold flex">
                       
                       <IoTicket className="mt-1 mx-2"/>
@@ -430,7 +430,7 @@ setDropdown(false);
                       My Account
                     </li>
                   </Link>
-                  <Link href={"/orders"}>
+                  <Link href={"/components/MyTicket"}>
                     <li className="py-1 text-base hover:text-pink-700 list-none font-bold flex">
                       
                       <IoTicket className="mt-1 mx-2"/>
