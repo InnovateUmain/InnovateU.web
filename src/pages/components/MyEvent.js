@@ -1,28 +1,41 @@
 import React from 'react'
 import Link from 'next/link';
 import Box from '@mui/material/Box';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Modal from '@mui/material/Modal';
 import { IoTicket } from "react-icons/io5";
 import { MdEventNote } from "react-icons/md";
 import { RiSecurePaymentFill } from "react-icons/ri";
 import { IoMdCloseCircle } from "react-icons/io";
-
 import { motion } from 'framer-motion';
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid purple',
-  boxShadow: 50,
-  borderRadius: "8px",
-  p: 4,
-};
 const MyEvent = () => {
   const [open,setOpen]=useState(false);
+  const [width,setWidth]= useState(0);
+
+  useEffect(()=>{
+    var w = window.innerWidth;
+   if(w>=500){
+    setWidth(400);
+   }
+   else{
+    setWidth(350);
+   }
+    
+   },[])
+   
+  const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: {width},
+    bgcolor: 'background.paper',
+    border: '2px solid purple',
+    boxShadow: 50,
+    borderRadius: "8px",
+    p: 4,
+  };
+
   const handleOpen=()=>{
     setOpen(true);
     
@@ -107,7 +120,7 @@ const MyEvent = () => {
           </div>
           <div className="border-l-2 h-full border-gray-400" />
         </div>
-        <div className="flex flex-col group-hover:bg-slate-500 ml-2 p-2 pr-6 rounded-xl">
+        <div className="flex flex-col group-hover:bg-purple-300 ml-2 p-2 pr-6 rounded-xl">
           <div className="ml-4 text-xl font-medium">Registeration Started</div>
           <div className="ml-4 mb-2 text-xs">24 Oct 12:42 - 27 Oct 12:15</div>
           <div className="ml-4 text-sm">Checking Basic Details</div>
@@ -123,7 +136,7 @@ const MyEvent = () => {
           </div>
           <div className="border-l-2 h-full border-gray-400" />
         </div>
-        <div className="flex flex-col group-hover:bg-slate-500 ml-2 p-2 pr-6 rounded-xl">
+        <div className="flex flex-col group-hover:bg-purple-300 ml-2 p-2 pr-6 rounded-xl">
           <div className="ml-4 text-xl font-medium">
             Payment Processing
           </div>
@@ -142,7 +155,7 @@ const MyEvent = () => {
           </div>
           <div className="border-l-2 h-full border-gray-400" />
         </div>
-        <div className="flex flex-col group-hover:bg-slate-500 ml-2 p-2 pr-6 rounded-xl">
+        <div className="flex flex-col group-hover:bg-purple-300 ml-2 p-2 pr-6 rounded-xl">
           <div className="ml-4 text-xl font-medium">Successfully Registered</div>
           <div className="ml-4 mb-2 text-xs">24 Oct 12:42 - 27 Oct 12:15</div>
           <div className="ml-4 text-sm">Confirmation email send successfully</div>

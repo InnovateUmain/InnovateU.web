@@ -5,9 +5,11 @@ const UserSchema=new mongoose.Schema({
     phone:{type:Number,unique:true},
     password:{type:String,required:true},
     bio:{type:String,default:''},
-    username:{type:String,default:''},
-    country:{type:String,default:''},
-    college:{type:String,default:''},
+    clg:{type:String,default:''},
+    github:{type:String,default:''},
+    linkedin:{type:String,default:''},
+    website:{type:String,default:''},
+    gender:{type:String,default:''},
     img:{type:String,default:''},
 },{timestamps:true})
 mongoose.models={}

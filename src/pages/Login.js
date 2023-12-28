@@ -9,7 +9,7 @@ const Login = () => {
     const router = useRouter();
     useEffect(()=>{
 if(localStorage.getItem('innovateUuser')){
-    toast.error('You are already logged in');
+    toast.error('Ohh! You are already logged in ...');
     setTimeout(()=>{
         router.push('/')
        
@@ -17,7 +17,7 @@ if(localStorage.getItem('innovateUuser')){
 
 
 }
-    },[router.query])
+    },[])
     
     const [emailt, setEmailt] = useState(false);
     const [result, setResult] = useState(false);
@@ -53,7 +53,8 @@ if(localStorage.getItem('innovateUuser')){
         }
         else{
             setLoading(true);
-            const data = {email,password};
+            const data = {email:email.toLowerCase(),password};
+
             const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/login`, {
                 method: "POST", // or 'PUT'
                 headers: {

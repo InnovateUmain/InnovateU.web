@@ -1,11 +1,10 @@
-import React, { useEffect } from "react";
+import React, { use, useEffect } from "react";
 import { useState } from "react";
 import Link from "next/link";
 import { FaUserAlt } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { Avatar } from "@mui/material";
 import { deepPurple } from "@mui/material/colors";
-
 import {
   AiFillCloseCircle,
 } from "react-icons/ai";
@@ -16,7 +15,12 @@ import {
 import {  BiLogOut } from "react-icons/bi";
 import { IoTicket } from "react-icons/io5";
 import { BsCalendar2EventFill } from "react-icons/bs";
-const Navbar = () => {
+import { useSelector } from "react-redux";
+import { useRouter } from "next/router";
+const Navbar = ({logout,user}) => {
+  const router = useRouter();
+  const userinfo = useSelector((state)=>state.userData);
+  const sl = userinfo.name.indexOf(" ");
   const [isOpen, setIsOpen] = useState(false);
   const [data1, setData1] = useState(false);
   const [data2, setData2] = useState(false);
@@ -24,16 +28,10 @@ const Navbar = () => {
   const [data4, setData4] = useState(false);
   const [data5, setData5] = useState(false);
   const [data6, setData6] = useState(false);
-  const [user,setUser] = useState(false);
   const [dropdown,setDropdown]=useState(false);
-
   const [scrolling, setScrolling] = useState(false);
-
+  const [name,setName]= useState("IN");
   useEffect(() => {
-    if(localStorage.getItem("innovateUuser")){
-      setUser(true);
-      console.log("TRUE BHAI")
-    }
     function handleScroll() {
       if (window.scrollY > 100) {
         setScrolling(true);
@@ -47,16 +45,12 @@ const Navbar = () => {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-   
   }, []);
+
   const handleclick = () => {
     setIsOpen(!isOpen);
   };
-  const logout=()=>{
-localStorage.removeItem("innovateUuser");
-setUser(false);
-setDropdown(false);
-  }
+ 
   return (
     <>
       <style jsx>
@@ -348,7 +342,7 @@ setDropdown(false);
                 }}
                 
                 >
-                  <Avatar sx={{ bgcolor: deepPurple[500] }}>BK</Avatar>
+                  <Avatar sx={{ bgcolor: deepPurple[500] }}>{userinfo.name!=""?userinfo.name.charAt(0):name}{sl!=null&&userinfo.name!=""?userinfo.name.charAt(sl+1):userinfo.name.charAt(1)}</Avatar>
                   </div>}
                  { dropdown && <div className="sticky top-0 z-30">
                 <div className="absolute lg:right-8 bg-white shadow-lg lg:top-4 rounded-md px-5 w-44 py-4 z-30 sm:top-0 hidden lg:block" onMouseLeave={()=>{
@@ -408,7 +402,7 @@ setDropdown(false);
                 }}
                 
                 >
-                  <Avatar sx={{ bgcolor: deepPurple[500] }}>BK</Avatar>
+                  <Avatar sx={{ bgcolor: deepPurple[500] }}>{userinfo.name!=""?userinfo.name.charAt(0):name}{sl!=null&&userinfo.name!=""?userinfo.name.charAt(sl+1):userinfo.name.charAt(1)}</Avatar>
                   </div>}
                  { dropdown && <div className="sticky top-0 z-30">
                 <div className="absolute right-24 bg-white shadow-lg top-4 rounded-md px-5 w-44 py-4 z-30 block lg:hidden" onMouseLeave={()=>{

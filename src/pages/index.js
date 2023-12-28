@@ -29,10 +29,11 @@ const Index = () => {
     dispatch(addUserData({name:result.data.name,email:result.data.email,token:"5465dbgdh"}))
   }
   useEffect(()=>{
-const data = JSON.parse(localStorage.getItem('innovateUuser')).token;
+    if(localStorage.getItem('innovateUuser')){
+      const data = JSON.parse(localStorage.getItem('innovateUuser')).token;
 
-getUser(data);
-
+      getUser(data);
+    }
   },[])
   const info = useSelector((state)=>state.userData)
   console.log(info)

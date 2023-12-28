@@ -2,27 +2,17 @@ import React, { useEffect, useState } from 'react'
 import { BsCheck2Circle} from 'react-icons/bs';
 import { motion } from 'framer-motion';
 import toast,{ Toaster } from 'react-hot-toast';
-
+import Confetti from 'react-confetti'
 import Link from 'next/link';
 import Spinner from './components/Spinner';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
-
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid purple',
-  boxShadow: 24,
-  borderRadius: "6px",
-  p: 4,
-};
+import { useRouter } from 'next/router';
+import { IoMdCloseCircle } from "react-icons/io";
 const Signup = () => {
+
     const [emailt, setEmailt] = useState(false);
     const [passwordt, setPasswordt] = useState(false);
     const [num, setnum] = useState(false);
@@ -34,7 +24,30 @@ const Signup = () => {
     const [loading , setLoading] = useState(false);
     const [text, setText] = useState('');
     const [open,setOpen]=useState(false);
-   
+    const [width,setWidth]= useState(0);
+const router = useRouter();
+    useEffect(()=>{
+      var w = window.innerWidth;
+     if(w>=500){
+      setWidth(500);
+     }
+     else{
+      setWidth(350);
+     }
+      
+     },[])
+     const style = {
+      position: 'absolute',
+      top: '50%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)',
+      width: {width},
+      bgcolor: 'background.paper',
+      border: '2px solid purple',
+      boxShadow: 24,
+      borderRadius: "6px",
+      p: 4,
+    };
     const originalText = "To start, could you give us your few details?";
     const speed = 50;
   
@@ -92,7 +105,7 @@ const Signup = () => {
         }
         else{
             setLoading(true);
-            const data = {name,email,password,phone};
+            const data = {name,email:email.toLowerCase(),password,phone};
             const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/signup`, {
                 method: "POST", // or 'PUT'
                 headers: {
@@ -113,6 +126,9 @@ const Signup = () => {
                   setnum(false);
                   setPhone('');
                   localStorage.setItem('innovateUuser',JSON.stringify({token:response.token,email:response.email}));
+                  setTimeout(()=>{
+                  handleOpen();
+                  },1000)
               }
               else{
                 toast.error(response.message);
@@ -214,7 +230,7 @@ setOpen(true);
             </div>
                <div className='flex my-2'>
                <div className="mr-2">&gt; <span className='text-green-600'>~</span></div>
-                Password?: <input name="password" value={password} onChange={handleChange} className="flex-1 bg-gray-800 focus:outline-none" placeholder="Why you join to opensource community ?" onKeyDown={(e)=>{
+                Password?: <input name="password" value={password} onChange={handleChange} className="flex-1 bg-gray-800 focus:outline-none" placeholder="Enter Your Password" onKeyDown={(e)=>{
                      if(e.key === 'Enter'){
                          setResult(true);
                      }
@@ -242,7 +258,6 @@ setOpen(true);
             }
     </div>
 </div>
-<Button onClick={handleOpen}>Open modal</Button>
 <Modal
   open={open}
   onClose={handleClose}
@@ -250,7 +265,24 @@ setOpen(true);
   aria-describedby="modal-modal-description"
 >
   <Box sx={style}>
-  
+  <div className='absolute top-2 right-2 text-purple-600' onClick={handleClose}>
+    <IoMdCloseCircle className='text-4xl'/>
+    </div>
+  <div className="bg-white p-8 rounded-lg shadow-lg text-center">
+        <div className="animate-tickScale inline-block bg-green-600 rounded-full">
+    
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+        </div>
+        
+        <h1 className="lg:text-4xl md:text-4xl sm:text-2xl font-semibold text-gray-800 mb-4 font text-2xl">Congratulations!</h1>
+        <Confetti numberOfPieces={100} width={300} height={520} className='m-auto'/>
+        <p className="text-lg text-gray-600 mb-4 font">Congratulations! You have successfully registered an account.</p>
+        <p className="text-lg text-gray-600 mb-2 font">Welcome to our community! Get ready to explore, collaborate, and contribute to exciting projects. <span className='font-bold text-green-600'>Happy coding.</span>.</p>
+        <Link href="/" className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-full block mx-2 my-4 ">Go Back to Home</Link>
+        <Link href="/components/Profile" className="bg-purple-200 hover:bg-purple-400 text-black font-semibold py-2 px-4 rounded-full inline-block">View Your Profile</Link>
+    </div>
   </Box>
 </Modal>
 <h1 className='text-center my-4'>Have an account?<Link href={"/Login"} className='text-green-400'> Login Now !</Link></h1>

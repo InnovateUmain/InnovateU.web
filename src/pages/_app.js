@@ -9,9 +9,12 @@ import { store } from './appstore/store';
 export default function App({ Component, pageProps }) {
   const router=useRouter();
   const [progress, setProgress] = useState(0)
+  const [user,setUser]=useState(false);
+  //import preline
   useEffect(() => {
     import("preline");
   }, [])
+  //user and router details
   useEffect(()=>{
     router.events.on('routeChangeStart',()=>{
       setProgress(40)
@@ -19,12 +22,20 @@ export default function App({ Component, pageProps }) {
     router.events.on('routeChangeComplete',()=>{
       setProgress(100)
     });
- 
+    if(localStorage.getItem("innovateUuser")){
+      setUser(true);
+    }
+    
   },[router.query])
+
+  const logout=()=>{
+    localStorage.removeItem("innovateUuser");
+    setUser(false);
+      }
   return <><Provider store={store}><LoadingBar
   color='#c307ed'
   waitingTime={400}
   progress={progress}
   onLoaderFinished={() => setProgress(0)}
-/><Navbar/><Component {...pageProps} /> <Footer/></Provider></>
+/><Navbar user={user} logout={logout}/><Component {...pageProps} /> <Footer/></Provider></>
 }
