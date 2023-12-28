@@ -1,5 +1,6 @@
 import connectDb from "../../middleware/mongoose";
-import User from "../../../models/User";
+import User from "../../../models/User"
+var jwt = require('jsonwebtoken');
 var CryptoJS = require("crypto-js");
 const nodemailer = require("nodemailer");
 const handler = async (req, res) => {
@@ -8,8 +9,8 @@ const handler = async (req, res) => {
         port: 587,
         secure: false,
         auth: {
-          user: 'basirkhan4ukhanatoz@gmail.com',
-          pass: 'O1aXMRNItUmjprkD'
+            user: 'thebasirkhanofficial@gmail.com',
+            pass: 'bOTLR5E0phXVM2qm'
         }
       });
 if(req.method==="POST"){
@@ -32,7 +33,9 @@ else{
         password:CryptoJS.AES.encrypt(req.body.password, process.env.AES_SECRET).toString(),
     })
     let a = await user.save();
-    res.status(200).json({success:true,message:"User registered successfully"})
+    const token = jwt.sign({email:a.email,name:a.name}, process.env.JWT_SECRET,);
+    res.status(200).json({success: true,token,email:user.email,message:"User registered successfully"});
+
 
     const info = await transporter.sendMail({
         from: '<support@InnovateU.com>', // sender address

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 // import Hero from './components/Hero';
 import Hero1 from './components/Hero1';
 import About from './components/About';
@@ -11,7 +11,31 @@ import Newsroom from './components/Newsroom';
 import Partner from './components/Partner';
 import Faq from './components/Faq';
 import Contact from './components/Contact';
+import { useDispatch } from 'react-redux';
+import { addUserData } from './appstore/userData';
+import { useSelector } from 'react-redux';
 const Index = () => {
+  const dispatch = useDispatch();
+  const getUser=async(token)=>{
+    console.log(token)
+    const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/getuserdata`, {
+      method: "POST", // or 'PUT'
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(token),
+    });
+    const result = await res.json();
+    dispatch(addUserData({name:result.data.name,email:result.data.email,token:"5465dbgdh"}))
+  }
+  useEffect(()=>{
+const data = JSON.parse(localStorage.getItem('innovateUuser')).token;
+
+getUser(data);
+
+  },[])
+  const info = useSelector((state)=>state.userData)
+  console.log(info)
   // https://res.cloudinary.com/dst73auvn/image/upload/v1699904650/giphy_dmein5.gif
   // https://res.cloudinary.com/dst73auvn/image/upload/v1699904652/1_NuTQuFZpT8RxNEtkSh3W5A_u4fodg.gif
   return (

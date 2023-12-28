@@ -112,6 +112,7 @@ const Signup = () => {
                   setEmailt(false);
                   setnum(false);
                   setPhone('');
+                  localStorage.setItem('innovateUuser',JSON.stringify({token:response.token,email:response.email}));
               }
               else{
                 toast.error(response.message);

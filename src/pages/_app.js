@@ -4,6 +4,8 @@ import Navbar from './components/Navbar'
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import Footer from './components/Footer';
+import { Provider } from 'react-redux';
+import { store } from './appstore/store';
 export default function App({ Component, pageProps }) {
   const router=useRouter();
   const [progress, setProgress] = useState(0)
@@ -19,10 +21,10 @@ export default function App({ Component, pageProps }) {
     });
  
   },[router.query])
-  return <><LoadingBar
-  color='#eb1d0e'
+  return <><Provider store={store}><LoadingBar
+  color='#c307ed'
   waitingTime={400}
   progress={progress}
   onLoaderFinished={() => setProgress(0)}
-/><Navbar/><Component {...pageProps} /> <Footer/></>
+/><Navbar/><Component {...pageProps} /> <Footer/></Provider></>
 }
