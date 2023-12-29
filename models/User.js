@@ -9,7 +9,6 @@ const UserSchema=new mongoose.Schema({
     github:{type:String,default:''},
     linkedin:{type:String,default:''},
     website:{type:String,default:''},
-    gender:{type:String,default:''},
     img:{type:String,default:''},
 },{timestamps:true})
 mongoose.models={}

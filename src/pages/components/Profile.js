@@ -1,9 +1,11 @@
 
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import toast,{ Toaster } from 'react-hot-toast';
 import Spinner from './Spinner';
+import { motion } from 'framer-motion';
 const Profile = () => {
+  const ref = useRef();
   const[name,setName]= useState("");
   const[email,setEmail] =useState("");
   const[password,setPassword]=useState("");
@@ -18,6 +20,8 @@ const Profile = () => {
   const[college,setCollege]= useState("");
   const[bio,setBio]=useState("");
   const[loading,setLoading]=useState(false);
+  const[image,setImage]=useState("");
+  const[url,setUrl]=useState("");
   const handleChange=(e)=>{
     if(e.target.name=="name"){
       setName(e.target.value);
@@ -56,6 +60,9 @@ const Profile = () => {
     else if(e.target.name=="bio"){
         setBio(e.target.value);
     } 
+    else if(e.target.name=="image"){
+      setImage(e.target.files[0]);
+    }
    
   }
   const getUser=async(token)=>{
@@ -76,7 +83,7 @@ setLinkedin(result.data.linkedin);
 setGithub(result.data.github);
 setWebsite(result.data.website);
 setBio(result.data.bio);
-setImg(result.data.img);
+setUrl(result.data.img);
     
     setLoading(false);
   
@@ -89,9 +96,10 @@ setImg(result.data.img);
     getUser(data);
   },[])
   //update userdetails
-  const updateuser = async()=>{
+  const updateuser = async(ulurl)=>{
+    let upurl = ulurl!==""?ulurl:url;
     setLoading(true);
-    const data = {name,email,bio,phone,college,github,linkedin,website};
+    const data = {name,email,bio,phone,college,github,linkedin,website,img:upurl};
     const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/updateuser`, {
       method: "POST", // or 'PUT'
       headers: {
@@ -142,6 +150,30 @@ setImg(result.data.img);
       updateuser();
     }
   }
+  const uploadImage = () => {
+setLoading(true);
+    const data = new FormData()
+    data.append("file", image)
+    data.append("upload_preset", "uuaob1ay")
+    data.append("cloud_name","dst73auvn")
+    fetch("https://api.cloudinary.com/v1_1/dst73auvn/image/upload",{
+    method:"post",
+    body: data
+    })
+    .then(resp => resp.json())
+    .then(data => {
+      
+    setUrl(data.url)
+    setLoading(false);
+    toast.success("Image uploaded successfully")
+    setImage("");
+    updateuser(data.url);
+    })
+    .catch(err => {
+      setLoading(false);
+    toast.error("Something went wrong ! Please try again")
+    })
+    }
   return (
     <div className={`min-h-screen relative top-6 ${loading?"flex justify-center items-center":""}`}>
        <Toaster position="top-center" reverseOrder={false}/>
@@ -169,17 +201,28 @@ setImg(result.data.img);
           </div>
           {/* End Col */}
           <div className="sm:col-span-9">
+          <input type="file" className={`${image!=""?"":"hidden"} text-white font-bold p-2 m-2`} ref={ref}  name='image' onChange={handleChange}/>
             <div className="flex items-center gap-5">
               <img
                 className="inline-block h-16 w-16 rounded-full ring-2 ring-white ring-gray-800 text-white"
-                src="../assets/img/160x160/img1.jpg"
+                src=  {`${url}`}
                 alt="Image Description"
+                onClick={()=>{
+                  ref.current.click();
+                  // uploadImage();
+                }}
               />
+             
               <div className="flex gap-x-2">
+              
                 <div>
-                  <button
+                
+                  <motion.button
                     type="button"
                     className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
+                    whileHover={{scale:1.1}}
+                    whileTap={{scale:0.9,rotate:1}}
+                    onClick={uploadImage}
                   >
                     <svg
                       className="flex-shrink-0 w-4 h-4"
@@ -198,7 +241,7 @@ setImg(result.data.img);
                       <line x1={12} x2={12} y1={3} y2={15} />
                     </svg>
                     Upload photo
-                  </button>
+                  </motion.button>
                 </div>
               </div>
             </div>

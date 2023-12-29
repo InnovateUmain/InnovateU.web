@@ -10,6 +10,7 @@ const user = await User.findOneAndUpdate({email:req.body.email},{
     github:req.body.github,
     linkedin:req.body.linkedin,
     website:req.body.website,
+    img:req.body.img,
 });
 res.status(200).json({success:true,message:"Profile updated successfully"})
     }

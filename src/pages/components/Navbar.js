@@ -342,7 +342,10 @@ const Navbar = ({logout,user}) => {
                 }}
                 
                 >
-                  <Avatar sx={{ bgcolor: deepPurple[500] }}>{userinfo.name!=""?userinfo.name.charAt(0):name}{sl!=null&&userinfo.name!=""?userinfo.name.charAt(sl+1):userinfo.name.charAt(1)}</Avatar>
+
+                  {!userinfo.img&&<Avatar sx={{ bgcolor: deepPurple[500], width: 50, height: 50}}>{userinfo.name!=""?userinfo.name.charAt(0):name}{sl!=null&&userinfo.name!=""?userinfo.name.charAt(sl+1):userinfo.name.charAt(1)}</Avatar>}
+                  {userinfo.img&&<Avatar sx={{ bgcolor: deepPurple[500], width: 50, height: 50 }} alt="user image" src={`${userinfo.img}`}/>}
+
                   </div>}
                  { dropdown && <div className="sticky top-0 z-30">
                 <div className="absolute lg:right-8 bg-white shadow-lg lg:top-4 rounded-md px-5 w-44 py-4 z-30 sm:top-0 hidden lg:block" onMouseLeave={()=>{
@@ -402,7 +405,8 @@ const Navbar = ({logout,user}) => {
                 }}
                 
                 >
-                  <Avatar sx={{ bgcolor: deepPurple[500] }}>{userinfo.name!=""?userinfo.name.charAt(0):name}{sl!=null&&userinfo.name!=""?userinfo.name.charAt(sl+1):userinfo.name.charAt(1)}</Avatar>
+                 {!userinfo.img&&<Avatar sx={{ bgcolor: deepPurple[500]}}>{userinfo.name!=""?userinfo.name.charAt(0):name}{sl!=null&&userinfo.name!=""?userinfo.name.charAt(sl+1):userinfo.name.charAt(1)}</Avatar>}
+                  {userinfo.img&&<Avatar sx={{ bgcolor: deepPurple[500]}} alt="user image" src={`${userinfo.img}`}/>}
                   </div>}
                  { dropdown && <div className="sticky top-0 z-30">
                 <div className="absolute right-24 bg-white shadow-lg top-4 rounded-md px-5 w-44 py-4 z-30 block lg:hidden" onMouseLeave={()=>{
@@ -421,7 +425,7 @@ const Navbar = ({logout,user}) => {
                   <Link href={"/components/Profile"}>
                     <li className="py-1 text-base hover:text-pink-700 list-none font-bold flex">
                       <MdManageAccounts className="mt-1 mx-2" />
-                      My Account
+                      My Profile
                     </li>
                   </Link>
                   <Link href={"/components/MyTicket"}>
