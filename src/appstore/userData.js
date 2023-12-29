@@ -9,6 +9,7 @@ const initialState={
     phone:"",
     bio:"",
     clg:"",
+    title:"",
 }
 export const userData= createSlice({
     name:"userData",
@@ -23,7 +24,8 @@ export const userData= createSlice({
         state.website=action.payload.website,
         state.phone=action.payload.phone,
         state.bio=action.payload.bio,
-        state.clg=action.payload.clg
+        state.clg=action.payload.clg,
+        state.title=action.payload.title
         },
         removeUserData:(state,action)=>{
         state.name="",
@@ -34,7 +36,8 @@ export const userData= createSlice({
         state.website="",
         state.phone="",
         state.bio="",
-        state.clg=""
+        state.clg="",
+        state.title=""
         }
     }
 })

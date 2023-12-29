@@ -26,7 +26,7 @@ const Index = () => {
       body: JSON.stringify(token),
     });
     const result = await res.json();
-    dispatch(addUserData({name:result.data.name,email:result.data.email,img:result.data.img,linkedin:result.data.linkedin,github:result.data.github,website:result.data.website,phone:result.data.phone,bio:result.data.bio,clg:result.data.clg}))
+    dispatch(addUserData({name:result.data.name,email:result.data.email,img:result.data.img,linkedin:result.data.linkedin,github:result.data.github,website:result.data.website,phone:result.data.phone,bio:result.data.bio,clg:result.data.clg,title:result.data.title}))
   }
   useEffect(()=>{
     if(localStorage.getItem('innovateUuser')){

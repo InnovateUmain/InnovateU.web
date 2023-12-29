@@ -52,7 +52,7 @@ const Events = () => {
                     </li>
                   </ul>
                   <div className='my-4'>
-                <Link href='/Event' ><motion.button className='mx-4 fontevent font-bold px-4 py-2 rounded-full text-white bg-purple-600' whileTap={{scale:0.9, rotate:2}}>Ongoing Events &gt;</motion.button></Link>
+                <Link href='Event' ><motion.button className='mx-4 fontevent font-bold px-4 py-2 rounded-full text-white bg-purple-600' whileTap={{scale:0.9, rotate:2}}>Ongoing Events &gt;</motion.button></Link>
                 </div>
                 </div>
               </div>

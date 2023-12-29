@@ -25,6 +25,7 @@
     "next": "13.5.4",
     "nodemailer": "^6.9.7",
     "preline": "^2.0.2",
+    "razorpay": "^2.9.2",
     "react": "^18",
     "react-apexcharts": "^1.4.1",
     "react-confetti": "^6.1.0",

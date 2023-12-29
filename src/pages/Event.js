@@ -1,5 +1,5 @@
 import React from 'react'
-import Hero from './components/Hero'
+import Hero from './components/Events/Devcon2k24'
 const Event = () => {
   return (
     <div>

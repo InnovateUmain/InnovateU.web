@@ -63,6 +63,9 @@ const Profile = () => {
     else if(e.target.name=="image"){
       setImage(e.target.files[0]);
     }
+    else if(e.target.name=="title"){
+      setTitle(e.target.value);
+    }
    
   }
   const getUser=async(token)=>{
@@ -84,7 +87,8 @@ setGithub(result.data.github);
 setWebsite(result.data.website);
 setBio(result.data.bio);
 setUrl(result.data.img);
-    
+    setTitle(result.data.title);
+    console.log(result)
     setLoading(false);
   
 
@@ -97,9 +101,10 @@ setUrl(result.data.img);
   },[])
   //update userdetails
   const updateuser = async(ulurl)=>{
+  
     let upurl = ulurl!==""?ulurl:url;
     setLoading(true);
-    const data = {name,email,bio,phone,college,github,linkedin,website,img:upurl};
+    const data = {name,email,bio,phone,college,github,linkedin,website,img:upurl,title};
     const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/updateuser`, {
       method: "POST", // or 'PUT'
       headers: {
@@ -398,6 +403,26 @@ setLoading(true);
               placeholder="Enter Your College / Organization Name"
             />
           </div>
+          <div className="sm:col-span-3">
+            <label
+              htmlFor="af-account-email"
+              className="inline-block text-sm  mt-2.5 text-gray-200"
+            >
+              Title/Role
+            </label>
+          </div>
+          {/* End Col */}
+          <div className="sm:col-span-9">
+            <input
+              id="af-account-email"
+              type="text"
+              name="title"
+              onChange={handleChange}
+              value={title}
+              className="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600"
+              placeholder="Enter Your Title/Role ex:- Student,Developer,etc"
+            />
+          </div>
           {/* End Col */}
           <div className="sm:col-span-3">
             <label
@@ -412,7 +437,7 @@ setLoading(true);
             <div className="space-y-2">
               <input
                 id="af-account-password"
-                type="text"
+                type="url"
                 name='github'
                 onChange={handleChange}
                 value={github}
@@ -435,7 +460,7 @@ setLoading(true);
             <div className="space-y-2">
               <input
                 id="af-account-password"
-                type="text"
+                type="url"
                 name='linkedin'
                 onChange={handleChange}
                 value={linkedin}
