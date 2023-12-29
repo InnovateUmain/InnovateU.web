@@ -12,7 +12,7 @@ import Partner from './components/Partner';
 import Faq from './components/Faq';
 import Contact from './components/Contact';
 import { useDispatch } from 'react-redux';
-import { addUserData } from './appstore/userData';
+import { addUserData } from '@/appstore/userData';
 import { useSelector } from 'react-redux';
 const Index = () => {
   const dispatch = useDispatch();

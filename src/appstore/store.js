@@ -1,7 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
 import userData from "./userData";
-export const store = configureStore({
+const store = configureStore({
 reducer:{
     userData:userData,
 },
 })
+export default store;

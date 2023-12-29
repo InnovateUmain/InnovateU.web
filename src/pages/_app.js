@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import Footer from './components/Footer';
 import { Provider } from 'react-redux';
-import { store } from './appstore/store';
+import store from '@/appstore/store';
 export default function App({ Component, pageProps }) {
   const router=useRouter();
   const [progress, setProgress] = useState(0)

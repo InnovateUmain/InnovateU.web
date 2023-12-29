@@ -8,42 +8,42 @@ const Menuitems = [
   {
     title: "All Members",
     icon: "file-text",
-    href: "/admin/Projects",
+    href: "/admin",
   },
   {
     title: "Applied Members",
     icon: "monitor",
-    href: "/admin/Presentations",
+    href: "/admin",
   },
   {
     title: "Devfest",
     icon: "edit",
-    href: "/admin/Assignments",
+    href: "/admin",
   },
   {
     title: "Team",
     icon: "message-square",
-    href: "/admin/chat",
+    href: "/admin",
   },
   {
     title: "New Admin",
     icon: "video",
-    href: "/admin/meeting",
+    href: "/admin",
   },
   {
     title: "To-Dos",
     icon: "list",
-    href: `/admin/Todo`,
+    href: `/admin`,
   },
   {
     title: "Search a Memeber",
     icon: "calendar",
-    href: "/admin/Calendar",
+    href: "/admin",
   },
   {
     title: "Edit Event",
     icon: "type",
-    href: "/admin/Texteditor",
+    href: "/admin",
   },
 ];
 
