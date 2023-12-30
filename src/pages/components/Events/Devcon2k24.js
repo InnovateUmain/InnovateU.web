@@ -14,6 +14,7 @@ import { useSelector } from 'react-redux';
 import Spinner from '../Spinner';
 import toast,{ Toaster } from 'react-hot-toast';
 const Hero = () => {
+ 
   const userinfo = useSelector((state)=>state.userData);
   const [open,setOpen]=useState(false);
   const [width,setWidth]= useState(0);
@@ -57,7 +58,7 @@ const router = useRouter();
     setWidth(800);
    }
    else{
-    setWidth(350);
+    setWidth(400);
    }
     
    },[])
@@ -68,8 +69,8 @@ const router = useRouter();
     left: '50%',
     transform: 'translate(-50%, -50%)',
     width: {width},
-    bgcolor: '#2e022b',
-    border: '2px solid purple',
+    bgcolor: '#1c0119',
+    border: '2px solid #4a0343',
     boxShadow: 24,
     borderRadius: "6px",
     p: 4,
@@ -89,36 +90,62 @@ setImage(userinfo.img);
        const handleClose=()=>{
         setOpen(false);
       }
+      //submitting data to backend
       const handleSubmit=async(e)=>{
+        //validation
         if(name===''||email===''||phone===''||clg===''||linkedin===''||github===''||title===''){
           toast.error("Please fill all the fields");
           return;
         }
-
         setLoading(true);
-        const data = {name,email,phone,clg,github,linkedin,img,title,estatus:"new"};
-    const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/eventr`, {
-      method: "POST", // or 'PUT'
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
-    const result = await res.json();
-    if(result.success){
-      toast.success(result.message);
-      setLoading(false);
-      setOpen(false);
-      router.push(`/components/Events/Payment?orderid=${result.order.id}`);
-    }
-    else{
-      toast.error(result.message);
-      setLoading(false);
-    }
+        //check user is exist or not 
+        const userdata = {email,estatus:"checkuser"};
+        const checkuser = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/eventr`, {
+          method: "POST", // or 'PUT'
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(userdata),
+        });
+        const userresult = await checkuser.json();
+        //if user exist and payment is pending then redirect to payment page
+        if(userresult.data!=null){
+          if(userresult.data.orderid!=""&&userresult.data.paymentstatus=="pending"){
+            router.push(`/components/Events/Payment?orderid=${userresult.data.orderid}`);
+          }
+          //if user exist and payment is paid then show toast
+          else if(userresult.data.orderid!=""&&userresult.data.paymentstatus=="paid"){
+            toast.success("Wooh 🎉🎉🎉 ! You are already registered for the Devcon 2k24");
+            setLoading(false);
+          }
+        }
+        //if user not exist then save data to db and redirect to payment page
+        else{
+          const data = {name,email,phone,clg,github,linkedin,img,title,estatus:"new"};
+          const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/eventr`, {
+            method: "POST", // or 'PUT'
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          });
+          const result = await res.json();
+          if(result.success){
+            toast.success(result.message);
+            setLoading(false);
+            setOpen(false);
+            router.push(`/components/Events/Payment?orderid=${result.order.id}`);
+          }
+          else{
+            toast.error(result.message);
+            setLoading(false);
+          }
+        }
+    
       }
 
   return (
-    <>
+    <div className='overflow-x-hidden'>
     <Toaster position="top-center" reverseOrder={false}/>
     <style jsx >
 {
@@ -160,7 +187,7 @@ setImage(userinfo.img);
               <p className=" herofont hero-text font-bold  text-white sm:text-5xl lg:text-9xl leading-tight text-5xl md:text-8xl herofont"
             
               >
-                DEV FEST 2023
+                DEVCON 2K24
                 {/* <span className="bg-gradient-to-r from-[#44BCFF] via-[#FF44EC] to-[#FF675E] blur-lg filter opacity-30 w-full h-full absolute inset-0"></span> */}
                 <br /><span className="herofont text-yellow-600">
                   {" "}
@@ -172,7 +199,7 @@ setImage(userinfo.img);
               <div className="px-8 sm:items-center sm:justify-center sm:px-0 sm:space-x-5 sm:flex mt-4 w-[100vw]">
                 <div className='flex justify-center items-center text-yellow-600  mx-2 my-2'>
 <BsFillCalendarCheckFill className='text-2xl mx-2 dt1'/>
-<p className='lg:text-2xl text-xl dt1'>12 DEC 2023</p>
+<p className='lg:text-2xl text-xl dt1'>15 JAN 2024</p>
 <FaMapLocationDot className='text-2xl mx-2 dt1'/>
 <p className='lg:text-2xl text-xl dt1'>CUTM, ODISHA</p>
                 </div>
@@ -235,7 +262,7 @@ setImage(userinfo.img);
     <div className='overflow-y-scroll max-h-[90vh]'>
 
     
-  <div className="mt-7 bg-white border border-gray-200 rounded-xl shadow-sm dark:bg-gray-800 dark:border-gray-700 ">
+  <div className="mt-6 bg-white border border-gray-200 rounded-xl shadow-sm dark:bg-gray-800 dark:border-gray-700 ">
     <div className="p-4 sm:p-7">
       <div className="text-center">
         <h1 className="block text-2xl font-bold text-gray-800 dark:text-white">
@@ -433,7 +460,7 @@ setImage(userinfo.img);
   </Box>
 </Modal>
 </div>}
-    </>
+    </div>
   )
 }
 

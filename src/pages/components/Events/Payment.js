@@ -4,38 +4,46 @@ import { MdEventNote } from "react-icons/md";
 import { useSelector } from 'react-redux';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/router';
+import toast,{ Toaster } from 'react-hot-toast';
+import Link from 'next/link';
 // import Razorpay from "razorpay";
 const Payment = () => {
     const userinfo = useSelector((state)=>state.userData);
     let orderid = Math.floor(Math.random() * 1000000);
     const router = useRouter();
     const handlePayment=async(e)=>{
+      try{
         var options =  {
-            key: `${process.env.NEXT_PUBLIC_KEY_ID}`,
-             // Enter the Key ID generated from the Dashboard
-            amount: 500, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
-            currency: "INR",
-            name: "InnovateU", //your business name
-            description: "Devcon 2k24 Registration fees.",
-            image: "https://res.cloudinary.com/dawzncoau/image/upload/v1701193584/InnovateU-removebg-preview_sgnisw.png",
-            order_id: router.query.orderid, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-            callback_url: `${process.env.NEXT_PUBLIC_HOST}/api/payment`,
-            prefill: {
-              //We recommend using the prefill parameter to auto-fill customer's contact information especially their phone number
-              name: userinfo.name, //your customer's name
-              email: userinfo.email,
-              contact: userinfo.phone, //Provide the customer's phone number for better conversion rates
-            },
-            notes: {
-              address: "Razorpay Corporate Office",
-            },
-            theme: {
-              color: "#FD0872",
-            },
-          };
-          var rzp1 = new window.Razorpay(options);
-          await rzp1.open();
-          e.preventDefault()
+          key: `${process.env.NEXT_PUBLIC_KEY_ID}`,
+           // Enter the Key ID generated from the Dashboard
+          amount: 500, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+          currency: "INR",
+          name: "InnovateU", //your business name
+          description: "Devcon 2k24 Registration fees.",
+          image: "https://res.cloudinary.com/dawzncoau/image/upload/v1701193584/InnovateU-removebg-preview_sgnisw.png",
+          order_id: router.query.orderid, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+          callback_url: `${process.env.NEXT_PUBLIC_HOST}/api/payment`,
+          prefill: {
+            //We recommend using the prefill parameter to auto-fill customer's contact information especially their phone number
+            name: userinfo.name, //your customer's name
+            email: userinfo.email,
+            contact: userinfo.phone, //Provide the customer's phone number for better conversion rates
+          },
+          notes: {
+            address: "Razorpay Corporate Office",
+          },
+          theme: {
+            color: "#FD0872",
+          },
+        };
+        var rzp1 = new window.Razorpay(options);
+        await rzp1.open();
+        e.preventDefault()
+      }
+       catch(err){
+        toast.error('Payment Failed . Please reload the page and try again')
+        window.location.reload();
+       }
     }
   return (
    
@@ -62,6 +70,7 @@ font-families {
 
 `}
    </style>
+   <Toaster position="top-center" reverseOrder={false}/>
    <div className="shadow-[0_16px_16px_-8px_rgba(118,108,241,0.3)] max-w-sm bg-white m-6 flex flex-col rounded-2xl overflow-hidden justify-center relative lg:top-8 top-10">
   <img
     src="/illustration-hero.svg"
@@ -93,9 +102,11 @@ font-families {
     <motion.button className="shadow-[0_16px_16px_-4px_rgba(118,108,241,0.3)] hover:bg-blue-medium-slate-blue w-full bg-blue-700 rounded-lg py-3 text-white font-bold" onClick={handlePayment} whileHover={{scale:1.1}} whileTap={{scale:0.9,rotate:1}}>
       Proceed to Payment
     </motion.button>
-    <button className="hover:text-neutral-dark-blue w-full text-neutral-desaturated-blue font-bold py-3 mt-2">
+    <Link href="/Event">
+    <motion.button className="hover:text-neutral-dark-blue w-full text-neutral-desaturated-blue font-bold py-3 mt-2" whileHover={{scale:1.1}} whileTap={{scale:0.9,rotate:1}}>
       Cancel Order
-    </button>
+    </motion.button>
+    </Link>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   </div>
 </div>

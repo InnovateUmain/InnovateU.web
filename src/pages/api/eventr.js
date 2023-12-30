@@ -1,63 +1,98 @@
 import connectDb from "../../middleware/mongoose";
 import Revent from "../../../models/Revent";
-const Razorpay = require('razorpay');
-var jwt = require('jsonwebtoken');
+const Razorpay = require("razorpay");
+var jwt = require("jsonwebtoken");
 var CryptoJS = require("crypto-js");
 const nodemailer = require("nodemailer");
 const handler = async (req, res) => {
-    const rand = Math.floor(Math.random()*1000000);
-    const transporter = await nodemailer.createTransport({
-        host: "smtp-relay.brevo.com",
-        port: 587,
-        secure: false,
-        auth: {
-            Revent: 'thebasirkhanofficial@gmail.com',
-            pass: 'bOTLR5E0phXVM2qm'
+  const ticketid = "IN" + Math.floor(Math.random() * 100000) + "D24";
+  const rand = Math.floor(Math.random() * 1000000);
+  const transporter = await nodemailer.createTransport({
+    host: "smtp-relay.brevo.com",
+    port: 587,
+    secure: false,
+    auth: {
+      Revent: "thebasirkhanofficial@gmail.com",
+      pass: "bOTLR5E0phXVM2qm",
+    },
+  });
+  if (req.method === "POST") {
+    if (req.body.estatus == "checkuser") {
+      try {
+        let a = await Revent.findOne({ email: req.body.email });
+        res.status(200).json({ success: true, data: a });
+        console.log(a);
+      } catch (err) {
+        res.status(400).json({ success: false, message: "Something went wrong ! Please try again after some time " });
+      }
+    }
+    if (req.body.estatus == "new") {
+      let remail = await Revent.find({ email: req.body.email });
+      let mevent = await Revent.find({ phone: req.body.phone });
+      if (remail.length > 0) {
+        res
+          .status(400)
+          .json({
+            success: false,
+            message: "This email is already registered",
+          });
+      } else if (mevent.length > 0) {
+        res
+          .status(400)
+          .json({
+            success: false,
+            message: "This phone number is already registered",
+          });
+      } else {
+        var instance = new Razorpay({
+          key_id: `${process.env.NEXT_PUBLIC_KEY_ID}`,
+          key_secret: `${process.env.NEXT_PUBLIC_KEY_SECRET}`,
+        });
+        var options = {
+          amount: 500 * 100,
+          currency: "INR",
+          receipt: `${rand}`,
+        };
+        try {
+          instance.orders.create(options, async function (err, order) {
+            console.log(order);
+            let eventr = new Revent({
+              name: req.body.name,
+              email: req.body.email,
+              phone: req.body.phone,
+              clg: req.body.clg,
+              github: req.body.github,
+              linkedin: req.body.linkedin,
+              title: req.body.title,
+              img: req.body.img,
+              orderid: order.id,
+              ticketid: ticketid,
+             eventname: "InnovateU Devcon 2k24",
+             eventdate: "15-19 JAN 2024",
+            });
+            let a = await eventr.save();
+            res
+              .status(200)
+              .json({
+                success: true,
+                message: "Your Details Saved Successfully Proceeed to Payment",
+                order,
+              });
+          });
+        } catch {
+          res
+            .status(400)
+            .json({
+              success: false,
+              message:
+                "Cannot intialize your payment server is busy please try again after some time",
+            });
         }
-      });
-if(req.method==="POST"){
-   if(req.body.estatus=="new") {
-    let remail = await Revent.find({email:req.body.email});
-    let mevent= await Revent.find({phone:req.body.phone});
-    if(remail.length>0){
-        res.status(400).json({success:false,message:"This email is already registered"})
+      }
     }
-    else if(mevent.length>0){
-        res.status(400).json({success:false,message:"This phone number is already registered"})
-    }
-    else{
-var instance = new Razorpay({ key_id: `${process.env.NEXT_PUBLIC_KEY_ID}`, key_secret: `${process.env.NEXT_PUBLIC_KEY_SECRET}` })
-var options = {
-  amount: 500*100,
-  currency: "INR",
-  receipt: `${rand}`
-};
-try{
-instance.orders.create(options, async function(err, order) {
-  console.log(order);
-  let eventr = new Revent({
-    name:req.body.name,
-    email:req.body.email,
-    phone:req.body.phone,
-    clg:req.body.clg,
-    github:req.body.github,
-    linkedin:req.body.linkedin,
-    title:req.body.title,
-    img:req.body.img,
-    orderid:order.id,
-})
-let a = await eventr.save();
-res.status(200).json({success: true,message:"Your Details Saved Successfully Proceeed to Payment",order});
-})}
-catch{
-res.status(400).json({success:false,message:"Cannot intialize your payment server is busy please try again after some time"})
-}
-        
-   }
-}
-if(req.body.estatus=="old"){
-    const info = await transporter.sendMail({
-        from: '<support@InnovateU.com>', // sender address
+    if (req.body.estatus == "old") {
+      const info = await transporter.sendMail({
+        from: "<support@InnovateU.com>", // sender address
         to: `${req.body.email}`, // list of receivers
         subject: `🎉 Welcome to InnovateU! Your Account is Ready 🚀`, // Subject line
         text: "Account Created Successfully", // plain text body
@@ -81,16 +116,13 @@ if(req.body.estatus=="old"){
     </td>
 </tr>
 </table>
-        `, 
+        `,
       });
-
-
-    
-}
-
-}
-else{
-    res.status(400).json({success:false,message:"This methos is not allowed"})
-}
-}
+    }
+  } else {
+    res
+      .status(400)
+      .json({ success: false, message: "This methos is not allowed" });
+  }
+};
 export default connectDb(handler);

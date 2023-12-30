@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-sync-scripts */
 import React, { useEffect } from 'react'
 // import Hero from './components/Hero';
 import Hero1 from './components/Hero1';
@@ -55,6 +56,7 @@ const Index = () => {
   <Partner/>
   <Faq/>
   <Contact/>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   </div>
   </>
   )

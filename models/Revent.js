@@ -3,7 +3,7 @@ const EventRegisteredSchema=new mongoose.Schema({
     name:{type:String,required:true},
     email:{type:String,required:true,unique:true},
     phone:{type:Number,unique:true},
-    ticketid:{type:String,unique:true,default:''},
+    ticketid:{type:String,unique:true,required:true},
     orderid:{type:String,required:true,unique:true},
     paymentid:{type:String,unique:true,default:''},
     paymentstatus:{type:String,default:'pending'},
