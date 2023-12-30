@@ -4,9 +4,13 @@ const Razorpay = require("razorpay");
 var jwt = require("jsonwebtoken");
 var CryptoJS = require("crypto-js");
 const nodemailer = require("nodemailer");
+var QRCode = require('qrcode')
 const handler = async (req, res) => {
+  //genrating ticketid randomly
   const ticketid = "IN" + Math.floor(Math.random() * 100000) + "D24";
+  //genrating random id for razorpay reciept
   const rand = Math.floor(Math.random() * 1000000);
+  //intializing node mailer
   const transporter = await nodemailer.createTransport({
     host: "smtp-relay.brevo.com",
     port: 587,
@@ -16,7 +20,33 @@ const handler = async (req, res) => {
       pass: "bOTLR5E0phXVM2qm",
     },
   });
+  //
   if (req.method === "POST") {
+    //get user data for event (used in confirmation page)
+    if(req.body.estatus=="getdata"){
+      console.log(req.body.id);
+      try{
+        let a = await Revent.findById(req.body.id);
+        var img = await QRCode.toDataURL(a.ticketid);
+        res.status(200).json({ success: true, data: a,url:img });
+      }
+      catch(err){
+        res.status(200).json({ success: true, message:"something went wrong" +err});
+      }
+      return;
+    }
+    //get user data via email (used in myevent and my ticket section)
+    if(req.body.estatus=="getdataviaemail"){
+      try{
+        let a = await Revent.findOne({email:req.body.email})
+        var img = await QRCode.toDataURL(a.ticketid);
+        res.status(200).json({ success: true, data: a,url:img });
+      }
+      catch(err){
+        res.status(200).json({ success: true, message:"something went wrong" +err});
+      }
+      return;
+    }
     if (req.body.estatus == "checkuser") {
       try {
         let a = await Revent.findOne({ email: req.body.email });
@@ -25,6 +55,7 @@ const handler = async (req, res) => {
       } catch (err) {
         res.status(400).json({ success: false, message: "Something went wrong ! Please try again after some time " });
       }
+      return;
     }
     if (req.body.estatus == "new") {
       let remail = await Revent.find({ email: req.body.email });

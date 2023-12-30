@@ -30,7 +30,7 @@ const handler = async (req, res) => {
        order= await Revent.findOneAndUpdate({orderid:req.body.razorpay_order_id},{paymentstatus:"paid",paymentid:req.body.razorpay_payment_id
         ,paymentamount:500
       });
-        res.redirect(`/?id=${order._id}&clearCart=1`,200);
+        res.redirect(`/components/Events/Eventconf?id=${order._id}`,200);
         }
       else{
          order =await Revent.findOneAndUpdate({orderid:req.body.razorpay_order_id},{paymentstatus:"pending",paymentid:req.body.razorpay_payment_id});
