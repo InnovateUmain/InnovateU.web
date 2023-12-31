@@ -7,8 +7,8 @@ const handler = async (req, res) => {
         port: 587,
         secure: false,
         auth: {
-          user: 'basirkhan4ukhanatoz@gmail.com',
-          pass: 'O1aXMRNItUmjprkD'
+            user: "thebasirkhanofficial@gmail.com",
+            pass: "bOTLR5E0phXVM2qm",
         }
       });
     if(req.method=="POST"){
@@ -51,7 +51,7 @@ const handler = async (req, res) => {
           });
         
           const info1 = await transporter.sendMail({
-            from: '<support@Project-Studio.com>', // sender address
+            from: '<support@innovateu.com>', // sender address
             to: "khanbasir5555@gmail.com, csanimeshsingh747@gmail.com", // list of receivers
             subject: `Query Submitted Confirmation `, // Subject line
             text: "Query Submitted Confirmation", // plain text body
