@@ -5,11 +5,34 @@ import { useSelector } from 'react-redux';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/router';
 import toast,{ Toaster } from 'react-hot-toast';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { addUserData } from '@/appstore/userData';
 import Link from 'next/link';
 // import Razorpay from "razorpay";
 const Payment = () => {
     const userinfo = useSelector((state)=>state.userData);
     let orderid = Math.floor(Math.random() * 1000000);
+    const dispatch = useDispatch();
+    const getUser=async(token)=>{
+      console.log(token)
+      const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/getuserdata`, {
+        method: "POST", // or 'PUT'
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(token),
+      });
+      const result = await res.json();
+      dispatch(addUserData({name:result.data.name,email:result.data.email,img:result.data.img,linkedin:result.data.linkedin,github:result.data.github,website:result.data.website,phone:result.data.phone,bio:result.data.bio,clg:result.data.clg,title:result.data.title}))
+    }
+    useEffect(()=>{
+      if(localStorage.getItem('innovateUuser')){
+        const data = JSON.parse(localStorage.getItem('innovateUuser')).token;
+  
+        getUser(data);
+      }
+    },[])
     const router = useRouter();
     const handlePayment=async(e)=>{
       try{

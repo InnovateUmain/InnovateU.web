@@ -2,12 +2,29 @@ import React, { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import Confetti from 'react-confetti'
+import { useDispatch } from 'react-redux'
+import { addUserData } from '@/appstore/userData'
 const Eventconf = () => {
     const ref = useRef();
     const router = useRouter();
+    const dispatch = useDispatch();
     const id = router.query.id;
     const [event,setEvent] = useState({});
     const[url,setUrl]= useState("");
+    const[width,setWidth]=useState(0);
+const[con,setCon]= useState(true);
+const getUser=async(token)=>{
+  console.log(token)
+  const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/getuserdata`, {
+    method: "POST", // or 'PUT'
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(token),
+  });
+  const result = await res.json();
+  dispatch(addUserData({name:result.data.name,email:result.data.email,img:result.data.img,linkedin:result.data.linkedin,github:result.data.github,website:result.data.website,phone:result.data.phone,bio:result.data.bio,clg:result.data.clg,title:result.data.title}))
+}
     const fetchEventDetails=async()=>{
         const userdata = { id,estatus:"getdata"};
         console.log(userdata)
@@ -32,15 +49,28 @@ const Eventconf = () => {
     }
     useEffect(()=>{
     fetchEventDetails();
-    
+    if(localStorage.getItem('innovateUuser')){
+      const data = JSON.parse(localStorage.getItem('innovateUuser')).token;
+  
+      getUser(data);
+    }
+    var w = window.innerWidth;
+      setWidth(w);
+      setTimeout(() => {
+        setCon(false);
+      }, 10000);
     },[router.query])
     
    if(event!=null){
 var rdate = new Date(event.createdAt);
    }
   return (
+    <>
+{con&&<div className='relative top-10' > 
+           <Confetti numberOfPieces={1500} width={width>=500?width:300} height={width>=500?width:1500} className='m-auto ' />
+        </div>}
     <div className='relative top-20 mb-10'>
-        
+    
         <style jsx>
 {`
   @import url("https://fonts.googleapis.com/css2?family=Rubik:wght@500&display=swap");
@@ -220,7 +250,7 @@ var rdate = new Date(event.createdAt);
   }
 `}
         </style>
-        <Confetti numberOfPieces={200} width={200} height={800} className='' />
+            
       {event==null?<div className='flex justify-center items-center'><h3 className='navfont text-white text-center my-32 text-2xl lg:w-[70vw]w-[90vw]'>Oops! It seems like you might have ended up on the wrong page or used incorrect credentials for the event. Please double-check your details to make sure you have the right access.</h3></div>:<div className="bg-gradient-to-r from-black to-gray-900 min-h-screen flex items-center justify-center h-full w-full p-4">
       
             <div className="bg-white p-8 rounded-lg shadow-lg text-center  lg:w-[80vw] w-[100vw]  ">
@@ -231,7 +261,7 @@ var rdate = new Date(event.createdAt);
                 </div>
                 <h1 className="text-4xl font-semibold text-gray-800 mb-4 navfont">Congratulations!</h1>
                 
-                <p className="text-lg text-gray-600 mb-4 font">Thank you for registering for our event. We are excited to have you join us!</p>
+                <p className="text-lg text-gray-600 mb-4 font">Thank you for registering for {event.eventname}. We are excited to have you join us!</p>
                 
               
                 
@@ -239,7 +269,7 @@ var rdate = new Date(event.createdAt);
                 {/* Event Ticket Section */}
                 <h2 className="text-xl font-semibold text-gray-800 mb-2 navfont">Event Ticket</h2>
                 <div className="mb-4 flex justify-center items-center flex-col">
-                   
+                
                     <>
   <div className="m-ticket" ref={ref}>
     <p className="m">DEVCON 2K24</p>
@@ -567,6 +597,7 @@ var rdate = new Date(event.createdAt);
         </div>}
         
     </div>
+      </>
   )
 }
 

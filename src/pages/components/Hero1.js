@@ -6,7 +6,7 @@ import { FaMapLocationDot,FaLinkedinIn,FaInstagram } from 'react-icons/fa6';
 import { motion } from 'framer-motion';
 const Hero1 = () => {
   return (
-    <div className='h-[100vh] w-[100vw]'>
+    <div className='h-[100vh] w-[100vw] '>
     <style jsx >
 {
   `
