@@ -2,8 +2,10 @@
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion';
-import { IoTicket } from "react-icons/io5";
-import { MdEventNote } from "react-icons/md";
+import { FaFilePdf ,FaImage} from "react-icons/fa6";
+import * as htmlToImage from 'html-to-image';
+import { toPng, toJpeg, toBlob, toPixelData, toSvg } from 'html-to-image';
+import { jsPDF } from "jspdf";
 const MyTicket = () => {
     const [event,setEvent] = useState({});
     const[url,setUrl]= useState("");
@@ -33,8 +35,37 @@ const MyTicket = () => {
     useEffect(()=>{
 		const data = JSON.parse(localStorage.getItem('innovateUuser')).email;
   fetchEventDetails(data);
+  
     },[])
-	
+    const captureImage = async () => {
+      try {
+        const dataUrl = await htmlToImage.toPng(document.getElementById('ticket'), { quality: 0.95 });
+  
+        var link = document.createElement('a');
+        link.download = 'EventTicket.png';
+  
+        // You may want to append the link to the body before triggering the download
+        // document.body.appendChild(link);
+  
+        link.href = dataUrl;
+        link.click();
+      } catch (error) {
+        console.error('Error capturing image:', error);
+      }
+    };
+    const capturePdf= async () => {
+      try {
+        const dataUrl = await htmlToImage.toPng(document.getElementById('ticket'), { quality: 0.95 });
+        const pdf = new jsPDF();
+          const imgProps= pdf.getImageProperties(dataUrl);
+          const pdfWidth = pdf.internal.pageSize.getWidth();
+          const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+          pdf.addImage(dataUrl, 'PNG', 0, 0,pdfWidth, pdfHeight);
+          pdf.save("EventTicket.pdf");
+      } catch (error) {
+        console.error('Error capturing image:', error);
+      }
+    };
   return (
     <div className='min-h-screen flex justify-center'>
 <style jsx global>
@@ -240,7 +271,7 @@ const MyTicket = () => {
         <br/>
        
     </div></div>:<>
-  <div className="m-ticket">
+  <div className="m-ticket" id="ticket">
     <p className="m">DEVCON 2K24</p>
     <div className="movie-details">
       <img
@@ -274,8 +305,8 @@ const MyTicket = () => {
     </div>
   </div>
   <div className='flex justify-center items-center my-6'>
-<motion.button className='p-2 m-2 bg-purple-600 text-white fontevent rounded-md flex justify-center items-center' whileHover={{scale:1.1}} whileTap={{scale:0.9, rotate:1}}>Event Details <MdEventNote className='mx-1'/></motion.button>
-<motion.button className='p-2 m-2 bg-purple-600 text-white fontevent rounded-md flex justify-center items-center' whileHover={{scale:1.1}} whileTap={{scale:0.9, rotate:1}}>Download Now<IoTicket className='mx-1'/></motion.button>
+<motion.button className='p-2 m-2 bg-purple-600 text-white fontevent rounded-md flex justify-center items-center' whileHover={{scale:1.1}} whileTap={{scale:0.9, rotate:1}} onClick={captureImage}>Download Photo <FaImage className='mx-1'/></motion.button>
+<motion.button className='p-2 m-2 bg-purple-600 text-white fontevent rounded-md flex justify-center items-center' whileHover={{scale:1.1}} whileTap={{scale:0.9, rotate:1}} onClick={capturePdf}>Download Pdf<FaFilePdf  className='mx-1'/></motion.button>
 </div>
   {/*-m-ticket end--*/}
 </>}

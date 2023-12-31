@@ -4,8 +4,13 @@ import { useRouter } from 'next/router'
 import Confetti from 'react-confetti'
 import { useDispatch } from 'react-redux'
 import { addUserData } from '@/appstore/userData'
+import { useReactToPrint } from 'react-to-print'
+import * as htmlToImage from 'html-to-image';
+import { toPng, toJpeg, toBlob, toPixelData, toSvg } from 'html-to-image';
+import { jsPDF } from "jspdf";
 const Eventconf = () => {
     const ref = useRef();
+    const refticket = useRef();
     const router = useRouter();
     const dispatch = useDispatch();
     const id = router.query.id;
@@ -13,6 +18,33 @@ const Eventconf = () => {
     const[url,setUrl]= useState("");
     const[width,setWidth]=useState(0);
 const[con,setCon]= useState(true);
+const capturePdf= async () => {
+  try {
+    const dataUrl = await htmlToImage.toPng(document.getElementById('ticket'), { quality: 0.95 });
+    const pdf = new jsPDF();
+      const imgProps= pdf.getImageProperties(dataUrl);
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+      pdf.addImage(dataUrl, 'PNG', 0, 0,pdfWidth, pdfHeight);
+      pdf.save("EventTicket.pdf");
+  } catch (error) {
+    console.error('Error capturing image:', error);
+  }
+};
+const capturePdfInvoice= async () => {
+  try {
+    const dataUrl = await htmlToImage.toPng(document.getElementById('invoice'), { quality: 0.95 });
+    const pdf = new jsPDF();
+      const imgProps= pdf.getImageProperties(dataUrl);
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+      pdf.addImage(dataUrl, 'PNG', 0, 0,pdfWidth, pdfHeight);
+      pdf.save("Invoice.pdf");
+  } catch (error) {
+    console.error('Error capturing image:', error);
+  }
+};
+
 const getUser=async(token)=>{
   console.log(token)
   const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/getuserdata`, {
@@ -64,6 +96,15 @@ const getUser=async(token)=>{
    if(event!=null){
 var rdate = new Date(event.createdAt);
    }
+   //print invoice function
+   const handlePrint = useReactToPrint({
+    content: () => ref.current,
+  });
+  //print Ticket function
+  const handlePrintTicket = useReactToPrint({
+    content: () => refticket.current,
+  });
+
   return (
     <>
 {con&&<div className='relative top-10' > 
@@ -267,103 +308,17 @@ var rdate = new Date(event.createdAt);
                 
                 
                 {/* Event Ticket Section */}
-                <h2 className="text-xl font-semibold text-gray-800 mb-2 navfont">Event Ticket</h2>
-                <div className="mb-4 flex justify-center items-center flex-col">
-                
-                    <>
-  <div className="m-ticket" ref={ref}>
-    <p className="m">DEVCON 2K24</p>
-    <div className="movie-details">
-      <img
-        src="https://res.cloudinary.com/dst73auvn/image/upload/v1698952130/2-removebg-preview_ljkree.png"
-        className="poster"
-      />
-      <div className="movie">
-        <h4>{event.name}</h4>
-        <p>Jan 15th - Jan 20th</p>
-        <p>Thu, 7 Jan | 10:00 AM</p>
-        <p>CUTM : PKD CAMPUS</p>
-      </div>
-    </div>
-    <div className="info">Tap for support, details &amp; more actions</div>
-    <div className="ticket-details">
-      <img
-        src={`${url}`}
-        className="scan"
-      />
-      <div className="ticket">
-        <p>1-Ticket</p>
-        <b>DEVCON 2K24</b>
-        <p>Venue: Aryabhat</p>
-        <h6>TICKET ID: {event.ticketid}</h6>
-      </div>
-    </div>
-    <div className="info-cancel">Cancellation not available for this venue</div>
-    <div className="total-amount">
-      <p>Total Amount</p>
-      <p>Rs. ₹{event.paymentamount}</p>
-    </div>
-  </div>
-  <div className="mt-6 flex justify-end gap-x-3">
-        <a
-          className="py-2 px-3 inline-flex justify-center items-center gap-2 rounded-lg border font-medium bg-white text-gray-700 shadow-sm align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-sm dark:bg-gray-800 dark:hover:bg-slate-800 dark:border-gray-700 dark:text-gray-400 dark:hover:text-white dark:focus:ring-offset-gray-800"
-          href="#"
-        >
-          <svg
-            className="flex-shrink-0 w-4 h-4"
-            xmlns="http://www.w3.org/2000/svg"
-            width={24}
-            height={24}
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={2}
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-            <polyline points="7 10 12 15 17 10" />
-            <line x1={12} x2={12} y1={15} y2={3} />
-          </svg>
-          Ticket PDF
-        </a>
-        <a
-          className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
-          href="#"
-        >
-          <svg
-            className="flex-shrink-0 w-4 h-4"
-            xmlns="http://www.w3.org/2000/svg"
-            width={24}
-            height={24}
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={2}
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <polyline points="6 9 6 2 18 2 18 9" />
-            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
-            <rect width={12} height={8} x={6} y={14} />
-          </svg>
-          Print
-        </a>
-      </div>
-  {/*-m-ticket end--*/}
-</>
-
-                    {/* Add more event ticket details as needed */}
-                </div>
+               
                   {/* Invoice Section */}
                   <h2 className="text-xl font-semibold text-gray-800 mb-2 navfont">Invoice</h2>
                 <div className="mb-4">
                   <>
+                 
   {/* Invoice */}
-  <div className="max-w-[85rem] px-4 sm:px-6 lg:px-8 mx-auto my-4 sm:my-10">
-    <div className="sm:w-11/12 lg:w-3/4 mx-auto">
+  <div className="max-w-[85rem] px-4 sm:px-6 lg:px-8 mx-auto my-4 sm:my-10 border-2 border-gray-100" >
+    <div className="sm:w-11/12 lg:w-3/4 mx-auto " >
       {/* Card */}
-      <div className="flex flex-col p-4 sm:p-10 bg-white shadow-md rounded-xl dark:bg-gray-800">
+      <div className="flex flex-col p-4 sm:p-10 bg-white shadow-md rounded-xl dark:bg-gray-800 border-2 border-gray-200" id="invoice" ref={ref}>
         {/* Grid */}
         <div className="flex justify-between">
           <div>
@@ -450,7 +405,7 @@ var rdate = new Date(event.createdAt);
                   Item
                 </h5>
                 <p className="font-medium text-gray-800 dark:text-gray-200">
-                  Devcon 2k24 Ticket
+                  {event.eventname}
                 </p>
               </div>
               <div>
@@ -517,6 +472,7 @@ var rdate = new Date(event.createdAt);
             {/* End Grid */}
           </div>
         </div>
+
         {/* End Flex */}
         <div className="mt-8 sm:mt-12">
           <h4 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
@@ -537,12 +493,13 @@ var rdate = new Date(event.createdAt);
         </div>
         <p className="mt-5 text-sm text-gray-500">© 2024 InnovateU.</p>
       </div>
+      
       {/* End Card */}
       {/* Buttons */}
       <div className="mt-6 flex justify-end gap-x-3">
-        <a
+        <button
           className="py-2 px-3 inline-flex justify-center items-center gap-2 rounded-lg border font-medium bg-white text-gray-700 shadow-sm align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-sm dark:bg-gray-800 dark:hover:bg-slate-800 dark:border-gray-700 dark:text-gray-400 dark:hover:text-white dark:focus:ring-offset-gray-800"
-          href="#"
+          onClick={capturePdfInvoice}
         >
           <svg
             className="flex-shrink-0 w-4 h-4"
@@ -561,10 +518,10 @@ var rdate = new Date(event.createdAt);
             <line x1={12} x2={12} y1={15} y2={3} />
           </svg>
           Invoice PDF
-        </a>
-        <a
+        </button>
+        <button
           className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
-          href="#"
+          onClick={handlePrint}
         >
           <svg
             className="flex-shrink-0 w-4 h-4"
@@ -583,16 +540,106 @@ var rdate = new Date(event.createdAt);
             <rect width={12} height={8} x={6} y={14} />
           </svg>
           Print
-        </a>
+        </button>
       </div>
       {/* End Buttons */}
     </div>
   </div>
   {/* End Invoice */}
 </>
+<h2 className="text-xl font-semibold text-gray-800 mb-2 navfont">Event Ticket</h2>
+                <div className="mb-4 flex justify-center items-center flex-col">
+                    <>
+  <div className="m-ticket" id="ticket" ref={refticket}>
+    <p className="m">DEVCON 2K24</p>
+    <div className="movie-details">
+      <img
+        src="https://res.cloudinary.com/dst73auvn/image/upload/v1698952130/2-removebg-preview_ljkree.png"
+        className="poster"
+      />
+      <div className="movie">
+        <h4 className='text-black font'>{event.name}</h4>
+        <p>Jan 15th - Jan 20th</p>
+        <p>Thu, 7 Jan | 10:00 AM</p>
+        <p>CUTM : PKD CAMPUS</p>
+      </div>
+    </div>
+    <div className="info text-gray-600">Tap for support, details &amp; more actions</div>
+    <div className="ticket-details">
+      <img
+        src={`${url}`}
+        className="scan"
+      />
+      <div className="ticket">
+        <p>1-Ticket</p>
+        <b className='font text-black'>DEVCON 2K24</b>
+        <p>Venue: Aryabhat</p>
+        <h6 className='text-gray-600 font'>TICKET ID: {event.ticketid}</h6>
+      </div>
+    </div>
+    <div className="info-cancel">Cancellation not available for this venue</div>
+    <div className="total-amount">
+      <p className='text-black font'>Total Amount</p>
+      <p className='text-black font'>Rs. ₹{event.paymentamount}</p>
+    </div>
+  </div>
+ 
+  {/*-m-ticket end--*/}
+  <div className="mt-6 flex justify-end gap-x-3">
+        <button
+          className="py-2 px-3 inline-flex justify-center items-center gap-2 rounded-lg border font-medium bg-white text-gray-700 shadow-sm align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-sm dark:bg-gray-800 dark:hover:bg-slate-800 dark:border-gray-700 dark:text-gray-400 dark:hover:text-white dark:focus:ring-offset-gray-800"
+          onClick={capturePdf}
+        >
+          <svg
+            className="flex-shrink-0 w-4 h-4"
+            xmlns="http://www.w3.org/2000/svg"
+            width={24}
+            height={24}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="7 10 12 15 17 10" />
+            <line x1={12} x2={12} y1={15} y2={3} />
+          </svg>
+          Ticket PDF
+        </button>
+        <button
+          className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
+          onClick={handlePrintTicket}
+          
+        >
+          <svg
+            className="flex-shrink-0 w-4 h-4"
+            xmlns="http://www.w3.org/2000/svg"
+            width={24}
+            height={24}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <polyline points="6 9 6 2 18 2 18 9" />
+            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+            <rect width={12} height={8} x={6} y={14} />
+          </svg>
+          Print
+        </button>
+      </div>
+  {/*-m-ticket end--*/}
+</>
+
+                    {/* Add more event ticket details as needed */}
+                </div>
 
                 </div>
-                <Link href="/" className="bg-blue-600 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-full inline-block">Go Back to Home</Link>
+                <Link href="/" className="bg-blue-600 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-full inline-block my-4">Go Back to Home</Link>
             </div>
         </div>}
         
