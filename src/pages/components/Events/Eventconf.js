@@ -8,6 +8,7 @@ import { useReactToPrint } from 'react-to-print'
 import * as htmlToImage from 'html-to-image';
 import { toPng, toJpeg, toBlob, toPixelData, toSvg } from 'html-to-image';
 import { jsPDF } from "jspdf";
+import Spinner from '../Spinner'
 const Eventconf = () => {
     const ref = useRef();
     const refticket = useRef();
@@ -17,6 +18,7 @@ const Eventconf = () => {
     const [event,setEvent] = useState({});
     const[url,setUrl]= useState("");
     const[width,setWidth]=useState(0);
+    const[loading,setLoading]=useState(false);
 const[con,setCon]= useState(true);
 const capturePdf= async () => {
   try {
@@ -46,6 +48,7 @@ const capturePdfInvoice= async () => {
 };
 
 const getUser=async(token)=>{
+  setLoading(true)
   console.log(token)
   const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/getuserdata`, {
     method: "POST", // or 'PUT'
@@ -55,9 +58,11 @@ const getUser=async(token)=>{
     body: JSON.stringify(token),
   });
   const result = await res.json();
+  setLoading(false)
   dispatch(addUserData({name:result.data.name,email:result.data.email,img:result.data.img,linkedin:result.data.linkedin,github:result.data.github,website:result.data.website,phone:result.data.phone,bio:result.data.bio,clg:result.data.clg,title:result.data.title}))
 }
     const fetchEventDetails=async()=>{
+      setLoading(true);
         const userdata = { id,estatus:"getdata"};
         console.log(userdata)
         const checkuser = await fetch(
@@ -71,6 +76,7 @@ const getUser=async(token)=>{
           }
         );
         const userresult = await checkuser.json();
+        setLoading(false)
         if(userresult.data!=null){
             setEvent(userresult.data);
             setUrl(userresult.url);
@@ -110,7 +116,7 @@ var rdate = new Date(event.createdAt);
 {con&&<div className='relative top-10' > 
            <Confetti numberOfPieces={1500} width={width>=500?width:300} height={width>=500?width:1500} className='m-auto ' />
         </div>}
-    <div className='relative top-20 mb-10'>
+    {loading?<div className='min-h-screen flex justify-center items-center'><Spinner/></div>:<div className='relative top-20 mb-10'>
     
         <style jsx>
 {`
@@ -643,7 +649,7 @@ var rdate = new Date(event.createdAt);
             </div>
         </div>}
         
-    </div>
+    </div>}
       </>
   )
 }
