@@ -12,20 +12,31 @@ import { useEffect } from "react";
 import Head from "next/head";
 import Card from "../admin/Card";
 export default function Index() {
-// const getuser=async(token)=>{
-//     const data ={token:token};
-//     const pr = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/getuser`, {
-//       method: "POST", // or 'PUT'
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       body: JSON.stringify(data),
-//     });
-//     const res = await pr.json();
-//     setId(res._id);
-//     console.log(res._id);
-// }
+  const router = useRouter();
+const getuser=async(token)=>{
+    const data ={token:token};
+    const pr = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/getadmin`, {
+      method: "POST", // or 'PUT'
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    const res = await pr.json();
+   if(res.data==null){
+      router.push('/admin/adminlogin');
+   }
+}
+useEffect(()=>{
+  try{
+    let user = JSON.parse(localStorage.getItem('innovateUadmin')).token;
+    getuser(user);
+  }
+  catch(err){
+    router.push("/admin/adminlogin")
+  }
 
+},[])
   return (
     <ThemeProvider theme={theme}>
        <Head>

@@ -16,7 +16,7 @@ const handler = async (req, res) => {
     port: 587,
     secure: false,
     auth: {
-      Revent: "thebasirkhanofficial@gmail.com",
+      user: "thebasirkhanofficial@gmail.com",
       pass: "bOTLR5E0phXVM2qm",
     },
   });

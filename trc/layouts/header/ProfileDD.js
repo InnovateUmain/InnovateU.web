@@ -21,14 +21,20 @@ const ProfileDD = () => {
   const [img ,setImg]=useState('');
 const router = useRouter();
   useEffect(()=>{
-    const data = JSON.parse(localStorage.getItem("innovateu"));
-    if(data&&data.token){
-      Getuserdata(data.token);
+    try{
+      const data = JSON.parse(localStorage.getItem("innovateUadmin")).token;
+      console.log(data)
+      if(data!=null){
+        Getuserdata(data);
+      }
+    }
+    catch(er){
+      console.log(er)
     }
     
   },[])
   const logout=()=>{
-    localStorage.removeItem("myprappuser");
+    localStorage.removeItem("innovateUadmin");
     toast.success("Logout Successfully", {
       position: "top-left",
       autoClose: 3000,
@@ -43,7 +49,7 @@ const router = useRouter();
   }
   const Getuserdata=async(token)=>{
     const data={token:token}
-    const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/getuser`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/admin/getadmin`, {
       method: "POST", // or 'PUT'
       headers: {
         "Content-Type": "application/json",
@@ -52,8 +58,8 @@ const router = useRouter();
     });
     const response=await res.json();
     console.log(response);
-    setName(response.name);
-    setImg(response.img);
+    setName(response.data.name);
+    setImg(response.data.img);
   }
   const [anchorEl4, setAnchorEl4] = React.useState(null);
 

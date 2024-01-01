@@ -1,5 +1,5 @@
-import connectDb from "../../middleware/mongoose";
-import User from "../../../models/User"
+import connectDb from "@/middleware/mongoose";
+import Admin from "../../../../models/Admin";
 var jwt = require('jsonwebtoken');
 var CryptoJS = require("crypto-js");
 const nodemailer = require("nodemailer");
@@ -15,8 +15,8 @@ const handler = async (req, res) => {
       });
 if(req.method==="POST"){
     
-let auser = await User.find({email:req.body.email});
-let muser= await User.find({phone:req.body.phone});
+let auser = await Admin.find({email:req.body.email});
+let muser= await Admin.find({phone:req.body.phone});
 if(auser.length>0){
     res.status(400).json({success:false,message:"This email is already registered"})
     console.log(auser.length);
@@ -26,7 +26,7 @@ else if(muser.length>0){
     console.log(muser);
 }
 else{
-    let user = new User({
+    let user = new Admin({
         name:req.body.name,
         email:req.body.email,
         phone:req.body.phone,
@@ -40,7 +40,7 @@ else{
     const info = await transporter.sendMail({
         from: '<support@InnovateU.com>', // sender address
         to: `${req.body.email}`, // list of receivers
-        subject: `🎉 Welcome to InnovateU! Your Account is Ready 🚀`, // Subject line
+        subject: `🎉 Welcome to InnovateU! Your Admin Account is Ready 🚀`, // Subject line
         text: "Account Created Successfully", // plain text body
         html: `
         <table cellpadding="0" cellspacing="0" width="100%" bgcolor="#f4f4f4">
@@ -51,9 +51,13 @@ else{
                 <td style="padding: 40px 20px; text-align: center;">
                     <img src="https://res.cloudinary.com/dst73auvn/image/upload/v1698952130/2-removebg-preview_ljkree.png" alt="InnovateU Logo Logo" width="150">
                     <h1 style="font-size: 24px; margin-top: 30px; color: #333;">Welcome to InnovateU</h1>
-                    <p style="font-size: 16px; color: #666; margin-top: 20px;">You have successfully created your account on InnovateU.</p>
+                    <p style="font-size: 16px; color: #666; margin-top: 20px;">You have successfully created your admin account on InnovateU.</p>
                     <p style="font-size: 16px; color: #666;">Start managing your projects more efficiently and collaboratively with our powerful tools.</p>
-                    <a href="${process.env.NEXT_PUBLIC_HOST}/Login" style="display: inline-block; margin-top: 30px; padding: 15px 30px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px; font-size: 16px;">Login to InnovateU</a>
+                    <p style="font-size: 16px; color: #666;">Here is your admin credentials . We will suggest you to please change the password after login the admin panel first time</p>
+                    <p style="font-size: 16px; color: #666; font-weight:bold;">Name:- ${req.body.name}</p>
+                    <p style="font-size: 16px; color: #666; font-weight:bold;">Email:- ${req.body.email}</p>
+                    <p style="font-size: 16px; color: #666; font-weight:bold;">Password:- ${req.body.password}</p>
+                    <a href="${process.env.NEXT_PUBLIC_HOST}/admin/adminlogin" style="display: inline-block; margin-top: 30px; padding: 15px 30px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px; font-size: 16px;">Login to InnovateU</a>
                     <p style="font-size: 14px; color: #999; margin-top: 20px;">If you have any questions or need assistance, feel free to contact our support team at <a href="mailto:support@projectstudio.com" style="color: #007bff;">support@InnovateU.com</a>.</p>
                     <p style="font-size: 14px; color: #999;">Thank you for choosing InnovateU!</p>
                 </td>
