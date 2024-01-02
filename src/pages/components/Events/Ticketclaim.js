@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FaEye ,FaEyeSlash } from "react-icons/fa";
 import toast,{ Toaster } from 'react-hot-toast';
 import Spinner from '../Spinner';
@@ -20,7 +20,13 @@ const Ticketclaim = () => {
       }
     const router = useRouter();
     const [ticket,setTicket] = useState("");
+    const [delay,setDelay] = useState(false);
     const [loading,setLoading] = useState(false);
+    useEffect(()=>{ 
+setTimeout(()=>{
+setDelay(true);
+},2000)
+    },[])
     const handleChange=(e)=>{  
         if(e.target.name=="ticket"){
             setTicket(e.target.value);
@@ -74,11 +80,13 @@ const Ticketclaim = () => {
         </span>
       </h2>
     <div>
-    <QrReader
+    {delay&&<div className='flex justify-center my-4'><QrReader
           style={previewStyle}
+          delay={300}
           onError={handleError}
           onScan={handleScan}
           />
+          </div>}
     </div>
     
       <div>
