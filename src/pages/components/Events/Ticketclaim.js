@@ -3,6 +3,7 @@ import { FaEye ,FaEyeSlash } from "react-icons/fa";
 import toast,{ Toaster } from 'react-hot-toast';
 import Spinner from '../Spinner';
 import { useRouter } from 'next/router';
+import { IoTicketSharp } from "react-icons/io5";
 import QrReader from 'react-qr-scanner'
 const Ticketclaim = () => {
     const previewStyle = {
@@ -10,12 +11,21 @@ const Ticketclaim = () => {
         width: 320,
         borderRadius:'10px',
     }
+    const constraints = {
+        facingMode: {exact: "environment" },
+      };
       const handleScan = (data) => {
+        let a = document.getElementById('rightaudio');
         if (data) {
-          console.log(data)
+          console.log(data.text)
+          setTicket(data.text);
+          setDelay(false);
+          a.play();
         }
       }
       const handleError = (err) => {
+        let a = document.getElementById('wrongaudio');
+        a.play();
         console.log(err);
       }
     const router = useRouter();
@@ -47,14 +57,12 @@ setDelay(true);
           setLoading(false);
           if(response.success){
               toast.success(response.message);
-              setEmail('');
-              setPassword('');
-              localStorage.setItem('innovateUadmin',JSON.stringify({token:response.token,email:response.email}));
-              setTimeout(()=>{
-                router.push('/admin')
-                },2000)
+              setTicket('');
+              setDelay(true);
           }
           else{
+            setDelay(true)
+            setTicket('');
               toast.error(response.message);
           }
     }
@@ -67,7 +75,7 @@ setDelay(true);
   <main
     id="content"
     role="main"
-    className="relative max-w-3xl px-4 sm:px-6 lg:px-8 flex flex-col justify-center sm:items-center mx-auto w-full h-full before:absolute before:top-0 before:start-1/2 before:bg-[url('https://preline.co/assets/svg/component/squared-bg-element-dark.svg')] before:bg-no-repeat before:bg-top before:w-full before:h-full before:-z-[1] before:transform before:-translate-x-1/2"
+    className="relative max-w-3xl px-4 sm:px-6 lg:px-8 flex flex-col justify-center sm:items-center mx-auto w-full h-full before:absolute before:top-0 before:start-1/2 before:bg-[url('https://preline.co/assets/svg/component/squared-bg-element-dark.svg')] before:bg-no-repeat before:bg-top before:w-full before:h-full before:-z-[1] before:transform before:-translate-x-1/2 mb-10"
   >
     <div className="text-center py-8 px-4 sm:px-6 lg:px-8">
       <img src="https://res.cloudinary.com/dst73auvn/image/upload/v1698952130/2-removebg-preview_ljkree.png" alt="" className='w-20 sm:w-28 h-auto mx-auto mb-4 sm:mb-8'/>
@@ -80,11 +88,17 @@ setDelay(true);
         </span>
       </h2>
     <div>
+        <audio src="/qrrightaudio.mp3" id='rightaudio'></audio>
+        <audio src="/qrwrongaudio.mp3" id='wrongaudio'></audio>
     {delay&&<div className='flex justify-center my-4'><QrReader
           style={previewStyle}
           delay={300}
           onError={handleError}
           onScan={handleScan}
+          key="environment"
+          constraints={{
+          audio: false,
+          video: { facingMode: "environment" }}}
           />
           </div>}
     </div>
@@ -107,24 +121,11 @@ setDelay(true);
                 value={ticket}
                 id="hs-cover-with-gradient-form-email-1"
                 className="py-3 ps-11 pe-4 block w-full bg-white/[.03] border-white/20 text-white placeholder:text-white rounded-lg text-sm focus:border-white/30 focus:ring-white/30 sm:p-4 sm:ps-11"
-                placeholder="Email address"
+                placeholder="Ticket ID"
               />
               <div className="absolute inset-y-0 start-0 flex items-center pointer-events-none z-20 ps-4">
-                <svg
-                  className="flex-shrink-0 h-4 w-4 text-gray-400"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width={24}
-                  height={24}
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <rect width={20} height={16} x={2} y={4} rx={2} />
-                  <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
-                </svg>
+                <IoTicketSharp className="flex-shrink-0 h-4 w-4 text-gray-400"/>
+               
               </div>
             </div>
           </div>
