@@ -31,6 +31,7 @@ export default function App({ Component, pageProps }) {
   const logout=()=>{
     localStorage.removeItem("innovateUuser");
     setUser(false);
+    router.push("/");
       }
   return <><Provider store={store}><LoadingBar
   color='#c307ed'

@@ -281,8 +281,8 @@ const MyTicket = () => {
       <div className="movie">
         <h4 className='text-black font'>{event.name}</h4>
         <p>Jan 15th - Jan 20th</p>
-        <p>Thu, 7 Jan | 10:00 AM</p>
-        <p>CUTM : PKD CAMPUS</p>
+        <p>Thu, 15 Jan | 10:00 AM</p>
+        <p>CUTM : BBSR CAMPUS</p>
       </div>
     </div>
     <div className="info text-gray-600">Tap for support, details &amp; more actions</div>

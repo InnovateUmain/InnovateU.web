@@ -113,7 +113,7 @@ const teamMembers = [
 ))}    
     </div>
     <div className='flex flex-col justify-center items-center my-8'>
-        <h1 className='text-white fontevent lg:text-5xl md:text-4xl text-4xl'>Our Project Leads</h1>
+        <h1 className='text-white fontevent lg:text-5xl md:text-4xl text-4xl'>InnovateU Leads</h1>
         <div className='h-2 w-56 bg-purple-600 rounded-full my-4 text-center'></div>
         </div>
     <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
