@@ -204,6 +204,11 @@ const Footer = () => {
                 Admin Login
               </Link>
             </li>
+            <li>
+              <Link href="/components/Events/Ticketclaim" className="text-gray-200 transition hover:opacity-75">
+                Ticket Claim Section
+              </Link>
+            </li>
           </ul>
         </div>
         <div>
