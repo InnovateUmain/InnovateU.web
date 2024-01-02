@@ -18,7 +18,9 @@ const LogoIcon = () => {
           }
         `}</style>
       {/* <Image src={LogoDark} alt={LogoDark} /> */}
-      <h1 className="text-center no-underline bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 text-transparent bg-clip-text text-2xl font-extrabold ">Innovate U</h1>
+      <div className="flex justify-center items-center">
+      <img src="https://res.cloudinary.com/dst73auvn/image/upload/v1698952130/2-removebg-preview_ljkree.png" alt="logo innovateu" className="h-20 w-20"/>
+      </div>
     </Link>
   );
 };

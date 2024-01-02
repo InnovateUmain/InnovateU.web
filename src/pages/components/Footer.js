@@ -199,6 +199,11 @@ const Footer = () => {
                 Join
               </Link>
             </li>
+            <li>
+              <Link href="/admin/adminlogin" className="text-gray-200 transition hover:opacity-75">
+                Admin Login
+              </Link>
+            </li>
           </ul>
         </div>
         <div>
