@@ -11,7 +11,7 @@ if(ticket!=null){
     }
     else{
         let update = await Revent.findOneAndUpdate({ticketid:req.body.ticketid},{ticketstatus:"claimed"});
-        res.status(200).json({success:true,message:"Ticket claimed successfully"})
+        res.status(200).json({success:true,message:"Ticket claimed successfully",data:ticket})
     }
 }
 else{

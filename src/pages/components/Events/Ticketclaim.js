@@ -1,11 +1,42 @@
 import React, { useEffect, useState } from 'react'
 import { FaEye ,FaEyeSlash } from "react-icons/fa";
+import { motion } from 'framer-motion';
 import toast,{ Toaster } from 'react-hot-toast';
 import Spinner from '../Spinner';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import Modal from '@mui/material/Modal';
 import { useRouter } from 'next/router';
 import { IoTicketSharp } from "react-icons/io5";
 import QrReader from 'react-qr-scanner'
+import { IoMdCloseCircle } from "react-icons/io";
+import Link from 'next/link';
+import Box from '@mui/material/Box';
 const Ticketclaim = () => {
+  const [width,setWidth] = useState(0);
+  const [data,setData] = useState({});
+  useEffect(()=>{
+    var w = window.innerWidth;
+   if(w>=500){
+    setWidth(500);
+   }
+   else{
+    setWidth(350);
+   }
+    
+   },[])
+   const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: {width},
+    bgcolor: 'background.paper',
+    border: '2px solid purple',
+    boxShadow: 24,
+    borderRadius: "6px",
+    p: 4,
+  };
     const previewStyle = {
         height: 240,
         width: 320,
@@ -31,6 +62,7 @@ const Ticketclaim = () => {
     const router = useRouter();
     const [ticket,setTicket] = useState("");
     const [delay,setDelay] = useState(false);
+    const [open,setOpen]=useState(false);
     const [loading,setLoading] = useState(false);
     useEffect(()=>{ 
 setTimeout(()=>{
@@ -42,6 +74,13 @@ setDelay(true);
             setTicket(e.target.value);
         }
     }
+    const handleOpen=()=>{
+      setOpen(true);
+      
+         }
+         const handleClose=()=>{
+          setOpen(false);
+        }
     const handleSubmit=async()=>{
         setLoading(true);
         const data = {ticketid:ticket};
@@ -57,8 +96,10 @@ setDelay(true);
           setLoading(false);
           if(response.success){
               toast.success(response.message);
+              setData(response.data);
               setTicket('');
               setDelay(true);
+              handleOpen();
           }
           else{
             setDelay(true)
@@ -68,6 +109,38 @@ setDelay(true);
     }
   return (
     <div className='min-h-screen relative top-20'>
+      <Modal
+  open={open}
+  onClose={handleClose}
+  aria-labelledby="modal-modal-title"
+  aria-describedby="modal-modal-description"
+>
+  <Box sx={style}>
+  <div className='absolute top-2 right-2 text-purple-600' onClick={handleClose}>
+    <IoMdCloseCircle className='text-4xl'/>
+    </div>
+  <div className="bg-white p-8 rounded-lg shadow-lg text-center">
+        <div className="animate-tickScale inline-block bg-green-600 rounded-full">
+    
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+        </div>
+        
+        <h1 className="lg:text-4xl md:text-4xl sm:text-2xl font-semibold text-gray-800 mb-4 font text-2xl">Congratulations!</h1>
+        <p className="text-lg text-gray-600 mb-4 font">Congratulations! You have successfully claimed {data.name} Ticket.</p>
+        <p className="text-lg text-gray-600 mb-2 font">Name: - <span className='font-bold text-green-600'>{data.name}</span>.</p>
+        <p className="text-lg text-gray-600 mb-2 font">Email: - <span className='font-bold text-green-600'>{data.email}</span>.</p>
+        <p className="text-lg text-gray-600 mb-2 font">Ticket id: - <span className='font-bold text-green-600'>{data.ticketid}</span>.</p>
+        <motion.button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-full inline-block mx-2 my-4 "
+        whileHover={{ scale: 1.08 }}
+        whileTap={{ scale: 0.9 ,rotate:1}}
+        onClick={handleClose}
+        >Go Back</motion.button>
+    
+    </div>
+  </Box>
+</Modal>
         <Toaster position="top-center" reverseOrder={false}/>
       {loading?<div className='flex justify-center '><Spinner/></div>:<>
       
@@ -90,7 +163,7 @@ setDelay(true);
     <div>
         <audio src="/qrrightaudio.mp3" id='rightaudio'></audio>
         <audio src="/qrwrongaudio.mp3" id='wrongaudio'></audio>
-    {delay&&<div className='flex justify-center my-4'><QrReader
+    {delay&&<div className='flex justify-center my-4 rounded-lg'><QrReader
           style={previewStyle}
           delay={300}
           onError={handleError}
