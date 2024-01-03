@@ -2,7 +2,9 @@
 import React, { useEffect } from 'react'
 // import Hero from './components/Hero';
 import Hero1 from './components/Hero1';
-import About from './components/About';
+// import About from './components/About';
+import { About } from '@/sections';
+import { GetStarted ,WhatsNew,Feedback} from '@/sections';
 import Stats from './components/Stats';
 import Events from './components/Events';
 import Sponsor from './components/Sponsor';
@@ -12,6 +14,8 @@ import Newsroom from './components/Newsroom';
 import Partner from './components/Partner';
 import Faq from './components/Faq';
 import Contact from './components/Contact';
+import { Footer } from '@/components';
+import { Insights } from '@/sections';
 import { useDispatch } from 'react-redux';
 import { addUserData } from '@/appstore/userData';
 import { useSelector } from 'react-redux';
@@ -47,15 +51,21 @@ const Index = () => {
   <div className="overflow-hidden scroll-smooth bg-[conic-gradient(at_bottom_right,_var(--tw-gradient-stops))] from-slate-900 via-purple-900 to-slate-900">
   <Hero1/>
   <About/>
-  <Stats/>
+  <div className="relative">
+      <GetStarted />
+      <div className="gradient-04 z-0" />
+      {/* <WhatsNew /> */}
+    </div>
+  {/* <Stats/> */}
   <Events/>
   <Sponsor/>
   <Testimonials/>
-  <Mentorship/>
+  {/* <Mentorship/> */}
   <Newsroom/>
-  <Partner/>
-  <Faq/>
+  {/* <Partner/> */}
+  <Insights/>
   <Contact/>
+  <Footer/>
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   </div>
   </>
