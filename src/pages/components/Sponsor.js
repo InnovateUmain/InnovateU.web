@@ -12,19 +12,14 @@ const Sponsor = () => {
         `}
       </style>
       <div className='flex justify-center items-center flex-col'>
-        <h1 className='fontsponsor font-bold lg:text-5xl md:text-4xl text-4xl my-4 text-white'>Our students work at</h1>
-        <div className='h-2 w-56 bg-purple-600 rounded-full'></div>
+        <h1 className='fontsponsor font-bold lg:text-5xl md:text-4xl text-4xl my-4 text-white'>Our Community Partners</h1>
+        {/* <div className='h-2 w-56 bg-purple-600 rounded-full'></div> */}
       </div>
       <section>
       <>
   {/* Clients */}
   <div className="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
     {/* Title */}
-    <div className="sm:w-1/2 xl:w-1/3 mx-auto text-center mb-6 md:mb-12">
-      <h2 className="text-xl font-semibold md:text-2xl md:leading-tight text-gray-200">
-        Trusted by Open Source, enterprise, and more than 99,000 of you
-      </h2>
-    </div>
     {/* End Title */}
     {/* Grid */}
     <div className="grid grid-cols-2 sm:grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3 lg:gap-6">

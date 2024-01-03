@@ -2,7 +2,7 @@ import React from 'react'
 
 const Testimonials = () => {
   return (
-    <div className='bg-gradient-to-t from-slate-900 via-purple-900 to-gray-900'>
+    <div className=''>
        <style jsx>
         {`
         @import url('https://fonts.googleapis.com/css2?family=Cabin:wght@600&display=swap');
@@ -11,14 +11,14 @@ const Testimonials = () => {
         }
         `}
       </style>
-      <div className='mx-6 flex justify-center items-center flex-col bg-black'>
+      <div className='mx-6 flex justify-center items-center flex-col '>
         <h1 className='fontsponsor font-bold lg:text-5xl md:text-4xl text-4xl my-4 text-white'>Testimonials</h1>
-        <div className='h-2 w-56 bg-purple-600 rounded-full'></div>
+        {/* <div className='h-2 w-56 bg-purple-600 rounded-full'></div> */}
       </div>
       <section>
       <>
   {/* Testimonials */}
-  <div className="overflow-hidden bg-black">
+  <div className="overflow-hidden ">
     <div className="relative max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
       {/* Title */}
       

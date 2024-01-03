@@ -213,7 +213,7 @@ const Navbar = ({logout,user}) => {
                     )}
                   </motion.li>
                   </Link>
-                  <Link href="/#event">
+                  <Link href="/Event">
                   <motion.li
                     className=" list-none px-3 py-2 mx-3 mt-2  transition-colors duration-300 transform rounded-md lg:mt-0 text-white  navfont "
                     whileTap={{ scale: 0.9, rotate: 1 }}

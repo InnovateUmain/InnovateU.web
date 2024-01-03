@@ -6,7 +6,7 @@ import Hero1 from './components/Hero1';
 import { About } from '@/sections';
 import { GetStarted ,WhatsNew,Feedback} from '@/sections';
 import Stats from './components/Stats';
-import Events from './components/Events';
+// import Events from './components/Events';
 import Sponsor from './components/Sponsor';
 import Testimonials from './components/Testimonials';
 import Mentorship from './components/Mentorship';
@@ -57,7 +57,7 @@ const Index = () => {
       {/* <WhatsNew /> */}
     </div>
   {/* <Stats/> */}
-  <Events/>
+  {/* <Events/> */}
   <Sponsor/>
   <Testimonials/>
   {/* <Mentorship/> */}
