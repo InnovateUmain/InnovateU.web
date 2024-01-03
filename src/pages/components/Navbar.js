@@ -100,6 +100,7 @@ const Navbar = ({logout,user}) => {
         className={`fixed top-0 z-50 w-[100vw] h-20 flex justify-center items-center rounded ${
           scrolling ? "backdrop-blur-xl" : ""
         }`}
+        id="navbar"
       >
         <div className="container px-6 py-4 mx-auto ">
           <div className="lg:flex lg:items-center lg:justify-between">

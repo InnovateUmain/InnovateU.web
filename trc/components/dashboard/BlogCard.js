@@ -8,21 +8,21 @@ import user3 from "../../../assets/images/backgrounds/u4.jpg";
 const blogs = [
   {
     img: user1,
-    title: "Super awesome, Project Studio 12 is coming soon!",
+    title: "Super awesome, Devcon 2k24 is coming soon!",
     subtitle:
       "Some quick example text to build on the card title and make up the bulk of the card's content.",
     btncolor: "error",
   },
   {
     img: user2,
-    title: "Super awesome, Meeting  12 is coming soon!",
+    title: "Super awesome,20 Hours Hackathon is coming soon!",
     subtitle:
       "Some quick example text to build on the card title and make up the bulk of the card's content.",
     btncolor: "warning",
   },
   {
     img: user3,
-    title: "Super awesome, Dashboard 12 is coming soon!",
+    title: "Super awesome, Workshop on Blockchain is coming soon!",
     subtitle:
       "Some quick example text to build on the card title and make up the bulk of the card's content.",
     btncolor: "primary",

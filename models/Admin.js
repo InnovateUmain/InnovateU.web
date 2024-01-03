@@ -5,6 +5,7 @@ const AdminSchema=new mongoose.Schema({
     phone:{type:Number,unique:true},
     password:{type:String,required:true},
     bio:{type:String,default:''},
+    title:{type:String,default:''},
     admintype:{type:String,default:''},
     img:{type:String,default:''},
 },{timestamps:true})

@@ -12,27 +12,27 @@ const activities = [
   {
     time: "09.50",
     color: "success.main",
-    text: "Meeting with John",
+    text: "Check emails and respond to inquiries",
   },
   {
     time: "09.46",
     color: "secondary.main",
-    text: "Payment received from John Doe of $385.90",
+    text: "Check user stats and data usage",
   },
   {
     time: "09.47",
     color: "primary.main",
-    text: "Project Meeting",
+    text: "Check system logs and fix bugs",
   },
   {
     time: "09.48",
     color: "warning.main",
-    text: "New Sale recorded #ML-3467",
+    text: "Check for server errors and fix them",
   },
   {
     time: "09.49",
     color: "error.main",
-    text: "Payment was made of $64.95 to Michael Anderson",
+    text: "Maintain database and run system backups",
   },
 ];
 

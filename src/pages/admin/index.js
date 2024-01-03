@@ -40,16 +40,17 @@ useEffect(()=>{
   return (
     <ThemeProvider theme={theme}>
        <Head>
-      <title>Admin Panel - Ps App</title>
+      <title>Admin Panel - InnovateU</title>
       <meta name="description" content="Effortlessly manage reservations and streamline culinary services with our Hotel Booking and Food Delivery Admin Panel. Take control of bookings, track orders, and ensure seamless operations for your hotel and food delivery services. Simplify your administrative tasks and optimize your hospitality and dining experiences with our comprehensive admin panel."/>
       <meta name="keywords" content="hotel booking, food delivery, accommodation, online reservations, gourmet dining, seamless service, delightful stay, convenient hospitality, doorstep delivery, culinary experience, vacation getaway, top-rated hotel, comfortable accommodations, exquisite cuisine, memorable retreat" />
       <script src="https://unpkg.com/@zegocloud/zego-uikit-prebuilt/zego-uikit-prebuilt.js"></script>
      </Head>
        <style jsx global>{`
-        .footer {
+        
+        #footer {
           display:none;
         }
-        .Navbar{
+        #navbar{
           display:none;
         }
       `}</style>

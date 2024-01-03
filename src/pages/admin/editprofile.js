@@ -1,286 +1,393 @@
-import React, { useEffect, useState } from 'react'
+
+
+import React, { useEffect, useRef, useState } from 'react'
+import toast,{ Toaster } from 'react-hot-toast';
 import theme from "../../../trc/theme/theme";
 import FullLayout from "../../../trc/layouts/FullLayout";
 import { ThemeProvider } from "@mui/material/styles";
-import { useRouter } from 'next/router';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css'
 import Spinner from '../components/Spinner';
-import { set } from 'mongoose';
+import { motion } from 'framer-motion';
+import updateadmin from '../api/admin/updateadmin';
+const Profile = () => {
+  const ref = useRef();
+  const[name,setName]= useState("");
+  const[email,setEmail] =useState("");
 
-const Editprofile = () => {
-  const [url,setUrl]=useState('');
-  const router =useRouter();
+  const[phone,setPhone] = useState("");
+
+  const[title,setTitle]=useState("");
+  const[img,setImg]=useState("");
+
+  const[bio,setBio]=useState("");
   const[loading,setLoading]=useState(false);
-  const[email,setEmail]=useState('');
-  const[username,setUsername]=useState('');
-  const[bio,setBio]=useState('');
-  const[image,setImage]=useState('');
-  const[name,setName]=useState('');
-  const[number,setNumber]=useState('');
-  const[country,setCountry]=useState('');
-  const[college,setCollege]=useState('');
-  const[phone,setPhone]=useState('');
-//   useEffect(()=>{
-//  const user = JSON.parse(localStorage.getItem("myprappuser"));
-//  fetchdata(user.token);
-// setEmail(user.email);
-
-//   },[])
- 
-
-  const handleChange=(e)=>{ 
-    if(e.target.name=="image"){
-      setImage(e.target.files[0]);
+  const[image,setImage]=useState("");
+  const[url,setUrl]=useState("");
+  const handleChange=(e)=>{
+    if(e.target.name=="name"){
+      setName(e.target.value);
     }
     else if(e.target.name=="email"){
       setEmail(e.target.value);
     }
-    else if(e.target.name=="name"){
-      setName(e.target.value);
+  
+    else if(e.target.name=="phone"){
+      setPhone(e.target.value);
     }
-    else if(e.target.name=="username"){
-      setUsername(e.target.value);
+
+    else if(e.target.name=="img"){
+        setImg(e.target.value);
     }
     else if(e.target.name=="bio"){
-      setBio(e.target.value);
+        setBio(e.target.value);
+    } 
+    else if(e.target.name=="image"){
+      setImage(e.target.files[0]);
     }
-    else if(e.target.name=="country"){
-      setCountry(e.target.value);
+    else if(e.target.name=="title"){
+      setTitle(e.target.value);
     }
-    else if(e.target.name=="college"){
-      setCollege(e.target.value);
-    }
-    else if(e.target.name=="number"){
-      setNumber(e.target.value);
-    }
+   
   }
-  const fetchdata=async(token)=>{
-    setLoading(true)
-    const data ={token:token};
-    const pr = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/getuser`, {
+  const getAdmin=async(token)=>{
+    setLoading(true);
+    const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/admin/getadmindata`, {
+      method: "POST", // or 'PUT'
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(token),
+    });
+    const result = await res.json();
+setName(result.data.name);
+setEmail(result.data.email);
+setPhone(result.data.phone);
+setBio(result.data.bio);
+setUrl(result.data.img);
+    setTitle(result.data.title);
+    console.log(result)
+    setLoading(false);
+  
+
+  }
+  //useeffect for getting user details
+  useEffect(()=>{
+    const data = JSON.parse(localStorage.getItem('innovateUadmin')).token;
+
+    getAdmin(data);
+  },[])
+  //update userdetails
+  const updateadmin = async(ulurl)=>{
+  
+    let upurl = ulurl!==""?ulurl:url;
+    setLoading(true);
+    const data = {name,email,bio,phone,img:upurl,title};
+    const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/admin/updateadmin`, {
       method: "POST", // or 'PUT'
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
     });
-
-    const res=await pr.json();
-    setLoading(false)
-    setName(res.name);
-    setBio(res.bio);
-    setCollege(res.college);
-    setCountry(res.country);
-    setUsername(res.username);
-    setNumber(res.phone);
-    setUrl(res.img);
-
-   }
+    const result = await res.json();
+    if(result.success){
+      toast.success(result.message);
+      setLoading(false);
+    }
+    else{
+      toast.error("Something went wrong ! Please try again");
+      setLoading(false);
+    }
+  }
+  const handleUpdate=()=>{
+    updateadmin();
+  }
   const uploadImage = () => {
-    setLoading(true)
+setLoading(true);
     const data = new FormData()
     data.append("file", image)
-    data.append("upload_preset", "dgdea2n8")
-    data.append("cloud_name","dawzncoau")
-    fetch("https://api.cloudinary.com/v1_1/dawzncoau/image/upload",{
+    data.append("upload_preset", "uuaob1ay")
+    data.append("cloud_name","dst73auvn")
+    fetch("https://api.cloudinary.com/v1_1/dst73auvn/image/upload",{
     method:"post",
     body: data
     })
     .then(resp => resp.json())
     .then(data => {
-      setLoading(false);
-      toast.success("Successfully Upload Your Profile Picture", {
-        position: "top-left",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        });
+      
     setUrl(data.url)
+    setLoading(false);
+    toast.success("Image uploaded successfully")
+    setImage("");
+    updateadmin(data.url);
     })
     .catch(err => {
-    toast.error("Sorry some error occured please try again after some time", {
-      position: "top-left",
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-      });
+      setLoading(false);
+    toast.error("Something went wrong ! Please try again")
     })
     }
-    const handleSubmit=async()=>{  
-      setLoading(true)
-      const data ={name,email,phone,bio,img:url,college,country,username,number};
-      const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/updateuser`, {
-        method: "POST", // or 'PUT'
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-  
-      const response=await res.json();
-      setLoading(false)
-      if(response.success){
-        toast.success("Successfully updated your details", {
-          position: "top-left",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-          });
-      }
-      else{
-        toast.error(response.error, {
-          position: "top-left",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-          });
-      }
-      
-    }
   return (
-    <div>
-      <ThemeProvider theme={theme}>
-        <style jsx global>{`
-        .footer {
+    <>
+    <ThemeProvider theme={theme}>
+    <FullLayout>
+    <style jsx global>{`
+        
+        #footer {
           display:none;
         }
-        .Navbar{
+        #navbar{
           display:none;
         }
       `}</style>
-       <FullLayout>
-       <ToastContainer
-position="top-left"
-autoClose={5000}
-hideProgressBar={false}
-newestOnTop={false}
-closeOnClick
-rtl={false}
-pauseOnFocusLoss
-draggable
-pauseOnHover
-theme="light"
-
-/>
-  {loading?<Spinner/>:<><div className="space-y-12">
-    <div className="border-b border-gray-900/10 pb-12">
-      <h2 className="text-base font-semibold leading-7 text-gray-900">Your Profile</h2>
-      <p className="mt-1 text-sm leading-6 text-gray-600">This information will be displayed publicly so be careful what you share.Except email and phone number.</p>
-
-      <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-        <div className="sm:col-span-4">
-          <label htmlFor="username" className="block text-sm font-medium leading-6 text-gray-900">User Name</label>
-          <div className="mt-2">
-            <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-              <span className="flex select-none items-center pl-3 text-gray-500 sm:text-sm">InnovateU.org/</span>
-              <input onChange={handleChange} value={username} type="text" name="username" id="username" autoComplete="username" className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6 p-2" placeholder="Enter Your User Name"/>
+    <div className={`  ${loading?"flex justify-center items-center":""}`}>
+       <Toaster position="top-center" reverseOrder={false}/>
+      {loading?<div className='flex justify-center'><Spinner/></div>:<>
+     
+  {/* Card Section */}
+  <div className="max-w-4xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
+    {/* Card */}
+    <div className="bg-slate-900 rounded-xl shadow p-4 sm:p-7 ">
+      <div className="mb-8">
+        <h2 className="text-xl font-bold  text-gray-200">
+          Profile
+        </h2>
+        <p className="text-sm text-gray-400">
+          Manage your name, password and account settings. Note: Email cannot be updated.
+        </p>
+      </div>
+      <form>
+        {/* Grid */}
+        <div className="grid sm:grid-cols-12 gap-2 sm:gap-6">
+          <div className="sm:col-span-3">
+            <label className="inline-block text-sm  mt-2.5 text-gray-200">
+              Profile photo
+            </label>
+          </div>
+          {/* End Col */}
+          <div className="sm:col-span-9">
+          <input type="file" className={`${image!=""?"":"hidden"} text-white font-bold p-2 m-2`} ref={ref}  name='image' onChange={handleChange}/>
+            <div className="flex items-center gap-5">
+              <img
+                className="inline-block h-16 w-16 rounded-full ring-2 ring-white ring-gray-800 text-white"
+                src=  {`${url}`}
+                alt="Image Description"
+                onClick={()=>{
+                  ref.current.click();
+                  // uploadImage();
+                }}
+              />
+             
+              <div className="flex gap-x-2">
+              
+                <div>
+                
+                  <motion.button
+                    type="button"
+                    className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
+                    whileHover={{scale:1.1}}
+                    whileTap={{scale:0.9,rotate:1}}
+                    onClick={uploadImage}
+                  >
+                    <svg
+                      className="flex-shrink-0 w-4 h-4"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width={24}
+                      height={24}
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                      <polyline points="17 8 12 3 7 8" />
+                      <line x1={12} x2={12} y1={3} y2={15} />
+                    </svg>
+                    Upload photo
+                  </motion.button>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-
-        <div className="col-span-full">
-          <label htmlFor="about" className="block text-sm font-medium leading-6 text-gray-900">Bio (Write about yourself)</label>
-          <div className="mt-2">
-            <textarea id="about" onChange={handleChange} value={bio} name="bio" rows="3" className="p-2 m-2 font-semibold block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
+          {/* End Col */}
+          <div className="sm:col-span-3">
+            <label
+              htmlFor="af-account-full-name"
+              className="inline-block text-sm  mt-2.5 text-gray-200"
+            >
+              Full name
+            </label>
+            <div className="hs-tooltip inline-block">
+              <button type="button" className="hs-tooltip-toggle ms-1">
+                <svg
+                  className="inline-block w-3 h-3 text-gray-600"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width={16}
+                  height={16}
+                  fill="currentColor"
+                  viewBox="0 0 16 16"
+                >
+                  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                  <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
+                </svg>
+              </button>
+             
+            </div>
           </div>
-          <p className="mt-3 text-sm leading-6 text-gray-600">Write a few sentences about yourself.</p>
-        </div>
-
-        <div className="col-span-full">
-      
-        {<div className="m-2"><h4 className='font-bold'></h4><img src={`${url==""?"/grey.jpg":url}`} alt="preview" className='w-20 h-20 object-cover border-amber-500 rounded-full' width={20} height={20}/></div>}
-        <label className="block text-blue-600 m-2 font-extralight" htmlFor=''>Choose profile photo(if you want to change please choose your profile photo and hit the upload now button)
-    <input type="file" name= "image" onChange={handleChange}
-    className="block w-full text-sm text-slate-500 
-      file:mr-4 file:py-2 file:px-4
-      file:rounded-full file:border-0
-      file:text-sm file:font-semibold
-      file:bg-violet-50 file:text-violet-700
-      hover:file:bg-violet-100
-    "/>
-  </label>
-  <button onClick={uploadImage} className='my-2 flex w-full justify-center rounded-md bg-blue-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pink-600'>
-            Upload Now
-          </button> 
-        </div>
-
-        </div>
-    </div>
-
-    <div className="border-b border-gray-900/10 pb-12">
-      <h2 className="text-base font-semibold leading-7 text-gray-900">Personal Information</h2>
-      <p className="mt-1 text-sm leading-6 text-gray-600">Use a permanent address where you can receive mail.</p>
-
-      <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-        <div className="sm:col-span-3">
-          <label htmlFor="first-name" className="block text-sm font-medium leading-6 text-gray-900">Your Name</label>
-          <div className="mt-2">
-            <input type="text" onChange={handleChange} value={name} name="name" id="name" autoComplete="name" className="font-semibold p-2 m-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
+          {/* End Col */}
+          <div className="sm:col-span-9">
+            <div className="sm:flex">
+              <input
+                id="af-account-full-name"
+                type="text"
+                name='name'
+                onChange={handleChange}
+                value={name}
+                className="py-2 px-3 pe-11 block w-full  shadow-sm -mt-px -ms-px first:rounded-t-lg last:rounded-b-lg sm:first:rounded-s-lg sm:mt-0 sm:first:ms-0 sm:first:rounded-se-none sm:last:rounded-es-none sm:last:rounded-e-lg text-sm relative focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600"
+                placeholder="John doe "
+              />
+             
+            </div>
           </div>
-        </div>
-
-        <div className="sm:col-span-4">
-          <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">Email address (cannot be changed)</label>
-          <div className="mt-2">
-            <input id="email" onChange={handleChange} value={email} name="email" type="email" autoComplete="email" className=" font-semibold p-2 m-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" readOnly/>
+          {/* End Col */}
+          <div className="sm:col-span-3">
+            <label
+              htmlFor="af-account-email"
+              className="inline-block text-sm  mt-2.5 text-gray-200"
+            >
+              Email
+            </label>
           </div>
-        </div>
-        <div className="sm:col-span-4">
-          <label htmlFor="number" className="block text-sm font-medium leading-6 text-gray-900">Phone Number</label>
-          <div className="mt-2">
-            <input id="number" name="number" onChange={handleChange} value={number} type="number" autoComplete="number" className=" font-semibold p-2 m-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
+          {/* End Col */}
+          <div className="sm:col-span-9">
+            <input
+              id="af-account-email"
+              type="email"
+              name='email'
+              onChange={handleChange}
+              value={email}
+              className="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600"
+              placeholder="maria@site.com"
+              readOnly
+            />
           </div>
-        </div>
+          {/* End Col */}
+          
+          {/* End Col */}
+          <div className="sm:col-span-3">
+            <div className="inline-block">
+              <label
+                htmlFor="af-account-phone"
+                className="inline-block text-sm  mt-2.5 text-gray-200"
+              >
+                Phone
+              </label>
+              <span className="text-sm  text-gray-600">
+                (Optional)
+              </span>
+            </div>
+          </div>
+          {/* End Col */}
+          <div className="sm:col-span-9">
+            <div className="sm:flex">
+              <input
+                id="af-account-phone"
+                type="number"
+                name='phone'
+                onChange={handleChange}
+                value={phone}
+                className="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm -mt-px -ms-px first:rounded-t-lg last:rounded-b-lg sm:first:rounded-s-lg sm:mt-0 sm:first:ms-0 sm:first:rounded-se-none sm:last:rounded-es-none sm:last:rounded-e-lg text-sm relative focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600"
+                placeholder="+x(xxx)xxx-xx-xx"
+              />
+              <select className="py-2 px-3 pe-9 block w-full sm:w-auto border-gray-200 shadow-sm -mt-px -ms-px first:rounded-t-lg last:rounded-b-lg sm:first:rounded-s-lg sm:mt-0 sm:first:ms-0 sm:first:rounded-se-none sm:last:rounded-es-none sm:last:rounded-e-lg text-sm relative focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600">
+                <option selected="">Mobile</option>
+                <option>Home</option>
+                <option>Work</option>
+                <option>Fax</option>
+              </select>
+            </div>
+           
+          </div>
+          {/* End Col */}
+         
+          {/* End Col */}
         
-        <div className="sm:col-span-3">
-          <label htmlFor="country" className="block text-sm font-medium leading-6 text-gray-900">College/University</label>
-          <div className="mt-2">
-            <select value={college} onChange={handleChange} id="country" name="college" autoComplete="country-name" className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
-            <option>Select</option>
-              <option>CUTM</option>
-              <option>Other</option>
-            </select>
+          
+          <div className="sm:col-span-3">
+            <label
+              htmlFor="af-account-email"
+              className="inline-block text-sm  mt-2.5 text-gray-200"
+            >
+              Title/Role
+            </label>
           </div>
-        </div>
-        <div className="sm:col-span-3">
-          <label htmlFor="country" className="block text-sm font-medium leading-6 text-gray-900">Country</label>
-          <div className="mt-2">
-            <select value={country} onChange={handleChange} id="country" name="country" autoComplete="country-name" className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
-            <option>Select</option>
-              <option>India</option>
-              <option>Other</option>
-            </select>
+          {/* End Col */}
+          <div className="sm:col-span-9">
+            <input
+              id="af-account-email"
+              type="text"
+              name="title"
+              onChange={handleChange}
+              value={title}
+              className="py-2 px-3 pe-11 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600"
+              placeholder="Enter Your Title/Role ex:- Student,Developer,etc"
+            />
           </div>
+          {/* End Col */}
+         
+          
+          <div className="sm:col-span-3">
+            <label
+              htmlFor="af-account-bio"
+              className="inline-block text-sm  mt-2.5 text-gray-200"
+            >
+              BIO
+            </label>
+          </div>
+          {/* End Col */}
+          <div className="sm:col-span-9">
+            <textarea
+              id="af-account-bio"
+              name="bio"
+              onChange={handleChange}
+              value={bio}
+              className="py-2 px-3 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600"
+              rows={6}
+              placeholder="Type your message..."
+              defaultValue={""}
+            />
+          </div>
+          
+          {/* End Col */}
         </div>
-      </div>
+        {/* End Grid */}
+        <div className="mt-5 flex justify-end gap-x-2">
+          <button
+            type="button"
+            className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            onClick={handleUpdate}
+            className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-purple-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
+          >
+            Save changes
+          </button>
+        </div>
+      </form>
     </div>
+    {/* End Card */}
   </div>
+  {/* End Card Section */}
+</>}
 
-  <div className="mt-6 flex items-center justify-start gap-x-6 mb-12">
-    <button onClick={handleSubmit} className="w-40 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Save</button>
-  </div></>}
-
-       </FullLayout>
-      </ThemeProvider> 
     </div>
+    </FullLayout>
+    </ThemeProvider>
+    </>
   )
 }
 
-export default Editprofile
+export default Profile
