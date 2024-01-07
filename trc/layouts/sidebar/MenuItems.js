@@ -7,42 +7,47 @@ const Menuitems = [
   },
   {
     title: "All Members",
-    icon: "file-text",
-    href: "/admin",
+    icon: "users",
+    href: "/admin/allmember",
   },
   {
     title: "Applied Members",
-    icon: "monitor",
-    href: "/admin",
+    icon: "check-circle",
+    href: "/admin/appliedmember",
   },
   {
-    title: "Devfest",
-    icon: "edit",
-    href: "/admin",
-  },
-  {
-    title: "Team",
-    icon: "message-square",
-    href: "/admin",
-  },
-  {
-    title: "New Admin",
-    icon: "video",
-    href: "/admin",
-  },
-  {
-    title: "To-Dos",
-    icon: "list",
-    href: `/admin`,
-  },
-  {
-    title: "Search a Memeber",
+    title: "All Events",
     icon: "calendar",
     href: "/admin",
   },
   {
-    title: "Edit Event",
-    icon: "type",
+    title: "Teams",
+    icon: "user-check",
+    href: "/admin",
+  },
+  {
+    title: "Speakers",
+    icon: "mic",
+    href: "/admin",
+  },
+  {
+    title: "New Admin",
+    icon: "user-plus",
+    href: `/admin`,
+  },
+  {
+    title: "All Projects",
+    icon: "file-text",
+    href: "/admin",
+  },
+  {
+    title: "Faqs",
+    icon: "help-circle",
+    href: "/admin",
+  },
+  {
+    title: "Reviews",
+    icon: "message-square",
     href: "/admin",
   },
 ];

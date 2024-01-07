@@ -16,6 +16,10 @@ const Ticketclaim = () => {
   const [width,setWidth] = useState(0);
   const [data,setData] = useState({});
   useEffect(()=>{
+    const a = prompt("Enter Password");
+    if(a!="754293"){
+      router.push('/');
+    }
     var w = window.innerWidth;
    if(w>=500){
     setWidth(500);
