@@ -176,6 +176,7 @@ const Hero = () => {
 
   return (
     <div className="overflow-x-hidden">
+        <img src="https://opinhacks.co/static/media/space-lines.fc6b21dd9d358c1b1e63.gif" alt="" className='w-[100vw] h-[100vh] ' style={{opacity:0.7}}/>
       <Toaster position="top-center" reverseOrder={false} />
       <style jsx>
         {`
