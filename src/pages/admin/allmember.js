@@ -195,6 +195,13 @@ getalluser();
       updateuser();
     }
   }
+  const alldata =()=>{
+    setCount(user.length);
+    setIntialcount(0);
+  }
+  const exportexcel = async()=>{
+   window.open(`${process.env.NEXT_PUBLIC_HOST}/api/admin/getexcel?data=user`,"_blank");
+  }
   
   return (
       <ThemeProvider theme={theme}>
@@ -232,15 +239,18 @@ getalluser();
               </div>
               <div>
                 <div className="inline-flex gap-x-2">
-                  <a
+                  <button
                     className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
-                    href="#"
+                    onClick={alldata}
                   >
                     View all
-                  </a>
-                  <a
+                  </button>
+                  <button
                     className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
-                    href="#"
+                    onClick={()=>{
+                      exportexcel();
+                    
+                    }}
                   >
                     <svg
                       className="flex-shrink-0 w-3 h-3"
@@ -257,8 +267,8 @@ getalluser();
                         strokeLinecap="round"
                       />
                     </svg>
-                    Add user
-                  </a>
+                    Export Excel
+                  </button>
                 </div>
               </div>
             </div>

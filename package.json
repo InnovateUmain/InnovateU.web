@@ -16,6 +16,7 @@
     "@reduxjs/toolkit": "^2.0.1",
     "apexcharts": "^3.45.1",
     "crypto-js": "^4.2.0",
+    "exceljs": "^4.4.0",
     "feather-icons": "^4.29.1",
     "feather-icons-react": "^0.6.2",
     "framer-motion": "^10.16.4",
