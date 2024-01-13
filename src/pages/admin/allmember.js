@@ -6,8 +6,11 @@ import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import toast,{ Toaster } from 'react-hot-toast';
 import { IoMdCloseCircle } from "react-icons/io";
+import { set } from 'mongoose';
 const Allmember = () => {
   const [user,setAlluser] = useState([]);
+  const [serachuser,setSearchuser] = useState([]);
+  const [isSearch,setIsSearch] = useState(false);
   const [count,setCount] = useState(6);
   const [intialcount,setIntialcount] = useState(0);
   const [width,setWidth]= useState(0);
@@ -24,6 +27,7 @@ const Allmember = () => {
   const[img,setImg]=useState("");
   const[college,setCollege]= useState("");
   const[bio,setBio]=useState("");
+  const [searchq,setSearchq] = useState("");
   const[loading,setLoading]=useState(false);
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
@@ -69,7 +73,7 @@ getalluser();
   }
 
   var val ="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=300&h=300&q=80";
-  console.log(user)
+
   const funccal=(title,github,linkedin,website,bio,img,clg)=>{
     if(title.length>0&&github.length>0&&linkedin.length>0&&website.length>0&&bio.length>0&&img.length>0&&clg.length>0){
       return "5/5";
@@ -144,6 +148,18 @@ getalluser();
     }
     else if(e.target.name=="title"){
       setTitle(e.target.value);
+    }
+    else if(e.target.name=="search"){
+      setSearchq(e.target.value);
+      if(e.target.value.length>0){
+        setIsSearch(true);
+      }
+      else if(e.target.value.length==0){
+        setIsSearch(false);
+      }
+
+    const res = user.filter((item)=>item.name.toLowerCase().includes(e.target.value.toLowerCase()));
+    setSearchuser(res);
     }
    
   }
@@ -238,6 +254,9 @@ getalluser();
                 </p>
               </div>
               <div>
+                <input type="text" className='p-2 border-2 border-gray-300 rounded-lg w-96' placeholder='Search for Name' onChange={handleChange} value={searchq} name='search'/>
+              </div>
+              <div>
                 <div className="inline-flex gap-x-2">
                   <button
                     className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
@@ -325,7 +344,96 @@ getalluser();
               <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
              
                 {/* end of 1 row */}
-               {user.slice(intialcount,count).map((item)=>(<tr key={item._id}>
+              {
+
+               isSearch&&serachuser.map((serachuser)=>(<tr key={serachuser._id}>
+                  <td className="h-px w-px whitespace-nowrap">
+                    <div className="ps-6 py-3">
+                      
+                    </div>
+                  </td>
+                  <td className="h-px w-px whitespace-nowrap">
+                    <div className="ps-6 lg:ps-3 xl:ps-0 pe-6 py-3">
+                      <div className="flex items-center gap-x-3">
+                        <img
+                          className="inline-block h-[2.375rem] w-[2.375rem] rounded-full"
+                          src=  {`${serachuser.img!=""?serachuser.img:val}`}
+                          alt="Image Description"
+                        />
+                        <div className="grow">
+                          <span className="block text-sm font-semibold text-gray-800 dark:text-gray-200">
+                          {serachuser.name}
+                          </span>
+                          <span className="block text-sm text-gray-500">
+                            {serachuser.email}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="h-px w-72 whitespace-nowrap">
+                    <div className="px-6 py-3">
+                      <span className="block text-sm font-semibold text-gray-800 dark:text-gray-200">
+                        Title
+                      </span>
+                      <span className="block text-sm text-gray-500">
+                        {serachuser.title.length>0?serachuser.title:"User"}
+                      </span>
+                    </div>
+                  </td>
+                  <td className="h-px w-px whitespace-nowrap">
+                    <div className="px-6 py-3">
+                      <span className="py-1 px-1.5 inline-flex items-center gap-x-1 text-xs font-medium bg-yellow-100 text-yellow-800 rounded-full dark:bg-yellow-500/10 dark:text-yellow-500">
+                        
+                      {serachuser.phone}
+                      </span>
+                    </div>
+                  </td>
+                  <td className="h-px w-px whitespace-nowrap">
+                    <div className="px-6 py-3">
+                      <div className="flex items-center gap-x-3">
+                        <span className="text-xs text-gray-500">{
+                          funccal(serachuser.title,serachuser.github,serachuser.linkedin,serachuser.website,serachuser.bio,serachuser.img,serachuser.clg)
+                        }</span>
+                        <div className="flex w-full h-1.5 bg-gray-200 rounded-full overflow-hidden dark:bg-gray-700">
+                          <div
+                            className="flex flex-col justify-center overflow-hidden bg-gray-800 dark:bg-gray-200"
+                            role="progressbar"
+                            style={{ width: `${funccalp(serachuser.title,serachuser.github,serachuser.linkedin,serachuser.website,serachuser.bio,serachuser.img,serachuser.clg)}` }}
+                            aria-valuenow={78}
+                            aria-valuemin={0}
+                            aria-valuemax={100}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="h-px w-px whitespace-nowrap">
+                    <div className="px-6 py-3">
+                      <span className="text-sm text-gray-500" onClick={()=>{
+                        date= new Date(serachuser.createdAt)
+                      }}>
+                    
+                     {new Date(serachuser.createdAt).toLocaleDateString("en-IN",{ weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+                      </span>
+                    </div>
+                  </td>
+                  <td className="h-px w-px whitespace-nowrap">
+                    <div className="px-6 py-1.5">
+                      <button
+                        className="inline-flex items-center gap-x-1 text-sm text-blue-600 decoration-2 hover:underline font-medium dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
+                        onClick={()=>getUser(serachuser.name,serachuser.email,serachuser.phone,serachuser.title,serachuser.github,serachuser.linkedin,serachuser.website,serachuser.bio,serachuser.clg)}
+                     
+                        >
+                        Edit
+
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+))}
+               
+                 {!isSearch&&user.slice(intialcount,count).map((item)=>(<tr key={item._id}>
                   <td className="h-px w-px whitespace-nowrap">
                     <div className="ps-6 py-3">
                       
