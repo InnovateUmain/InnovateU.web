@@ -21,6 +21,7 @@ const handler = async (req, res) => {
                     eventreglimit:req.body.eventreglimit,
                     eventregstatus:req.body.eventregstatus,
                     eventregcount:req.body.eventregcount,
+                    eventspeaker:req.body.eventspeaker,
                 })
                 const event=await newevent.save()
                 res.status(200).json({success:true,message:"Event added successfully",})
@@ -71,6 +72,19 @@ const handler = async (req, res) => {
                   res.status(500).json({success:false,message:"Internal server error. Please try again later"})
                  }
         }//end of if
+        //event get by id
+        if(req.body.status=="getbyid"){
+            try{
+                const event  = await Event.findById({_id:req.body.id});
+         
+                res.status(200).json({success:true,message:"Event get successfully",event:event})
+            }
+            catch(error){
+               
+                res.status(500).json({success:false,message:"Internal server error. Please try again later"})
+            }
+            
+        }
         res.status(200).json({success:true,message:"Please add methods what to do ?",})
     }
     else{
