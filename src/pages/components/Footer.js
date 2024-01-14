@@ -150,7 +150,7 @@ const Footer = () => {
               </Link>
             </li>
             <li>
-              <Link href="/components/Community/Workshop" className="text-gray-200 transition hover:opacity-75">
+              <Link href="/components/Events/Devcon2k24" className="text-gray-200 transition hover:opacity-75">
                 Workshop
               </Link>
             </li>

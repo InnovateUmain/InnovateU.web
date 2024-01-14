@@ -1,5 +1,5 @@
 import connectDb from "@/middleware/mongoose";
-import User from "../../../../models/User";
+import User from "../../../../../models/User";
 const excel = require("exceljs");
 const handler = async (req, res) => {
     if(req.query.data=="user"){
