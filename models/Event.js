@@ -7,7 +7,7 @@ const EventSchema=new mongoose.Schema({
     eventdesc:{type:String,required:true},
     eventvenue:{type:String,required:true},
     eventtype:{type:String,default:'pending'},
-    eventposter:{type:String,required:true},
+    eventposter:{type:String,default:'https://img.freepik.com/premium-vector/default-image-icon-vector-missing-picture-page-website-design-mobile-app-no-photo-available_87543-11093.jpg'},
     eventreglink:{type:String,default:''},
     eventregfee:{type:String,default:'free'},
     eventreglastdate:{type:String,default:''},

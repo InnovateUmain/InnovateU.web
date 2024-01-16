@@ -4,8 +4,13 @@ import { MdLocationOn } from "react-icons/md";
 import { FaMicrophone } from "react-icons/fa";
 
 import Link from 'next/link';
+import { set } from 'mongoose';
+
 const Event = () => {
+  const[searchq,setSearchq]=React.useState('');
+  const [isSearch, setIsSearch] = React.useState(false);
   const [event, setEvent] = React.useState([]);
+  const [searchevent, setSearchevent] = React.useState([]);
   const fetchEvents = async () => {
     const data = { status: "get" };
     const res = await fetch(
@@ -24,7 +29,21 @@ const Event = () => {
   useEffect(() => {
 fetchEvents();
   }, [])
-
+const onChange=(e)=>{
+  if(e.target.name=='search'){
+    setSearchq(e.target.value);
+    if (e.target.value.length > 0) {
+      setIsSearch(true);
+    }
+    if (e.target.value.length == 0) {
+      setIsSearch(false);
+    }
+    const res = event.filter((item) =>
+    item.eventname.toLowerCase().includes(e.target.value.toLowerCase())
+  );
+  setSearchevent(res);
+}
+}
   return (
     <div className=' my-20  bg-gradient-to-b from-gray-900 to-gray-600 bg-gradient-to-r'>
   <div className=''>
@@ -50,9 +69,12 @@ fetchEvents();
           </div>
         </div>
         <input
-          className="font-bold uppercase rounded-full w-full py-4 pl-4 text-gray-700 bg-gray-100 leading-tight focus:outline-none focus:shadow-outline lg:text-sm text-xs"
-          type="text"
-          placeholder="Search"
+          className="font-bold  rounded w-full py-4 pl-4 text-gray-700 bg-gray-100    lg:text-sm text-xs"
+          type="search"
+          placeholder="Search for the event ?"
+          name='search'
+          onChange={onChange}
+          autoComplete="off"
         />
         <div className="bg-gray-600 p-2 hover:bg-blue-400 cursor-pointer mx-2 rounded-full">
           <svg
@@ -70,21 +92,21 @@ fetchEvents();
         </div>
       </div>
     <div className="md:px-4 md:grid md:grid-cols-2 lg:grid-cols-3 gap-5 space-y-4 md:space-y-0">
-    {event.map((item)=>(<Link href={`/components/Events/Eventdetails?id=${item._id}`} key={item._id}>
-      <div className="max-w-sm bg-white px-6 pt-6  rounded-xl shadow-lg transform hover:scale-105 transition duration-500 mx-2" style={{height:"500px"}}>
+    {!isSearch&&event.map((item)=>(<Link href={`/components/Events/Eventdetails?id=${item._id}`} key={item._id}>
+      <div className="max-w-sm bg-white px-6 pt-6  rounded-xl shadow-lg transform hover:scale-105 transition duration-500 mx-2 my-4" style={{height:"500px"}}>
         
        <div className="relative">
           <img
-            className="w-full rounded-xl object-cover h-60 w-96"
+            className="w-full rounded-xl object-cover h-60 w-96 "
             src="https://images.unsplash.com/photo-1541701494587-cb58502866ab?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80"
             alt="Colors"
           />
-          <p className="absolute top-0 bg-yellow-300 text-gray-800 font-semibold py-1 px-3 rounded-br-lg rounded-tl-lg">
+         { item.eventregfee=="free"&&<p className="absolute top-0 bg-yellow-300 text-gray-800 font-semibold py-1 px-3 rounded-br-lg rounded-tl-lg">
             FREE
-          </p>
-          {/* <p className="absolute top-0 bg-yellow-300 text-gray-800 font-semibold py-1 px-3 rounded-br-lg rounded-tl-lg">
-            $12
-          </p> */}
+          </p>}
+          {item.eventregfee!="free"&&<p className="absolute top-0 bg-yellow-300 text-gray-800 font-semibold py-1 px-3 rounded-br-lg rounded-tl-lg">
+          ₹{item.eventregfee}
+          </p>}
           {/* <p className="absolute top-0 right-0 bg-yellow-300 text-gray-800 font-semibold py-1 px-3 rounded-tr-lg rounded-bl-lg">
             %20 Discount
           </p> */}
@@ -118,7 +140,54 @@ fetchEvents();
         </div>
       </div>
       </Link>))}
-      
+      {isSearch&&searchevent.map((item)=>(<Link href={`/components/Events/Eventdetails?id=${item._id}`} key={item._id}>
+      <div className="max-w-sm bg-white px-6 pt-6  rounded-xl shadow-lg transform hover:scale-105 transition duration-500 mx-2 my-4" style={{height:"500px"}}>
+        
+       <div className="relative">
+          <img
+            className="w-full rounded-xl object-cover h-60 w-96 "
+            src="https://images.unsplash.com/photo-1541701494587-cb58502866ab?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80"
+            alt="Colors"
+          />
+         { item.eventregfee=="free"&&<p className="absolute top-0 bg-yellow-300 text-gray-800 font-semibold py-1 px-3 rounded-br-lg rounded-tl-lg">
+            FREE
+          </p>}
+          {item.eventregfee!="free"&&<p className="absolute top-0 bg-yellow-300 text-gray-800 font-semibold py-1 px-3 rounded-br-lg rounded-tl-lg">
+          ₹{item.eventregfee}
+          </p>}
+          {/* <p className="absolute top-0 right-0 bg-yellow-300 text-gray-800 font-semibold py-1 px-3 rounded-tr-lg rounded-bl-lg">
+            %20 Discount
+          </p> */}
+        </div>
+        <h1 className="mt-4 text-gray-800 text-xl font-bold cursor-pointer navfont">
+          {item.eventname}
+        </h1>
+        <div className="my-4">
+          <div className="flex space-x-1 items-center">
+            <span>
+             
+            <MdEvent className='text-indigo-600 text-2xl'/>
+            </span>
+            <p className='navfont text-sm mb-1.5'>{item.eventdate} | {item.eventtime}</p>
+          </div>
+          <div className="flex space-x-1 items-center">
+            <span>
+            <MdLocationOn className='text-indigo-600 text-2xl mb-1.5'/>
+            </span>
+            <p className='navfont text-sm'>{item.eventvenue}</p>
+          </div>
+          <div className="flex space-x-1 items-center">
+            <span>
+            <FaMicrophone className='text-indigo-600 text-2xl mb-1.5'/>
+            </span>
+            <p className='navfont text-sm'>{item.eventspeaker}</p>
+          </div>
+          <button className="mt-4 text-xl w-full text-white bg-indigo-600 py-2 rounded-xl shadow-lg navfont">
+            Show More
+          </button>
+        </div>
+      </div>
+      </Link>))}
       
     </div>
   </div>
