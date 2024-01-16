@@ -2,16 +2,18 @@ import React, { useEffect } from 'react'
 import { MdEvent } from "react-icons/md";
 import { MdLocationOn } from "react-icons/md";
 import { FaMicrophone } from "react-icons/fa";
-
+import Cardskeleton from './components/skeleton/Cardskeleton';
+import Error from './Error';
 import Link from 'next/link';
-import { set } from 'mongoose';
-
 const Event = () => {
   const[searchq,setSearchq]=React.useState('');
   const [isSearch, setIsSearch] = React.useState(false);
   const [event, setEvent] = React.useState([]);
   const [searchevent, setSearchevent] = React.useState([]);
+  const [loading, setLoading] = React.useState(false);
+  const[error,setError]=React.useState('');
   const fetchEvents = async () => {
+    setLoading(true);
     const data = { status: "get" };
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_HOST}/api/admin/Add/addevent`,
@@ -24,7 +26,14 @@ const Event = () => {
       }
     );
     const result = await res.json();
-    setEvent(result.event);
+    setLoading(false);
+    if (result.success == true) {
+      setEvent(result.event);
+    }
+    else{
+      setError(true);
+    }
+   
   }
   useEffect(() => {
 fetchEvents();
@@ -45,7 +54,8 @@ const onChange=(e)=>{
 }
 }
   return (
-    <div className=' my-20  bg-gradient-to-b from-gray-900 to-gray-600 bg-gradient-to-r'>
+    <>
+    {loading?<div className='min-h-screen my-20'><Cardskeleton/></div>:<div className=' my-20  bg-gradient-to-b from-gray-900 to-gray-600 bg-gradient-to-r'>
   <div className=''>
   <div className=" flex justify-center items-center  bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 flex-col mb-10 h-full">
   <div
@@ -92,7 +102,7 @@ const onChange=(e)=>{
         </div>
       </div>
     <div className="md:px-4 md:grid md:grid-cols-2 lg:grid-cols-3 gap-5 space-y-4 md:space-y-0">
-    {!isSearch&&event.map((item)=>(<Link href={`/components/Events/Eventdetails?id=${item._id}`} key={item._id}>
+    {!isSearch&&event&&event.map((item)=>(<Link href={`/components/Events/Eventdetails?id=${item._id}`} key={item._id}>
       <div className="max-w-sm bg-white px-6 pt-6  rounded-xl shadow-lg transform hover:scale-105 transition duration-500 mx-2 my-4" style={{height:"500px"}}>
         
        <div className="relative">
@@ -193,7 +203,14 @@ const onChange=(e)=>{
   </div>
 </div>
 
-    </div>
+    </div>}
+    {
+      error&&<>
+      <Error/>
+    </>
+    
+    }
+    </>
   )
 }
 

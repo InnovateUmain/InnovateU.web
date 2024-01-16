@@ -1,8 +1,8 @@
 import mongoose, { Schema } from "mongoose";
 const EventRegisteredSchema=new mongoose.Schema({
     name:{type:String,required:true},
-    email:{type:Schema.Types.String,ref:'User',required:true},
-    phone:{type:Number,unique:true},
+    email:{ type: String, required: true, unique: false },
+    phone:{type:Number,required:true},
     ticketid:{type:String,unique:true,required:true},
     orderid:{type:String,default:""},
     paymentid:{type:String,default:''},

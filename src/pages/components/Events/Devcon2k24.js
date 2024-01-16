@@ -311,12 +311,12 @@ const Hero = () => {
                       </h1>
                       <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
                         If already registered -
-                        <a
+                        <Link
                           className="text-blue-600 decoration-2 hover:underline font-medium dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
-                          href="../examples/html/signin.html"
+                          href="/components/MyTicket"
                         >
                           See your ticket here
-                        </a>
+                        </Link>
                       </p>
                     </div>
                     <div className="mt-5">

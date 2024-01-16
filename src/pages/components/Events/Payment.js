@@ -14,6 +14,7 @@ const Payment = () => {
     const userinfo = useSelector((state)=>state.userData);
     let orderid = Math.floor(Math.random() * 1000000);
     const dispatch = useDispatch();
+   
     const getUser=async(token)=>{
       console.log(token)
       const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/getuserdata`, {
@@ -34,12 +35,13 @@ const Payment = () => {
       }
     },[])
     const router = useRouter();
+    const amount = router.query.amount;
     const handlePayment=async(e)=>{
       try{
         var options =  {
           key: `${process.env.NEXT_PUBLIC_KEY_ID}`,
            // Enter the Key ID generated from the Dashboard
-          amount: 500, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+          amount: {amount}, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
           currency: "INR",
           name: "InnovateU", //your business name
           description: "Devcon 2k24 Registration fees.",
@@ -96,23 +98,24 @@ font-families {
    <Toaster position="top-center" reverseOrder={false}/>
    <div className="shadow-[0_16px_16px_-8px_rgba(118,108,241,0.3)] max-w-sm bg-white m-6 flex flex-col rounded-2xl overflow-hidden justify-center relative lg:top-8 top-10">
   <img
-    src="/illustration-hero.svg"
-    alt="Happy person happily dancing to music"
+    src={`${router.query.poster}`}
+    alt="event poster"
+    className="w-full h-48 object-cover"
   />
   <div className="p-6 pb-4">
     <h2 className="mt-2 text-2xl font-black text-neutral-dark-blue text-center">
       Order Summary
     </h2>
     <p className="text-base text-center mx-2 my-5 text-neutral-desaturated-blue fontevent">
-    Experience Devcon 2k24 live! Immerse in tech talks, hands-on workshops, and networking, all offline. Join us for a memorable in-person event
+    Experience {router.query.name} live! Immerse in tech talks, hands-on workshops, and networking, all offline . Join us for a memorable in-person event
     </p>
     <div className="flex gap-4 text-sm items-center mb-6 p-4 bg-neutral-very-pale-blue rounded-lg">
       <MdEventNote className='text-purple-500 text-4xl'/>
      
       <div>
-        <h3 className="text-neutral-dark-blue font-black">Devcon 2K24</h3>
+        <h3 className="text-neutral-dark-blue font-black">{router.query.name}</h3>
         <span className="text-neutral-desaturated-blue font-bold">
-        ₹ 500
+        ₹ {router.query.amount}
         </span>
       </div>
       <a

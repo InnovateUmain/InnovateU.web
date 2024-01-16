@@ -3,7 +3,14 @@ import { CiCalendarDate } from "react-icons/ci";
 import { IoMdTime } from "react-icons/io";
 import { CiMicrophoneOn } from "react-icons/ci";
 import { BsBuildingCheck } from "react-icons/bs";
-import { useEffect } from "react";
+import { useEffect,useState } from "react";
+import Box from "@mui/material/Box";
+import { IoMdCloseCircle } from "react-icons/io";
+import Modal from "@mui/material/Modal";
+import toast,{ Toaster } from 'react-hot-toast';
+import { useDispatch } from 'react-redux';
+import { addUserData } from "@/appstore/userData";
+import Error from "@/pages/Error";
 import Link from "next/link";
 import {
   VerticalTimeline,
@@ -11,10 +18,93 @@ import {
 } from "react-vertical-timeline-component";
 import { useRouter } from "next/router";
 import "react-vertical-timeline-component/style.min.css";
+import BlogSkeleton from "../skeleton/BlogSkeleton";
+import { useSelector } from "react-redux";
+
 const Eventdetails = () => {
-  const [event, setEvent] = React.useState([]);
+  const [event, setEvent] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const[errorpage,setErrorpage]=useState(false);
+  const [open, setOpen] = useState(false);
+  const [width, setWidth] = useState(0);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [clg, setClg] = useState("");
+  const [linkedin, setLinkedin] = useState("");
+  const [github, setGithub] = useState("");
+  const [title, setTitle] = useState("");
+  const [img, setImage] = useState("");
   const router = useRouter();
+  const dispatch = useDispatch();
+  const userinfo = useSelector((state) => state.userData);
+  //handle change function
+  const handleChange = (e) => {
+    if (e.target.name === "name") {
+      setName(e.target.value);
+    } else if (e.target.name === "email") {
+      setEmail(e.target.value);
+    } else if (e.target.name === "phone") {
+      setPhone(e.target.value);
+    } else if (e.target.name === "clg") {
+      setClg(e.target.value);
+    } else if (e.target.name === "linkedin") {
+      setLinkedin(e.target.value);
+    } else if (e.target.name === "github") {
+      setGithub(e.target.value);
+    } else if (e.target.name === "title") {
+      setTitle(e.target.value);
+    }
+  };
+
+  //get user data
+  const getUser=async(token)=>{
+    console.log(token)
+    const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/getuserdata`, {
+      method: "POST", // or 'PUT'
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(token),
+    });
+    const result = await res.json();
+    dispatch(addUserData({name:result.data.name,email:result.data.email,img:result.data.img,linkedin:result.data.linkedin,github:result.data.github,website:result.data.website,phone:result.data.phone,bio:result.data.bio,clg:result.data.clg,title:result.data.title}))
+  }
+  //use effect
+  useEffect(() => {
+    var w = window.innerWidth;
+    if (w >= 500) {
+      setWidth(800);
+     
+    } else {
+   
+      setWidth(400);
+     
+    }
+    if(localStorage.getItem('innovateUuser')){
+      const data = JSON.parse(localStorage.getItem('innovateUuser')).token;
+
+      getUser(data);
+    }
+
+  }, []);
+  //style for modal
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: { width },
+    bgcolor: "#1c0119",
+    border: "2px solid #4a0343",
+    boxShadow: 24,
+    borderRadius: "6px",
+    p: 4,
+  };
+
+//fetch events
   const fetchEvents = async (id) => {
+    setLoading(true);
     const data = { status: "getbyid", id };
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_HOST}/api/admin/Add/addevent`,
@@ -26,14 +116,23 @@ const Eventdetails = () => {
         body: JSON.stringify(data),
       }
     );
+ 
     const result = await res.json();
+    setLoading(false);
+    if(result.success==true){
+      setEvent(result.event);
+    }
+    else{
+setErrorpage(false);
+    }
     setEvent(result.event);
   };
   useEffect(() => {
     let id = router.query.id;
     fetchEvents(id);
-  }, []);
+  }, [router.query.id]);
   console.log(event);
+  //logic for registration count bar
   const valuefunc = () => {
 if(event.eventreglimit=="unlimited"){
   return 20;
@@ -42,9 +141,76 @@ else if(event.eventreglimit!="unlimited"){
   return (event.eventregcount/event.eventreglimit)*100;
   }
 }
+const handleOpen = () => {
+  setOpen(true);
+  setName(userinfo.name);
+  setEmail(userinfo.email);
+  setPhone(userinfo.phone);
+  setClg(userinfo.clg);
+  setLinkedin(userinfo.linkedin);
+  setGithub(userinfo.github);
+  setTitle(userinfo.title);
+  setImage(userinfo.img);
+};
+const handleClose = () => {
+  setOpen(false);
+};
+//handle registration
+const handleRegistratation=async(link,id)=>{
+if(link!=""){
+toast.success('Please proceed to the registration page. Ensure all required details are filled out accurately and submit the form to complete your registration process. Thank you.',{icon:'👏'})
+  setTimeout(()=>{
+    window.open(link, '_blank');
+  },3000)
+}//end of if
+else{
+handleOpen();
+}
+}
+const handleSubmit=async(e)=>{
+  const data = {
+    name,
+    email,
+    phone,
+    clg,
+    github,
+    linkedin,
+    img,
+    title,
+    id:event._id,
+    estatus: "new",
+  };
+  const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/eventr`, {
+    method: "POST", // or 'PUT'
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+  
+  const result = await res.json();
+  if(result.success==true){
+    toast.success(result.message,{icon:'👏'})
+    if(result.order!=null){
+      console.log(result.order)
+      router.push(`/components/Events/Payment?orderid=${result.order.id}&&name=${result.event.eventname}&&amount=${result.event.eventregfee}&&id=${event._id}&&poster=${event.eventposter}`);
+    }
+    handleClose();
+
+  }
+  else{
+    toast.error(result.message,{icon:'👎'})
+  
+  }
+}
   return (
+    <>
+       <Toaster
+  position="top-center"
+  reverseOrder={false}
+/>
     <div>
-      <section className="py-10 font-poppins bg-[conic-gradient(at_bottom_right,_var(--tw-gradient-stops))] from-blue-700 via-blue-800 to-gray-900 my-20 mx-2 rounded-lg">
+      {loading?<div className="min-h-screen my-20"><BlogSkeleton/></div>:event&&<section className="py-10 font-poppins bg-[conic-gradient(at_bottom_right,_var(--tw-gradient-stops))] from-blue-700 via-blue-800 to-gray-900 my-20 mx-2 rounded-lg">
         <div className="max-w-6xl px-4 mx-auto">
           <div className="flex flex-wrap mb-24 -mx-4 ">
             <div className="w-full px-4 mb-8 md:w-1/2 md:mb-0">
@@ -113,7 +279,7 @@ else if(event.eventreglimit!="unlimited"){
                     >
                       <img
                         className="object-contain w-full lg:h-28"
-                        src={`${event.eventposter}`}
+                        src={`${event&&event.eventposter}`}
                         alt=""
                       />
                     </a>
@@ -137,7 +303,7 @@ else if(event.eventreglimit!="unlimited"){
                     >
                       <img
                         className="object-contain w-full lg:h-28"
-                        src={`${event.eventposter}`}
+                        src={`${event&&event.eventposter}`}
                         alt=""
                       />
                     </a>
@@ -325,12 +491,27 @@ else if(event.eventreglimit!="unlimited"){
                 </div>
 
                 <div className="flex gap-4 mb-6">
-                  <a
-                    href="#"
+                 {event.eventregstatus=="open"&&<button
                     className="w-full px-4 py-3 text-center text-gray-100 bg-blue-600 border border-transparent  hover:border-blue-500 hover:text-blue-100 hover:bg-blue-800  dark:bg-gray-700 dark:hover:bg-gray-900 rounded-xl"
+                    onClick={()=>{
+                      handleRegistratation(event.eventreglink,event._id)
+                    }}
                   >
                     Register Now
-                  </a>
+                  </button>}
+                  {event.eventregstatus=="closed"&&<button
+                    className="w-full px-4 py-3 text-center text-gray-100 bg-red-600 border border-transparent  hover:border-blue-500 hover:text-blue-100 hover:bg-red-800  dark:bg-gray-700 dark:hover:bg-gray-900 rounded-xl "
+                    disabled="true"
+                  >
+                    Registration Closed
+                  </button>}
+                  {event.eventregstatus=="over"&&<button
+                    className="w-full px-4 py-3 text-center text-gray-100 bg-red-600 border border-transparent  hover:border-blue-500 hover:text-blue-100 hover:bg-red-800  dark:bg-gray-700 dark:hover:bg-gray-900 rounded-xl "
+                    disabled="true"
+                  >
+                    Registration Full
+                  </button>}
+
                 </div>
               </div>
             </div>
@@ -342,7 +523,7 @@ else if(event.eventreglimit!="unlimited"){
               <div className="w-full px-4 mb-10 lg:w-1/2 lg:mb-0">
                 <div className="relative">
                   <img
-                    src="https://i.postimg.cc/QtyYkbxp/pexels-andrea-piacquadio-927022.jpg"
+                    src={`${event.eventposter}`}
                     alt=""
                     className="relative z-40 object-cover w-full h-96 lg:rounded-tr-[80px] lg:rounded-bl-[80px] rounded"
                   />
@@ -387,12 +568,12 @@ else if(event.eventreglimit!="unlimited"){
           <h1 className="navfont text-white text-4xl">TimeLine</h1>
           <div className="h-1 w-40 text-purple-600 rounded-full bg-blue-800"></div>
         </div>
-        <VerticalTimeline>
+        <VerticalTimeline className="overflow-hidden">
           <VerticalTimelineElement
             className="vertical-timeline-element--work "
             contentStyle={{ background: "rgb(42, 8, 156)", color: "#fff" }}
             contentArrowStyle={{ borderRight: "7px solid  rgb(33, 150, 243)" }}
-            date={"12 Dec 2024"}
+             date={`${event.eventdate}`}
             iconStyle={{ background: "rgb(42, 8, 156)", color: "#fff" }}
             icon={<CiCalendarDate />}
           >
@@ -410,7 +591,7 @@ else if(event.eventreglimit!="unlimited"){
           <VerticalTimelineElement
             className="vertical-timeline-element--work"
             contentStyle={{ background: "rgb(42, 8, 156)", color: "#fff" }}
-            date={"12 Dec 2024"}
+             date={`${event.eventdate}`}
             iconStyle={{ background: "rgb(42, 8, 156)", color: "#fff" }}
             icon={<IoMdTime />}
           >
@@ -418,7 +599,7 @@ else if(event.eventreglimit!="unlimited"){
               Opening ceremony
             </h3>
             <h4 className="vertical-timeline-element-subtitle">
-              Date & Time : {event.eventdate} | {event.eventtime}
+             Date & Time: {event.eventdate} | {event.eventtime && event.eventtime.split(':00').join(':05')}
             </h4>
             <p>
               Join us for the official opening ceremony, where we set the stage
@@ -428,7 +609,7 @@ else if(event.eventreglimit!="unlimited"){
           <VerticalTimelineElement
             className="vertical-timeline-element--work"
             contentStyle={{ background: "rgb(42, 8, 156)", color: "#fff" }}
-            date={"12 Dec 2024"}
+             date={`${event.eventdate}`}
             iconStyle={{ background: "rgb(42, 8, 156)", color: "#fff" }}
             icon={<CiMicrophoneOn />}
           >
@@ -436,7 +617,7 @@ else if(event.eventreglimit!="unlimited"){
               Keynote speaker/session
             </h3>
             <h4 className="vertical-timeline-element-subtitle">
-              Date & Time :{event.eventdate} | {event.eventtime}{" "}
+              Date & Time: {event.eventdate} | {event.eventtime && event.eventtime.split(':00').join(':06')}
             </h4>
             <p>
               Immerse yourself in a thought-provoking session by our
@@ -447,7 +628,7 @@ else if(event.eventreglimit!="unlimited"){
           <VerticalTimelineElement
             className="vertical-timeline-element--work"
             contentStyle={{ background: "rgb(42, 8, 156)", color: "#fff" }}
-            date={"12 Dec 2024"}
+            date={`${event.eventdate}`}
             iconStyle={{ background: "rgb(42, 8, 156)", color: "#fff" }}
             icon={<BsBuildingCheck />}
           >
@@ -455,7 +636,7 @@ else if(event.eventreglimit!="unlimited"){
               Panel discussions
             </h3>
             <h4 className="vertical-timeline-element-subtitle">
-              Date & Time : {event.eventdate} | {event.eventtime}
+           Date & Time: {event.eventdate} | {event.eventtime && event.eventtime.split(':00').join(':45')}
             </h4>
             <p>
               Engage in interactive panel discussions featuring industry
@@ -466,7 +647,7 @@ else if(event.eventreglimit!="unlimited"){
           <VerticalTimelineElement
             className="vertical-timeline-element--education"
             contentStyle={{ background: "rgb(42, 8, 156)", color: "#fff" }}
-            date={"12 Dec 2024"}
+             date={`${event.eventdate}`}
             iconStyle={{ background: "rgb(42, 8, 156)", color: "#fff" }}
             icon={<CiCalendarDate />}
           >
@@ -474,7 +655,7 @@ else if(event.eventreglimit!="unlimited"){
               FAQ & Open Questions
             </h3>
             <h4 className="vertical-timeline-element-subtitle">
-              Date & Time : {event.eventdate} | {event.eventtime}{" "}
+            Date & Time: {event.eventdate} | {event.eventtime && event.eventtime.split(':00').join(':55')}
             </h4>
             <p>
               We love hearing from you! If you have any questions not covered
@@ -485,7 +666,7 @@ else if(event.eventreglimit!="unlimited"){
           <VerticalTimelineElement
             className="vertical-timeline-element--education"
             contentStyle={{ background: "rgb(42, 8, 156)", color: "#fff" }}
-            date={"12 Dec 2024"}
+            date={`${event.eventdate}`}
             iconStyle={{ background: "rgb(42, 8, 156)", color: "#fff" }}
             icon={<CiCalendarDate />}
           >
@@ -493,7 +674,7 @@ else if(event.eventreglimit!="unlimited"){
               Thank-you messages to sponsors and participants & Closing ceremony
             </h3>
             <h4 className="vertical-timeline-element-subtitle">
-              Follow us on [Social Media Platforms] for real-time updates and
+              Follow us on Social Media Platforms for real-time updates and
               engage with the community. Use the hashtag #{event.eventname} to
               join the conversation. We look forward to welcoming you to{" "}
               {event.eventname} and making it an enriching experience for
@@ -501,8 +682,217 @@ else if(event.eventreglimit!="unlimited"){
             </h4>
           </VerticalTimelineElement>
         </VerticalTimeline>
-      </section>
+      </section>}
     </div>
+    {errorpage==true&&<>
+      <div className="overflow-hidden">
+ <Error/>
+</div>
+</>
+}
+<Modal
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box sx={style}>
+              <div
+                className="absolute top-2 right-2 text-purple-600"
+                onClick={handleClose}
+              >
+                <IoMdCloseCircle className="text-4xl" />
+              </div>
+              <div className="overflow-y-scroll max-h-[90vh]">
+                <div className="mt-6 bg-white border border-gray-200 rounded-xl shadow-sm dark:bg-gray-800 dark:border-gray-700 ">
+                  <div className="p-4 sm:p-7">
+                    <div className="text-center">
+                      <h1 className="block text-2xl font-bold text-gray-800 dark:text-white">
+                        Register For {event&&event.eventname}
+                      </h1>
+                    
+                      <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                      Save your information in your profile for quicker registration next time -
+                        <Link
+                          className="text-blue-600 decoration-2 hover:underline font-medium dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
+                          href="/components/Profile"
+                          target="_blank"
+                        >
+                         {" "} MyProfile
+                        </Link>
+                      </p>
+                      
+                    </div>
+                    <div className="mt-5">
+                      {/* Form */}
+
+                      <div className="grid gap-y-4">
+                        {/* Form Group */}
+                        <div>
+                          <label
+                            htmlFor="name"
+                            className="block text-sm mb-2 dark:text-white"
+                          >
+                            Name
+                          </label>
+                          <div className="relative">
+                            <input
+                              type="text"
+                              id="name"
+                              name="name"
+                              value={name}
+                              onChange={handleChange}
+                              className="py-3 px-4 block w-full  rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600 border-2 border-gray-400"
+                              placeholder="Enter your name"
+                            />
+                          </div>
+                        </div>
+                        {/* End Form Group */}
+                        {/* Form Group */}
+                        <div>
+                          <label
+                            htmlFor="email"
+                            className="block text-sm mb-2 dark:text-white"
+                          >
+                            Email address
+                          </label>
+                          <div className="relative">
+                            <input
+                              type="email"
+                              id="email"
+                              value={email}
+                              onChange={handleChange}
+                              name="email"
+                              className="py-3 px-4 block w-full border-gray-400 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600 border-2"
+                              placeholder="example@gmail.com"
+                            />
+                          </div>
+                        </div>
+                        {/* End Form Group */}
+                        {/* Form Group */}
+                        <div>
+                          <label
+                            htmlFor="phone"
+                            className="block text-sm mb-2 dark:text-white"
+                          >
+                            Phone
+                          </label>
+                          <div className="relative">
+                            <input
+                              type="number"
+                              id="phone"
+                              value={phone}
+                              onChange={handleChange}
+                              name="phone"
+                              className="py-3 px-4 block w-full border-gray-400 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600 border-2"
+                              placeholder="+91 XXXXXXXXXX"
+                            />
+                          </div>
+                        </div>
+                        {/* End Form Group */}
+                        {/* Checkbox */}
+                        <div>
+                          <label
+                            htmlFor="clg"
+                            className="block text-sm mb-2 dark:text-white"
+                          >
+                            College/Organization
+                          </label>
+                          <div className="relative">
+                            <input
+                              type="text"
+                              id="clg"
+                              name="clg"
+                              value={clg}
+                              onChange={handleChange}
+                              className="py-3 px-4 block w-full border-gray-400 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600 border-2"
+                              placeholder="Enter your college/organization name. ex:-CUTM,etc."
+                            />
+                          </div>
+                        </div>
+                        {/* End Form Group */}
+                        {/* Form Group */}
+                        <div>
+                          <label
+                            htmlFor="title"
+                            className="block text-sm mb-2 dark:text-white"
+                          >
+                            Title/Role
+                          </label>
+                          <div className="relative">
+                            <input
+                              type="text"
+                              id="title"
+                              name="title"
+                              value={title}
+                              onChange={handleChange}
+                              className="py-3 px-4 block w-full border-gray-400 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600 border-2"
+                              placeholder="Enter your title/role. ex:- student,developer,etc."
+                            />
+                          </div>
+                        </div>
+                        {/* End Form Group */}
+                        {/* Checkbox */}
+                        <div>
+                          <label
+                            htmlFor="github"
+                            className="block text-sm mb-2 dark:text-white"
+                          >
+                            Github Url
+                          </label>
+                          <div className="relative">
+                            <input
+                              type="url"
+                              id="title"
+                              name="github"
+                              value={github}
+                              onChange={handleChange}
+                              className="py-3 px-4 block w-full border-gray-400 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600 border-2"
+                              placeholder="Enter your github url."
+                            />
+                          </div>
+                        </div>
+                        <div>
+                          <label
+                            htmlFor="linkedin"
+                            className="block text-sm mb-2 dark:text-white"
+                          >
+                            Linkedin Url
+                          </label>
+                          <div className="relative">
+                            <input
+                              type="url"
+                              id="linkedin"
+                              name="linkedin"
+                              value={linkedin}
+                              onChange={handleChange}
+                              className="py-3 px-4 block w-full border-gray-400 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600 border-2"
+                              placeholder="Enter your linkedin url."
+                            />
+                          </div>
+                        </div>
+                        {/* End Form Group */}
+                        {/* Checkbox */}
+                        {/* End Form Group */}
+                        {/* Checkbox */}
+
+                        {/* End Checkbox */}
+                        <button
+                          type="submit"
+                          className="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
+                          onClick={handleSubmit}
+                        >
+                          Proceed to next step
+                        </button>
+                      </div>
+                      {/* End Form */}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Box>
+          </Modal>
+    </>
   );
 };
 
