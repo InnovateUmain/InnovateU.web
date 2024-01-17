@@ -55,7 +55,9 @@ const Card = () => {
         const res = await pr.json();
        if(res.data!=null){
           seteventpaid(res.data)
-          setPayment(res.data.length*500);
+          res.data.map((item)=>{
+            setPayment(payment+parseInt(item.paymentamount))
+          })
        }
     }
     

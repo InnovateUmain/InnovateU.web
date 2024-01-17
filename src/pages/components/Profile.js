@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import toast,{ Toaster } from 'react-hot-toast';
 import Spinner from './Spinner';
+import BlogSkeleton from './skeleton/BlogSkeleton';
 import { motion } from 'framer-motion';
 const Profile = () => {
   const ref = useRef();
@@ -180,9 +181,9 @@ setLoading(true);
     })
     }
   return (
-    <div className={`min-h-screen relative top-6 ${loading?"flex justify-center items-center":""}`}>
+    <div className={`min-h-screen relative top-6 my-20}`}>
        <Toaster position="top-center" reverseOrder={false}/>
-      {loading?<Spinner/>:<>
+      {loading?<div className='my-16'><BlogSkeleton/></div>:<>
      
   {/* Card Section */}
   <div className="max-w-4xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">

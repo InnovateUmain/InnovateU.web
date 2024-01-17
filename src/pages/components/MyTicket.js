@@ -2,14 +2,20 @@
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion';
+import QRCode from "react-qr-code";
 import { FaFilePdf ,FaImage} from "react-icons/fa6";
 import * as htmlToImage from 'html-to-image';
 import { toPng, toJpeg, toBlob, toPixelData, toSvg } from 'html-to-image';
 import { jsPDF } from "jspdf";
+import Cardskeleton from './skeleton/Cardskeleton';
+import { set } from 'mongoose';
 const MyTicket = () => {
-    const [event,setEvent] = useState({});
+    const [event,setEvent] = useState([]);
+    const [qr,setQr] = useState(""); //qr code for ticket id [not used
     const[url,setUrl]= useState("");
+    const [loading,setLoading] = useState(false);
     const fetchEventDetails=async(email)=>{
+      setLoading(true);
         const userdata = { email,estatus:"getdataviaemail"};
         console.log(userdata)
         const checkuser = await fetch(
@@ -23,7 +29,7 @@ const MyTicket = () => {
           }
         );
         const userresult = await checkuser.json();
-		console.log(userresult)
+        setLoading(false);
         if(userresult.data!=null){
             setEvent(userresult.data);
             setUrl(userresult.url);
@@ -37,9 +43,12 @@ const MyTicket = () => {
   fetchEventDetails(data);
   
     },[])
-    const captureImage = async () => {
+    const captureImage = async (eventId) => {
       try {
-        const dataUrl = await htmlToImage.toPng(document.getElementById('ticket'), { quality: 0.95 });
+        const dataUrl = await htmlToImage.toPng(
+          document.getElementById(`ticket-${eventId}`),
+          { quality: 0.95 }
+        );
   
         var link = document.createElement('a');
         link.download = 'EventTicket.png';
@@ -53,9 +62,9 @@ const MyTicket = () => {
         console.error('Error capturing image:', error);
       }
     };
-    const capturePdf= async () => {
+    const capturePdf= async (eventId) => {
       try {
-        const dataUrl = await htmlToImage.toPng(document.getElementById('ticket'), { quality: 0.95 });
+        const dataUrl = await htmlToImage.toPng(document.getElementById(`ticket-${eventId}`), { quality: 0.95 });
         const pdf = new jsPDF();
           const imgProps= pdf.getImageProperties(dataUrl);
           const pdfWidth = pdf.internal.pageSize.getWidth();
@@ -66,8 +75,13 @@ const MyTicket = () => {
         console.error('Error capturing image:', error);
       }
     };
+    
+    // console.log("im",img("5555"))
+    // console.log(event)
+    // event.map((item)=>console.log(item))
+    
   return (
-    <div className='min-h-screen flex justify-center'>
+<div className='my-24 '>
 <style jsx global>
 {`
 @import url('https://fonts.googleapis.com/css2?family=Cabin:wght@600&display=swap');
@@ -251,14 +265,56 @@ const MyTicket = () => {
   }
 `}
 </style>
-
-       
-    <div className='bg-black min-h-screen text-white relative top-24 mb-10 '>
-    <div className='flex flex-col justify-center  my-4 items-center'>
-    <h1 className='text-white navfont lg:text-5xl md:text-4xl text-4xl'>My Ticket (1) </h1>
+<div className='flex flex-col justify-center  my-4 items-center'>
+    <h1 className='text-white navfont lg:text-5xl md:text-4xl text-4xl'>My Ticket ({event&&event.length}) </h1>
                   <div className='h-2 w-56 bg-purple-600 rounded-full my-4'></div>
-        </div>
-		{event==null?<div className='flex justify-center items-center'><div className="bg-white p-8 rounded-lg shadow-lg text-center w-4/5">
+        </div>    
+       
+    {loading?<div className='my-20'><Cardskeleton/></div>:<div className='bg-black  text-white  flex justify-center items-center flex-wrap '>
+    {event.map((item)=>(<div key={item._id} className='mx-4 my-4'>
+  <div className="m-ticket" id={`ticket-${item._id}`}>
+    <p className="m">INNOVATEU</p>
+    <div className="movie-details">
+      <img
+        src="https://res.cloudinary.com/dst73auvn/image/upload/v1698952130/2-removebg-preview_ljkree.png"
+        className="poster"
+      />
+      <div className="movie">
+        <h4 className='text-black font navfont'>{item.name}</h4>
+        <p>{item.eventdate}</p>
+        <p>Time | {item.eventtime
+}</p>
+        <p>CUTM : BBSR CAMPUS</p>
+      </div>
+    </div>
+    <div className="info text-gray-600">Tap for support, details &amp; more actions</div>
+    <div className="ticket-details">
+    <QRCode
+    className='scan'
+    value={item.paymentstatus=="free"?item.eventgrplink:item.ticketid}
+    />
+      <div className="ticket">
+        <p>1-Ticket</p>
+        <b className='font text-black'>{item.eventname}</b>
+        <p>Venue: {item.eventvenue}</p>
+        <h6 className='text-gray-600 font'>TICKET ID: {item.ticketid}</h6>
+      </div>
+    </div>
+    <div className="info-cancel">Cancellation not available for this venue</div>
+    <div className="total-amount">
+      <p className='text-black font'>Total Amount</p>
+      <p className='text-black font'>Rs. ₹{item.paymentamount}</p>
+    </div>
+  </div>
+  <div className='flex justify-center items-center my-6'>
+<motion.button className='p-2 m-2 bg-purple-600 text-white fontevent rounded-md flex justify-center items-center' whileHover={{scale:1.1}} whileTap={{scale:0.9, rotate:1}} onClick={()=>{captureImage(item._id)}}>Download Photo <FaImage className='mx-1'/></motion.button>
+<motion.button className='p-2 m-2 bg-purple-600 text-white fontevent rounded-md flex justify-center items-center' whileHover={{scale:1.1}} whileTap={{scale:0.9, rotate:1}} onClick={()=>{capturePdf(item._id)}}>Download Pdf<FaFilePdf  className='mx-1'/></motion.button>
+</div>
+  {/*-m-ticket end--*/}
+</div> ))}
+
+        </div>}
+        {event.length<=0&&<div className='flex justify-center items-center '><div className="bg-white p-8 rounded-lg shadow-lg text-center w-4/5">
         <div className="animate-tickScale inline-block bg-green-600 rounded-full">
     
            <img src="/oops.jpg" alt="no data img" className="h-52 w-52"/>
@@ -266,52 +322,11 @@ const MyTicket = () => {
         
         <h1 className="lg:text-4xl md:text-4xl sm:text-2xl font-semibold text-gray-800 mb-4 font text-2xl">OOPS ! 🤭🤭🤭</h1>
         <p className="text-lg text-gray-600 mb-4 font"> You have not register for any event.</p>
-        <p className="text-lg text-gray-600 mb-2 font">If you wish to see your ticket please register for an event. Ongoing event is<Link href={"/Event"}><span className='font-bold text-green-600'> DEVCON 2K24</span></Link>.</p>
+        <p className="text-lg text-gray-600 mb-2 font">If you wish to see your ticket please register for an event. Ongoing event<Link href={"/Event"}><span className='font-bold text-green-600'> Event</span></Link>.</p>
         <Link href="/Event" className="bg-blue-600 hover:bg-blue-800 text-white font-semibold py-2 px-4 rounded-full inline-block mx-2 my-4 ">Register for an Event </Link>
         <br/>
        
-    </div></div>:<>
-  <div className="m-ticket" id="ticket">
-    <p className="m">DEVCON 2K24</p>
-    <div className="movie-details">
-      <img
-        src="https://res.cloudinary.com/dst73auvn/image/upload/v1698952130/2-removebg-preview_ljkree.png"
-        className="poster"
-      />
-      <div className="movie">
-        <h4 className='text-black font'>{event.name}</h4>
-        <p>Jan 15th - Jan 20th</p>
-        <p>Thu, 15 Jan | 10:00 AM</p>
-        <p>CUTM : BBSR CAMPUS</p>
-      </div>
-    </div>
-    <div className="info text-gray-600">Tap for support, details &amp; more actions</div>
-    <div className="ticket-details">
-      <img
-        src={`${url}`}
-        className="scan"
-      />
-      <div className="ticket">
-        <p>1-Ticket</p>
-        <b className='font text-black'>DEVCON 2K24</b>
-        <p>Venue: Aryabhat</p>
-        <h6 className='text-gray-600 font'>TICKET ID: {event.ticketid}</h6>
-      </div>
-    </div>
-    <div className="info-cancel">Cancellation not available for this venue</div>
-    <div className="total-amount">
-      <p className='text-black font'>Total Amount</p>
-      <p className='text-black font'>Rs. ₹{event.paymentamount}</p>
-    </div>
-  </div>
-  <div className='flex justify-center items-center my-6'>
-<motion.button className='p-2 m-2 bg-purple-600 text-white fontevent rounded-md flex justify-center items-center' whileHover={{scale:1.1}} whileTap={{scale:0.9, rotate:1}} onClick={captureImage}>Download Photo <FaImage className='mx-1'/></motion.button>
-<motion.button className='p-2 m-2 bg-purple-600 text-white fontevent rounded-md flex justify-center items-center' whileHover={{scale:1.1}} whileTap={{scale:0.9, rotate:1}} onClick={capturePdf}>Download Pdf<FaFilePdf  className='mx-1'/></motion.button>
-</div>
-  {/*-m-ticket end--*/}
-</>}
-        </div>
-       
+    </div></div>}
     </div>
   )
 }

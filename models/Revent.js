@@ -15,6 +15,8 @@ const EventRegisteredSchema=new mongoose.Schema({
     eventtime:{type:Schema.Types.String,ref:'Event',default:''},
     eventvenue:{type:Schema.Types.String,ref:'Event',default:''},
     eventtype:{type:Schema.Types.String,ref:'Event',default:''},
+    eventid:{type:Schema.Types.ObjectId,ref:'Event',default:''},
+    eventgrplink:{type:String,default:''},
     clg:{type:String,default:''},
     github:{type:String,default:''},
     linkedin:{type:String,default:''},
