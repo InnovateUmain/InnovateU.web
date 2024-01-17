@@ -191,16 +191,24 @@ const handleSubmit=async(e)=>{
   const result = await res.json();
   if(result.success==true){
     toast.success(result.message,{icon:'👏'})
+
     if(result.order!=null){
       console.log(result.order)
-      router.push(`/components/Events/Payment?orderid=${result.order.id}&&name=${result.event.eventname}&&amount=${result.event.eventregfee}&&id=${event._id}&&poster=${event.eventposter}`);
+      router.push(`/components/Events/Payment?orderid=${result.order.id}&&name=${result.event.eventname}&&amount=${result.event.eventregfee}&&id=${result.event._id}&&poster=${event.eventposter}`);
     }
+     if(result.orderid!=null){
+      router.push(`/components/Events/Payment?orderid=${result.orderid}&&name=${result.event.eventname}&&amount=${result.event.eventregfee}&&id=${result.event._id}&&poster=${event.eventposter}`);
+     }
+    if(result.order==null){
+      router.push(`/components/Events/Eventconf?id=${result.id}`);
+    }
+
     handleClose();
 
   }
   else{
-    toast.error(result.message,{icon:'👎'})
-  
+    toast.error(result.message)
+    
   }
 }
   return (

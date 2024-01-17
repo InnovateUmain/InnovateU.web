@@ -12,6 +12,8 @@ const EventRegisteredSchema=new mongoose.Schema({
     ticketstatus:{type:String,default:'not claimed'},
     eventname:{type:Schema.Types.String,ref:'Event',default:''},
     eventdate:{type:Schema.Types.String,ref:'Event',default:''},
+    eventtime:{type:Schema.Types.String,ref:'Event',default:''},
+    eventvenue:{type:Schema.Types.String,ref:'Event',default:''},
     eventtype:{type:Schema.Types.String,ref:'Event',default:''},
     clg:{type:String,default:''},
     github:{type:String,default:''},

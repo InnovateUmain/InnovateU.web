@@ -9,6 +9,7 @@ import * as htmlToImage from 'html-to-image';
 import { toPng, toJpeg, toBlob, toPixelData, toSvg } from 'html-to-image';
 import { jsPDF } from "jspdf";
 import Spinner from '../Spinner'
+import Error from '@/pages/Error'
 const Eventconf = () => {
     const ref = useRef();
     const refticket = useRef();
@@ -97,7 +98,7 @@ const getUser=async(token)=>{
       setTimeout(() => {
         setCon(false);
       }, 10000);
-    },[router.query])
+    },[router.query.id])
     
    if(event!=null){
 var rdate = new Date(event.createdAt);
@@ -298,7 +299,7 @@ var rdate = new Date(event.createdAt);
 `}
         </style>
             
-      {event==null?<div className='flex justify-center items-center'><h3 className='navfont text-white text-center my-32 text-2xl lg:w-[70vw]w-[90vw]'>Oops! It seems like you might have ended up on the wrong page or used incorrect credentials for the event. Please double-check your details to make sure you have the right access.</h3></div>:<div className="bg-gradient-to-r from-black to-gray-900 min-h-screen flex items-center justify-center h-full w-full p-4">
+      {event==null?<div className='flex justify-center items-center'><Error/></div>:<div className="bg-gradient-to-r from-black to-gray-900 min-h-screen flex items-center justify-center h-full w-full p-4">
       
             <div className="bg-white p-8 rounded-lg shadow-lg text-center  lg:w-[80vw] w-[100vw]  ">
                 <div className="animate-tickScale inline-block bg-green-600 rounded-full ">
@@ -316,9 +317,9 @@ var rdate = new Date(event.createdAt);
                 {/* Event Ticket Section */}
                
                   {/* Invoice Section */}
-                  <h2 className="text-xl font-semibold text-gray-800 mb-2 navfont">Invoice</h2>
+                  {event.paymentstatus=="paid"&&<h2 className="text-xl font-semibold text-gray-800 mb-2 navfont">Invoice</h2>}
                 <div className="mb-4">
-                  <>
+                 {event.paymentstatus=="paid"&& <>
                  
   {/* Invoice */}
   <div className="max-w-[85rem] px-4 sm:px-6 lg:px-8 mx-auto my-4 sm:my-10 border-2 border-gray-100" >
@@ -424,14 +425,14 @@ var rdate = new Date(event.createdAt);
                 <h5 className="sm:hidden text-xs font-medium text-gray-500 uppercase">
                   Rate
                 </h5>
-                <p className="text-gray-800 dark:text-gray-200">500</p>
+                <p className="text-gray-800 dark:text-gray-200">{event.paymentamount}</p>
               </div>
               <div>
                 <h5 className="sm:hidden text-xs font-medium text-gray-500 uppercase">
                   Amount
                 </h5>
                 <p className="sm:text-end text-gray-800 dark:text-gray-200">
-                ₹500
+                ₹{event.paymentamount}
                 </p>
               </div>
             </div>
@@ -448,13 +449,13 @@ var rdate = new Date(event.createdAt);
                 <dt className="col-span-3 font-semibold text-gray-800 dark:text-gray-200">
                   Subtotal:
                 </dt>
-                <dd className="col-span-2 text-gray-500">₹500.00</dd>
+                <dd className="col-span-2 text-gray-500">₹{event.paymentamount}.00</dd>
               </dl>
               <dl className="grid sm:grid-cols-5 gap-x-3">
                 <dt className="col-span-3 font-semibold text-gray-800 dark:text-gray-200">
                   Total:
                 </dt>
-                <dd className="col-span-2 text-gray-500">₹500.00</dd>
+                <dd className="col-span-2 text-gray-500">₹{event.paymentamount}.00</dd>
               </dl>
               {/* <dl className="grid sm:grid-cols-5 gap-x-3">
                 <dt className="col-span-3 font-semibold text-gray-800 dark:text-gray-200">
@@ -466,7 +467,7 @@ var rdate = new Date(event.createdAt);
                 <dt className="col-span-3 font-semibold text-gray-800 dark:text-gray-200">
                   Amount paid:
                 </dt>
-                <dd className="col-span-2 text-gray-500">₹500.00</dd>
+                <dd className="col-span-2 text-gray-500">₹{event.paymentamount}.00</dd>
               </dl>
               <dl className="grid sm:grid-cols-5 gap-x-3">
                 <dt className="col-span-3 font-semibold text-gray-800 dark:text-gray-200">
@@ -490,10 +491,7 @@ var rdate = new Date(event.createdAt);
           </p>
           <div className="mt-2">
             <p className="block text-sm font-medium text-gray-800 dark:text-gray-200">
-              supportinnovateu@gmail.com
-            </p>
-            <p className="block text-sm font-medium text-gray-800 dark:text-gray-200">
-              +91 7465737478
+              support@innovateu.org.in
             </p>
           </div>
         </div>
@@ -552,12 +550,12 @@ var rdate = new Date(event.createdAt);
     </div>
   </div>
   {/* End Invoice */}
-</>
+</>}
 <h2 className="text-xl font-semibold text-gray-800 mb-2 navfont">Event Ticket</h2>
                 <div className="mb-4 flex justify-center items-center flex-col">
                     <>
   <div className="m-ticket" id="ticket" ref={refticket}>
-    <p className="m">DEVCON 2K24</p>
+    <p className="m ">INNOVATEU</p>
     <div className="movie-details">
       <img
         src="https://res.cloudinary.com/dst73auvn/image/upload/v1698952130/2-removebg-preview_ljkree.png"
@@ -565,8 +563,8 @@ var rdate = new Date(event.createdAt);
       />
       <div className="movie">
         <h4 className='text-black font'>{event.name}</h4>
-        <p>Jan 15th - Jan 20th</p>
-        <p>Thu, 15 Jan | 10:00 AM</p>
+        <p>Date: {event.eventdate}</p>
+        <p>Time| {event.eventtime}</p>
         <p>CUTM : BBSR CAMPUS</p>
       </div>
     </div>
@@ -578,8 +576,8 @@ var rdate = new Date(event.createdAt);
       />
       <div className="ticket">
         <p>1-Ticket</p>
-        <b className='font text-black'>DEVCON 2K24</b>
-        <p>Venue: Aryabhat</p>
+        <b className='font text-black'>{event.eventname}</b>
+        <p>Venue: {event.eventvenue}</p>
         <h6 className='text-gray-600 font'>TICKET ID: {event.ticketid}</h6>
       </div>
     </div>

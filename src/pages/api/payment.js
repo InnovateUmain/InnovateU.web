@@ -27,8 +27,7 @@ const handler = async (req, res) => {
     // razorpay_order_id: 'order_LzpFVdVQVloXpf',
     // razorpay_signature:
    
-       order= await Revent.findOneAndUpdate({orderid:req.body.razorpay_order_id},{paymentstatus:"paid",paymentid:req.body.razorpay_payment_id
-        ,paymentamount:500
+       order= await Revent.findOneAndUpdate({orderid:req.body.razorpay_order_id},{paymentstatus:"paid",paymentid:req.body.razorpay_payment_id ,eventstatus:"success",
       });
       res.redirect(302, `${process.env.NEXT_PUBLIC_HOST}/components/Events/Eventconf?id=${order._id}`);
         }

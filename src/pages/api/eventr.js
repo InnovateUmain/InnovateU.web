@@ -29,6 +29,7 @@ const handler = async (req, res) => {
       try{
         let a = await Revent.findById(req.body.id);
         var img = await QRCode.toDataURL(a.ticketid);
+        console.log(a)
         res.status(200).json({ success: true, data: a,url:img });
       }
       catch(err){
@@ -63,16 +64,28 @@ const handler = async (req, res) => {
     if (req.body.estatus == "new") {
       const event = await Event.findById({ _id: req.body.id });
    
-    let find = await Revent.find({$and:[{email:req.body.email},{eventname:event.eventname}]});
-   
-    if(find.length>0){
+    let find = await Revent.findOne({$and:[{email:req.body.email},{eventname:event.eventname},{eventpaymentstatus:"free"}]});
+   let ppend = await Revent.findOne({$and:[{email:req.body.email},{eventname:event.eventname},{eventpaymentstatus:"pending"}]});
+    let paid = await Revent.findOne({$and:[{email:req.body.email},{eventname:event.eventname},{eventpaymentstatus:"paid"}]});
+    console.log(ppend)
+    if(find!=null){
+      res.status(400).json({ success: false, message: "You have already registered for this event" });
+      return;
+    }//if end
+    
+    if(ppend!=null){
+      res.status(200).json({ success: true, message: "Your details are already saved . Please proceed for payment",event:event,order:ppend,orderid:ppend.orderid});
+      return;
+    }//if end
+
+    if(paid!=null){
       res.status(400).json({ success: false, message: "You have already registered for this event" });
       return;
     }//if end
     else{
       if(event.eventregfee=="free"){
 
-        if( event.eventreglimit<event.eventregcount||event.eventreglimit=="unlimited"){
+        if(event.eventreglimit=="unlimited"){
           let eventr = new Revent({
             name: req.body.name,
             email: req.body.email,
@@ -86,6 +99,8 @@ const handler = async (req, res) => {
             eventname: event.eventname,
             eventdate: event.eventdate,
             eventtype: event.eventtype,
+            eventvenue: event.eventvenue,
+            eventtime: event.eventtime,
             eventstatus: "pending",
             paymentstatus: "free",
             paymentamount: "free",
@@ -95,13 +110,42 @@ const handler = async (req, res) => {
           })
           let a = await eventr.save();
           let updateregcount = await Event.findByIdAndUpdate({ _id: event._id }, { $inc: { eventregcount: 1 } });
-          res.status(200).json({ success: true, message: "Congratulations ! You have Successfully registered for this event" });
+          res.status(200).json({ success: true, message: "Congratulations ! You have Successfully registered for this event" ,id:a._id});
           return;
-        }
+        }//unlimited if end
+        else if(event.eventregcount<event.eventreglimit){
+          let eventr = new Revent({
+            name: req.body.name,
+            email: req.body.email,
+            phone: req.body.phone,
+            clg: req.body.clg,
+            github: req.body.github,
+            linkedin: req.body.linkedin,
+            title: req.body.title,
+            img: req.body.img,
+            ticketid: ticketid,
+            eventname: event.eventname,
+            eventdate: event.eventdate,
+            eventtype: event.eventtype,
+            eventvenue: event.eventvenue,
+            eventtime: event.eventtime,
+            eventstatus: "pending",
+            paymentstatus: "free",
+            paymentamount: "free",
+            orderid: rand,
+            paymentid: "free",
+            ticketstatus: "not claimed",
+          })
+          let a = await eventr.save();
+          let updateregcount = await Event.findByIdAndUpdate({ _id: event._id }, { $inc: { eventregcount: 1 } });
+          res.status(200).json({ success: true, message: "Congratulations ! You have Successfully registered for this event" ,id:a._id});
+          return;
+        }//else if end
+//user is trying to register for a full event
 
-        else if(event.eventregcount>=event.eventreglimit){
-          let closed = await Event.findByIdAndUpdate({ _id: event._id }, { eventregstatus: "closed" });
-          res.status(400).json({ success: false, message: "Sorry ! Registration for this event is closed" });
+        if(event.eventregcount>=event.eventreglimit){
+          let closed = await Event.findByIdAndUpdate({ _id: event._id }, { eventregstatus: "over" });
+          res.status(400).json({ success: false, message: "Sorry ! Registration  is full for this event.Ohh You are too late!" });
           return;
         }
 
@@ -133,6 +177,8 @@ const handler = async (req, res) => {
               eventname: event.eventname,
               eventdate: event.eventdate,
               eventtype: event.eventtype,
+              eventvenue: event.eventvenue,
+              eventtime: event.eventtime,
               eventstatus: "pending",
               paymentstatus: "pending",
               paymentamount: event.eventregfee,
@@ -151,68 +197,7 @@ const handler = async (req, res) => {
       }//else end;
     }
 
-      // let remail = await Revent.find({ email: req.body.email });
-      // let mevent = await Revent.find({ phone: req.body.phone });
-      // if (remail.length > 0) {
-      //   res
-      //     .status(400)
-      //     .json({
-      //       success: false,
-      //       message: "This email is already registered",
-      //     });
-      // } else if (mevent.length > 0) {
-      //   res
-      //     .status(400)
-      //     .json({
-      //       success: false,
-      //       message: "This phone number is already registered",
-      //     });
-      // } else {
-      //   var instance = new Razorpay({
-      //     key_id: `${process.env.NEXT_PUBLIC_KEY_ID}`,
-      //     key_secret: `${process.env.NEXT_PUBLIC_KEY_SECRET}`,
-      //   });
-      //   var options = {
-      //     amount: 500 * 100,
-      //     currency: "INR",
-      //     receipt: `${rand}`,
-      //   };
-      //   try {
-      //     instance.orders.create(options, async function (err, order) {
-      //       console.log(order);
-      //       let eventr = new Revent({
-      //         name: req.body.name,
-      //         email: req.body.email,
-      //         phone: req.body.phone,
-      //         clg: req.body.clg,
-      //         github: req.body.github,
-      //         linkedin: req.body.linkedin,
-      //         title: req.body.title,
-      //         img: req.body.img,
-      //         orderid: order.id,
-      //         ticketid: ticketid,
-      //        eventname: "InnovateU Devcon 2k24",
-      //        eventdate: "15-19 JAN 2024",
-      //       });
-      //       let a = await eventr.save();
-      //       res
-      //         .status(200)
-      //         .json({
-      //           success: true,
-      //           message: "Your Details Saved Successfully Proceeed to Payment",
-      //           order,
-      //         });
-      //     });
-      //   } catch {
-      //     res
-      //       .status(400)
-      //       .json({
-      //         success: false,
-      //         message:
-      //           "Cannot intialize your payment server is busy please try again after some time",
-      //       });
-      //   }
-      // }
+
     }
     if (req.body.estatus == "old") {
       
