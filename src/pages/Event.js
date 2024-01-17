@@ -102,7 +102,7 @@ const onChange=(e)=>{
         </div>
       </div>
     <div className="md:px-4 md:grid md:grid-cols-2 lg:grid-cols-3 gap-5 space-y-4 md:space-y-0">
-    {!isSearch&&event&&event.map((item)=>(<Link href={`/components/Events/Eventdetails?id=${item._id}`} key={item._id}>
+    {!isSearch&&event&&event.slice(0).reverse().map((item)=>(<Link href={`/components/Events/Eventdetails?id=${item._id}`} key={item._id}>
       <div className="max-w-sm bg-white px-6 pt-6  rounded-xl shadow-lg transform hover:scale-105 transition duration-500 mx-2 my-4" style={{height:"500px"}}>
         
        <div className="relative">

@@ -11,7 +11,7 @@ import { motion } from 'framer-motion';
 const MyEvent = () => {
   const [open,setOpen]=useState(false);
   const [width,setWidth]= useState(0);
-  const [event,setEvent] = useState({});
+  const [event,setEvent] = useState([]);
   const[url,setUrl]= useState("");
   const fetchEventDetails=async(email)=>{
       const userdata = { email,estatus:"getdataviaemail"};
@@ -27,13 +27,12 @@ const MyEvent = () => {
         }
       );
       const userresult = await checkuser.json();
-  console.log(userresult)
       if(userresult.data!=null){
           setEvent(userresult.data);
           setUrl(userresult.url);
       }
       else{
-      setEvent(null);
+      setEvent([]);
       }
   }
   useEffect(()=>{
@@ -74,9 +73,9 @@ const MyEvent = () => {
          rdate=new Date(event.createdAt);
          paydate= new Date(event.updatedAt);
       }
-     
+     console.log(event)
   return (
-    <div className='flex justify-center items-center min-h-screen'>
+    <div className='flex items-center min-h-screen flex-col my-20 bg-[conic-gradient(at_bottom_right,_var(--tw-gradient-stops))] from-blue-700 via-blue-800 to-gray-900'>
     <style jsx>
 {
   `
@@ -87,60 +86,50 @@ const MyEvent = () => {
   `
 }
           </style>
-      <div className='  text-white rounded relative top-10  lg:bg-slate-900 bg-black my-8 h-[100vh] w-[90vw] '>
-        <div className='flex flex-col justify-center items-center my-4 '>
-        <h1 className='text-white fontevent lg:text-5xl md:text-4xl text-4xl'>My Events (1) </h1>
+          <div className='flex flex-col justify-center items-center my-4 '>
+        <h1 className='text-white fontevent lg:text-5xl md:text-4xl text-4xl'>My Events</h1>
                   <div className='h-2 w-56 bg-purple-600 rounded-full my-4'></div>
         </div>
+      <div className='  text-white rounded'>
+        
       
        <div className='flex flex-wrap item-center justify-center mx-4 my-4
-       '>
-        
-
-    {/* component */}
-    {event==null?<div className='flex justify-center items-center'><div className="bg-white p-8 rounded-lg shadow-lg text-center w-4/5">
-        <div className="animate-tickScale inline-block bg-green-600 rounded-full">
-    
-           <img src="/oops.jpg" alt="no data img" className="h-52 w-52"/>
-        </div>
-        
-        <h1 className="lg:text-4xl md:text-4xl sm:text-2xl font-semibold text-gray-800 mb-4 font text-2xl">OOPS ! 🤭🤭🤭</h1>
-        <p className="text-lg text-gray-600 mb-4 font"> You have not register for any event.</p>
-        <p className="text-lg text-gray-600 mb-2 font">If you wish to see your event please register for an event. Ongoing event is<Link href={"/Event"}><span className='font-bold text-green-600'> DEVCON 2K24</span></Link>.</p>
-        <Link href="/Event" className="bg-blue-600 hover:bg-blue-800 text-white font-semibold py-2 px-4 rounded-full inline-block mx-2 my-4 ">Register for an Event </Link>
-        <br/>
-       
-    </div></div>:<div className="lg:flex shadow rounded-lg border  border-gray-400 bg-purple-300" onClick={handleOpen}>
+       flex-col'>
+   {event.slice(0).reverse().map((item)=>(<div className="lg:flex shadow-lg rounded-lg border  border-gray-400 bg-purple-300 mx-4 my-4" onClick={handleOpen} key={item._id}>
     <div className="bg-purple-600 rounded-lg lg:w-2/12 py-4 block h-full shadow-inner">
       <div className="text-center tracking-wide">
-        <div className="text-white font-bold text-4xl ">15</div>
-        <div className="text-white font-normal text-2xl">JAN</div>
+        <div className="text-white font-bold text-4xl p-2">{item.eventdate}</div>
+       
       </div>
     </div>
     <div className="w-full  lg:w-11/12 xl:w-full px-1 bg-white py-5 lg:px-2 lg:py-2 tracking-wide">
       <div className="flex flex-row lg:justify-start justify-center">
         <div className="text-gray-700 font-medium text-sm text-center lg:text-left px-2">
-          <i className="far fa-clock" /> 10:00 AM
+          <i className="far fa-clock" /> {item.eventtime}
         </div>
         <div className="text-gray-700 font-medium text-sm text-center lg:text-left px-2">
           Organiser : INNOVATEU
         </div>
       </div>
-      <div className="font-semibold text-gray-800 text-xl text-center lg:text-left px-2">
-        DEVCON 2K24
+      <div className="font-semibold text-gray-800 text-xl text-center lg:text-left px-2 capitalize">
+        {item.eventname}
       </div>
       <div className="text-gray-600 font-medium text-sm pt-1 text-center lg:text-left px-2">
-        CUTM Pkd Campus ,Ganesh Nagar, Tilak Nagar, 110018
+        CUTM,BBSR CAMPUS ,JATNI ,752050 Venue: {item.eventvenue}
       </div>
     </div>
     <div className="flex flex-row items-center w-full lg:w-1/3 bg-white lg:justify-end justify-center px-2 py-4 lg:px-0">
-      <span className="tracking-wider text-gray-600 bg-gray-200 px-2 text-sm rounded leading-loose mx-2 font-semibold">
+      {item.eventstatus=="pending"&&<span className="tracking-wider text-white bg-red-500 px-2 text-sm rounded leading-loose mx-2 font-semibold">
+        Pending
+      </span>}
+      {item.eventstatus=="success"&&<span className="tracking-wider text-white bg-green-500 px-2 text-sm rounded leading-loose mx-2 font-semibold">
+        Approved
+      </span>}
+      {item.eventstatus!="success"&& item.eventstatus !="pending"&&<span className="tracking-wider text-gray-600 bg-gray-300 px-2 text-sm rounded leading-loose mx-2 font-semibold">
         Going
-      </span>
+      </span>}
     </div>
-  </div>}
-</div>
-<Modal
+    <Modal
   open={open}
   onClose={handleClose}
   aria-labelledby="Event Details"
@@ -150,7 +139,7 @@ const MyEvent = () => {
     <div className='absolute top-4 right-4 text-purple-600' onClick={handleClose}>
     <IoMdCloseCircle className='text-4xl'/>
     </div>
-  {event==null?"":<div className='flex justify-center items-center'>
+  <div className='flex justify-center items-center'>
 
 
 <div className=" flex flex-col ">
@@ -166,7 +155,7 @@ const MyEvent = () => {
         </div>
         <div className="flex flex-col group-hover:bg-purple-300 ml-2 p-2 pr-6 rounded-xl">
           <div className="ml-4 text-xl font-medium">Registeration Started</div>
-          <div className="ml-4 mb-2 text-xs">{rdate.toLocaleDateString("en-IN",{ weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })},{rdate.getHours()}:{rdate.getMinutes()}</div>
+          <div className="ml-4 mb-2 text-xs">{new Date(item.createdAt).toLocaleDateString("en-IN",{ weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })},{new Date(item.createdAt).getHours()}:{new Date(item.createdAt).getMinutes()}</div>
           <div className="ml-4 text-sm">Checking Basic Details</div>
         </div>
       </div>
@@ -184,7 +173,7 @@ const MyEvent = () => {
           <div className="ml-4 text-xl font-medium">
             Payment Processing
           </div>
-          <div className="ml-4 mb-2 text-xs">{ paydate.toLocaleDateString("en-IN",{ weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })},{paydate.getHours()}:{paydate.getMinutes()}</div>
+          <div className="ml-4 mb-2 text-xs">{ new Date(item.updatedAt).toLocaleDateString("en-IN",{ weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })},{new Date(item.updatedAt).getHours()}:{new Date(item.updatedAt).getMinutes()}</div>
           <div className="ml-4 text-sm">Ticket Genrated</div>
         </div>
       </div>
@@ -201,14 +190,14 @@ const MyEvent = () => {
         </div>
         <div className="flex flex-col group-hover:bg-purple-300 ml-2 p-2 pr-6 rounded-xl">
           <div className="ml-4 text-xl font-medium">Successfully Registered</div>
-          {event!=null&&<div className="ml-4 mb-2 text-xs">{ paydate.toLocaleDateString("en-IN",{ weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })},{paydate.getHours()}:{paydate.getMinutes()}</div>}
+          {event!=null&&<div className="ml-4 mb-2 text-xs">{ new Date(item.updatedAt).toLocaleDateString("en-IN",{ weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })},{new Date(item.updatedAt).getHours()}:{new Date(item.updatedAt).getMinutes()}</div>}
           <div className="ml-4 text-sm">Confirmation email send successfully</div>
         </div>
       </div>
     </li>
   </ul>
 </div>
-</div>}
+</div>
 {event==null?"":<div className='flex justify-center items-center my-2'>
   <Link href={`/components/Events/Eventconf?id=${event._id}`}>
 <motion.button className='p-2 m-2 bg-purple-600 text-white fontevent rounded-md flex justify-center items-center' whileHover={{scale:1.1}} whileTap={{scale:0.9, rotate:1}}>Event Details <MdEventNote className='mx-1'/></motion.button>
@@ -219,10 +208,25 @@ const MyEvent = () => {
 </div>}
   </Box>
 </Modal>
+  </div>))}
+</div>
+
 
 
       </div>
-      
+      {event==null&&<div className='flex justify-center items-center'><div className="bg-white p-8 rounded-lg shadow-lg text-center w-4/5">
+        <div className="animate-tickScale inline-block bg-green-600 rounded-full">
+    
+           <img src="/oops.jpg" alt="no data img" className="h-52 w-52"/>
+        </div>
+        
+        <h1 className="lg:text-4xl md:text-4xl sm:text-2xl font-semibold text-gray-800 mb-4 font text-2xl">OOPS ! 🤭🤭🤭</h1>
+        <p className="text-lg text-gray-600 mb-4 font"> You have not register for any event.</p>
+        <p className="text-lg text-gray-600 mb-2 font">If you wish to see your event please register for an event. .</p>
+        <Link href="/Event" className="bg-blue-600 hover:bg-blue-800 text-white font-semibold py-2 px-4 rounded-full inline-block mx-2 my-4 ">Register for an Event </Link>
+        <br/>
+       
+    </div></div>}
     </div>
   )
 }
