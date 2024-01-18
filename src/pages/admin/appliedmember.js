@@ -2,6 +2,12 @@ import React, { useEffect, useState } from "react";
 import theme from "../../../trc/theme/theme";
 import FullLayout from "../../../trc/layouts/FullLayout";
 import { ThemeProvider } from "@mui/material/styles";
+import Box from '@mui/material/Box';
+import Modal from '@mui/material/Modal';
+import { IoMdCloseCircle } from "react-icons/io";
+import toast,{Toaster} from "react-hot-toast";
+const excel = require("exceljs");
+import { saveAs } from 'file-saver'
 import { set } from "mongoose";
 const Appliedmember = () => {
   //all state
@@ -9,11 +15,60 @@ const Appliedmember = () => {
   const [tabledata, setTabledata] = useState([]);
   const [searcharray, setSearcharray] = useState([]); 
   const [isSearch, setIsSearch] = useState(false);
-  const [eventname, setEventname] = useState([]);
-  const [eventdate, setEventdate] = useState([]);
-  const [eventstatus, setEventstatus] = useState([]);
-  const [eventtype, setEventtype] = useState([]);
+  const [eventname, setEventname] = useState("");
+  const [eventdate, setEventdate] = useState("");
+  const [eventstatus, setEventstatus] = useState("");
+  const [eventtype, setEventtype] = useState("");
+  const [ticketstatus, setTicketstatus] = useState("");
   const [searchquery, setSearchquery] = useState("");
+  const [count, setCount] = useState(2);
+  const [intialcount, setIntialcount] = useState(0);
+  const [width,setWidth]= useState(0);
+  const [open, setOpen] = useState(false);
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [phone, setPhone] = useState("");
+    const [ticketid, setTicketid] = useState("");
+    const [rdate, setRdate] = useState("");
+    const [status, setStatus] = useState("");
+    const [tiketclm, setTiketclm] = useState("");
+    const [paymentamount, setPaymentamount] = useState("");
+    const [paymentstatus, setPaymentstatus] = useState("");
+    const [eventgrplink, setEventgrplink] = useState("");
+    const [eventnamee, setEventnamee] = useState("");
+    const [github, setGithub] = useState("");
+    const [linkedin, setLinkedin] = useState("");
+    const [clg, setClg] = useState("");
+    const [orderid, setOrderid] = useState("");
+    const [paymentid, setPaymentid] = useState("");
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+        useEffect(()=>{
+          var w = window.innerWidth;
+          setWidth(w-10);
+         if(w>=995){
+          setWidth(1000);
+         }
+         else if(w<=994){
+          setWidth(w-10);
+         }
+         else{
+          setWidth(w-10);
+         }
+          
+         },[])
+         const style = {
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: {width},
+          bgcolor: 'background.paper',
+          border: '2px solid purple',
+          boxShadow: 24,
+          borderRadius: "6px",
+          p: 4,
+        };
   //handle change
   const handleChange = (e) => {
     if (e.target.name == "eventname") {
@@ -25,6 +80,58 @@ const Appliedmember = () => {
     } else if (e.target.name == "eventtype") {
       setEventtype(e.target.value);
     }
+    else if(e.target.name=="ticketstatus"){
+      setTicketstatus(e.target.value)
+    }
+    else if(e.target.name=="name"){
+      setName(e.target.value)
+    }
+    else if(e.target.name=="email"){
+      setEmail(e.target.value)
+    }
+    else if(e.target.name=="phone"){
+      setPhone(e.target.value)
+    }
+    else if(e.target.name=="ticketid"){
+      setTicketid(e.target.value)
+    }
+    else if(e.target.name=="rdate"){
+      setRdate(e.target.value)
+    }
+    else if(e.target.name=="status"){
+      setStatus(e.target.value)
+    }
+    else if(e.target.name=="tiketclm"){
+      setTiketclm(e.target.value)
+    }
+    else if(e.target.name=="paymentamount"){
+      setPaymentamount(e.target.value)
+    }
+    else if(e.target.name=="paymentstatus"){
+      setPaymentstatus(e.target.value)
+    }
+    else if(e.target.name=="eventgrplink"){
+      setEventgrplink(e.target.value)
+    }
+    else if(e.target.name=="eventnamee"){
+      setEventnamee(e.target.value)
+    }
+    else if(e.target.name=="github"){
+      setGithub(e.target.value)
+    }
+    else if(e.target.name=="linkedin"){
+      setLinkedin(e.target.value)
+    }
+    else if(e.target.name=="clg"){
+      setClg(e.target.value)
+    }
+    else if(e.target.name=="orderid"){
+      setOrderid(e.target.value)
+    }
+    else if(e.target.name=="paymentid"){
+      setPaymentid(e.target.value)
+    }
+
     else if(e.target.name=="search"){
       setSearchquery(e.target.value)
       if (e.target.value.length > 0) {
@@ -79,16 +186,173 @@ const Appliedmember = () => {
   }, []);
   //search;
   console.log(tabledata);
-  const handleSearch = async () => {};
+  const handleSearch = async () => {
+    console.log(eventname, eventdate, eventstatus, eventtype);
+    if(eventname==""&&eventdate==""&&eventstatus==""&&eventtype==""){
+      toast.error("Please select atleast one filter")
+    }
+    //end of checking if all are empty
+    else if(eventname.length>0&& eventstatus.length>0){
+      const data = { status: "getnev", eventname: eventname,eventstatus:eventstatus };
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_HOST}/api/admin/Get/getrevent`,
+        {
+          method: "POST", // or 'PUT'
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
+      const result = await res.json();
+      if(result.success){
+        toast.success("Data fetched successfully")
+      }
+      else{
+        toast.error(result.message)
+      }
+      setTabledata(result.data);
+
+    }
+    else if(eventname.length>0&&eventtype.length>0){
+      const data = { status: "getnet", eventname: eventname,eventtype:eventtype };
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_HOST}/api/admin/Get/getrevent`,
+        {
+          method: "POST", // or 'PUT'
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
+      const result = await res.json();
+      if(result.success){
+        toast.success("Data fetched successfully")
+      }
+      else{
+        toast.error(result.message)
+      }
+      setTabledata(result.data);
+    }
+    else if(eventname.length>0 && ticketstatus.length>0){
+      const data = { status: "getntic", eventname: eventname,ticketstatus:ticketstatus };
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_HOST}/api/admin/Get/getrevent`,
+        {
+          method: "POST", // or 'PUT'
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
+      const result = await res.json();
+      if(result.success){
+        toast.success("Data fetched successfully")
+      }
+      else{
+        toast.error(result.message)
+      }
+      setTabledata(result.data);
+    }
+    else if(eventname.length>0){
+      const data = { status: "getename", eventname: eventname };
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_HOST}/api/admin/Get/getrevent`,
+        {
+          method: "POST", // or 'PUT'
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
+      const result = await res.json();
+      if(result.success){
+        toast.success("Data fetched successfully")
+      }
+      else{
+        toast.error(result.message)
+      }
+      setTabledata(result.data);
+    }
+    else{
+      toast.error("Please select atleast  two filter in combination with event name");
+    }
+
+  };
   //reset
   const reset = () => {
     setEventname("");
     setEventdate("");
     setEventstatus("");
     setEventtype("");
+    fetchevent();
+    setCount(2);
+    setIntialcount(0);
   };
+ const exportexcel= async()=>{
+  let workbook = new excel.Workbook();
+  let worksheet = workbook.addWorksheet("UsersData");
+  worksheet.columns = [
+      { header: "EventName", key: "eventname", width: 30 },
+      { header: "Name", key: "name", width: 30 },
+      { header: "Email", key: "email", width: 30 },
+      { header: "Phone", key: "phone", width: 30 },
+      { header: "TicketId", key: "ticketid", width: 30 },
+      { header: "Register Date", key: "rdate", width: 30 },
+      { header: "Status", key: "status", width: 30 },
+      { header: "Regd No.", key: "regd", width: 30 },
+      { header: "Sign", key: "sign", width: 30 },
+      
+  ];
+  tabledata.map((item)=>{
+      worksheet.addRow({
+         eventname:item.eventname,
+          name:item.name,
+          email:item.email,
+          phone:item.phone,
+          ticketid:item.ticketid,
+          rdate:item.createdAt,
+          status:item.eventstatus,
+          regd:"",
+          sign:"",
+      });
+  })
+  worksheet.getRow(1).eachCell((cell) => {
+      cell.font = { bold: true };
+  });
+  const buf = await workbook.xlsx.writeBuffer()
+
+  saveAs(new Blob([buf]), 'Eventregdetails.xlsx')
+ }
+const handleSubmit = async()=>{
+  handleClose();
+  const data = { statuss: "eventupdate", name,email,phone,status,tiketclm,paymentstatus,eventgrplink,github,linkedin,clg };
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_HOST}/api/admin/Get/getrevent`,
+        {
+          method: "POST", // or 'PUT'
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
+      const result = await res.json();
+      if(result.success){
+        toast.success("Event Registration Data Updated Successfully");
+        fetchevent();
+      }
+      else{
+        toast.error(result.message)
+      }
+      
+}
   return (
     <div>
+      <Toaster position="top-right" reverseOrder={false} />
       <ThemeProvider theme={theme}>
         <FullLayout>
           <div className="m-2 w-full px-4 lg:px-8 py-4 mx-auto">
@@ -114,7 +378,7 @@ const Appliedmember = () => {
                     value={eventname}
                     className="mt-2 block w-full rounded-md border border-gray-200 px-2 py-3 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
                   >
-                    <option>Select</option>
+                    <option value="">Select</option>
                     {event.map((item) => (
                       <option key={item._id} value={item.eventname}>
                         {item.eventname}
@@ -136,26 +400,29 @@ const Appliedmember = () => {
                     value={eventtype}
                     className="mt-2 block w-full rounded-md border border-gray-200 px-2 py-3 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
                   >
-                    <option>Select</option>
+                    <option value={""}>Select</option>
                     <option value={"paid"}>Paid</option>
                     <option value={"free"}>Free</option>
                   </select>
                 </div>
                 <div className="flex flex-col">
                   <label
-                    htmlFor="date"
+                    htmlFor="status"
                     className="text-stone-600 text-sm font-medium"
                   >
-                    Date of the Event
+                    Ticket Status
                   </label>
-                  <input
-                    type="date"
-                    name="eventdate"
+                  <select
+                    id="status"
+                    name="ticketstatus"
                     onChange={handleChange}
-                    value={eventdate}
-                    id="date"
-                    className="mt-2 block w-full rounded-md border border-gray-200 px-2 py-2 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-                  />
+                    value={ticketstatus}
+                    className="mt-2 block w-full rounded-md border border-gray-200 px-2 py-3 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                  >
+                    <option value={""}>Select</option>
+                    <option value={"claimed"}>Claimed</option>
+                    <option value={"not claimed"}>Not Claimed</option>
+                  </select>
                 </div>
                 <div className="flex flex-col">
                   <label
@@ -171,12 +438,10 @@ const Appliedmember = () => {
                     value={eventstatus}
                     className="mt-2 block w-full rounded-md border border-gray-200 px-2 py-3 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
                   >
-                    <option>Select</option>
-                    <option>Pending at admin side</option>
-                    <option>Success</option>
-                    <option> Claimed </option>
-                    <option>Not Claimed</option>
-                    <option>All</option>
+                    <option value={""}>Select</option>
+                    <option value="pending">Pending at admin side</option>
+                    <option value="success">Success</option>
+                    <option value="rejected"> Rejected </option>
                   </select>
                 </div>
               </div>
@@ -239,33 +504,22 @@ const Appliedmember = () => {
                         <div>
                           
                           <div className="inline-flex gap-x-2">
-                            <a
+                            <button
                               className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
-                              href="#"
+                              onClick={()=>{
+                                  setCount(tabledata.length);
+                                  setIntialcount(0);
+                              }}
                             >
                               View all
-                            </a>
-                            <a
+                            </button>
+                            <button
                               className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
-                              href="#"
+                              onClick={exportexcel}
                             >
-                              <svg
-                                className="flex-shrink-0 w-4 h-4"
-                                xmlns="http://www.w3.org/2000/svg"
-                                width={24}
-                                height={24}
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth={2}
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                              >
-                                <path d="M5 12h14" />
-                                <path d="M12 5v14" />
-                              </svg>
-                              Create
-                            </a>
+                             
+                              Export to Excel
+                            </button>
                           </div>
                         </div>
                       </div>
@@ -317,7 +571,7 @@ const Appliedmember = () => {
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                          {!isSearch&&tabledata.map((item) => (
+                          {!isSearch&&tabledata.slice(intialcount,count).map((item) => (
                             <tr key={item._id}>
                               <td className="h-px w-px whitespace-nowrap">
                                 <div className="ps-6 py-3"></div>
@@ -404,6 +658,33 @@ const Appliedmember = () => {
                                       id=""
                                       type="button"
                                       className="py-1.5 px-2 inline-flex justify-center items-center gap-2 rounded-lg text-gray-700 align-middle focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-sm dark:text-gray-400 dark:hover:text-white dark:focus:ring-offset-gray-800"
+                                      onClick={()=>{
+                                        handleOpen();
+                                        setName(item.name);
+                                        setEmail(item.email);
+                                        setPhone(item.phone);
+                                        setTicketid(item.ticketid);
+                                        setRdate(new Date(
+                                          item.createdAt
+                                        ).toLocaleDateString("en-IN", {
+                                          weekday: "long",
+                                          year: "numeric",
+                                          month: "long",
+                                          day: "numeric",
+                                        }));
+                                        setStatus(item.eventstatus);
+                                        setTiketclm(item.ticketstatus);
+                                        setPaymentamount(item.paymentamount);
+                                        setPaymentstatus(item.paymentstatus);
+                                        setEventgrplink(item.eventgrplink);
+                                        setEventnamee(item.eventname);
+                                        setGithub(item.github);
+                                        setLinkedin(item.linkedin);
+                                        setClg(item.clg);
+                                        setOrderid(item.orderid);
+                                        setPaymentid(item.paymentid);
+
+                                      }}
                                     >
                                       <svg
                                         className="flex-shrink-0 w-4 h-4"
@@ -545,6 +826,7 @@ const Appliedmember = () => {
                                       id=""
                                       type="button"
                                       className="py-1.5 px-2 inline-flex justify-center items-center gap-2 rounded-lg text-gray-700 align-middle focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-sm dark:text-gray-400 dark:hover:text-white dark:focus:ring-offset-gray-800"
+                                      onClick={handleOpen}
                                     >
                                       <svg
                                         className="flex-shrink-0 w-4 h-4"
@@ -562,6 +844,7 @@ const Appliedmember = () => {
                                         <circle cx={19} cy={12} r={1} />
                                         <circle cx={5} cy={12} r={1} />
                                       </svg>
+                                      
                                     </button>
                                     <div className="transition-[opacity,margin] duration  hidden  divide-y divide-gray-200 min-w-[10rem] z-10 bg-white shadow-2xl rounded-lg p-2 mt-2 dark:divide-gray-700 dark:bg-gray-800 dark:border dark:border-gray-700">
                                       {/* <div className="py-2 first:pt-0 last:pb-0">
@@ -616,6 +899,13 @@ const Appliedmember = () => {
                             <button
                               type="button"
                               className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
+                              onClick={() => {
+                                if (intialcount > 0) {
+                                  setIntialcount(intialcount - 2);
+                                  setCount(count - 2);
+                                }
+                              }}
+                               
                             >
                               <svg
                                 className="flex-shrink-0 w-4 h-4"
@@ -636,6 +926,16 @@ const Appliedmember = () => {
                             <button
                               type="button"
                               className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
+                              onClick={() => {
+                                if (count < tabledata.length) {
+                                  setIntialcount(count);
+                                  setCount(count + 2);
+                                }
+                                else if(count < searcharray.length){
+                                  setIntialcount(count);
+                                  setCount(count + 2);
+                                }
+                              }}
                             >
                               Next
                               <svg
@@ -665,6 +965,330 @@ const Appliedmember = () => {
             </div>
             {/* End Table Section */}
           </>
+          <Modal
+  open={open}
+  onClose={handleClose}
+  aria-labelledby="modal-modal-title"
+  aria-describedby="modal-modal-description"
+>
+  <Box sx={style}>
+  <div className='absolute top-2 right-2 text-purple-600' onClick={handleClose}>
+    <IoMdCloseCircle className='text-4xl'/>
+    </div>
+    <div className="m-2 w-full px-4 lg:px-8 py-4 mx-auto overflow-scroll max-h-[80vh]">
+            <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-lg">
+              <h2 className="text-stone-700 text-xl font-bold">
+                Update Event Registration
+              </h2>
+              <p className="mt-1 text-sm">
+              Update Event Registration Status.
+              </p>
+              <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                <div className="flex flex-col">
+                  <label
+                    htmlFor="status"
+                    className="text-stone-600 text-sm font-medium"
+                  >
+                    Event Registration Status
+                  </label>
+                  <select
+                    id="status"
+                    name="status"
+                    onChange={handleChange}
+                    value={status}
+                    className="mt-2 block w-full rounded-md border border-gray-200 px-2 py-3 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                  >
+                    <option value="">Select</option>
+                    <option value="pending">Pending</option>
+                    <option value="success">Success</option>
+                    <option value="rejected">Rejected</option>
+                  </select>
+                </div>
+                <div className="flex flex-col">
+                  <label
+                    htmlFor="status"
+                    className="text-stone-600 text-sm font-medium"
+                  >
+                    Ticket Status
+                  </label>
+                  <select
+                    id="status"
+                    name="tiketclm"
+                    onChange={handleChange}
+                    value={tiketclm}
+                    className="mt-2 block w-full rounded-md border border-gray-200 px-2 py-3 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                  >
+                    <option value={""}>Select</option>
+                    <option value={"claimed"}>Claimed</option>
+                    <option value={"not claimed"}>Not Claimed</option>
+                  </select>
+                </div>
+                <div className="flex flex-col">
+                  <label
+                    htmlFor="status"
+                    className="text-stone-600 text-sm font-medium"
+                  >
+                    Payment Status
+                  </label>
+                  <select
+                    id="status"
+                    name="paymentstatus"
+                    onChange={handleChange}
+                    value={paymentstatus}
+                    className="mt-2 block w-full rounded-md border border-gray-200 px-2 py-3 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                  >
+                    <option value={""}>Select</option>
+                    <option value={"paid"}>Paid</option>
+                    <option value={"free"}>Free</option>
+                  </select>
+                </div>
+                <div className="flex flex-col">
+                  <label
+                    htmlFor="status"
+                    className="text-stone-600 text-sm font-medium"
+                  >
+                    Ticket Id
+                  </label>
+                  <input
+                    id="status"
+                    name="ticketid"
+                    onChange={handleChange}
+                    value={ticketid}
+                    className="mt-2 block w-full rounded-md border border-gray-200 px-2 py-3 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                    readOnly
+                  />
+                   
+                  
+                </div>
+              </div>
+              <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                <div className="flex flex-col">
+                  <label
+                    htmlFor="status"
+                    className="text-stone-600 text-sm font-medium"
+                  >
+                    Order Id
+                  </label>
+                  <input
+                    id="status"
+                    name="orderid"
+                    onChange={handleChange}
+                    value={orderid}
+                    className="mt-2 block w-full rounded-md border border-gray-200 px-2 py-3 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                    readOnly
+                  />
+                
+                  
+                </div>
+                <div className="flex flex-col">
+                  <label
+                    htmlFor="status"
+                    className="text-stone-600 text-sm font-medium"
+                  >
+                    Payment amount
+                  </label>
+                  <input
+                    id="status"
+                    name="paymentamount"
+                    onChange={handleChange}
+                    value={paymentamount}
+                    className="mt-2 block w-full rounded-md border border-gray-200 px-2 py-3 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                    readOnly
+                  />
+                  
+                </div>
+                <div className="flex flex-col">
+                  <label
+                    htmlFor="status"
+                    className="text-stone-600 text-sm font-medium"
+                  >
+                    Payment Id
+                  </label>
+                  <input
+                    id="status"
+                    name="paymentid"
+                    onChange={handleChange}
+                    value={paymentid}
+                    className="mt-2 block w-full rounded-md border border-gray-200 px-2 py-3 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                    readOnly
+                  />
+                  
+                </div>
+                <div className="flex flex-col">
+                  <label
+                    htmlFor="status"
+                    className="text-stone-600 text-sm font-medium"
+                  >
+                    Registration Date
+                  </label>
+                  <input
+                    id="status"
+                    name="rdate"
+                    onChange={handleChange}
+                    value={rdate}
+                    className="mt-2 block w-full rounded-md border border-gray-200 px-2 py-3 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                    readOnly
+                  />
+                   
+                  
+                </div>
+              </div>
+              <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                <div className="flex flex-col">
+                  <label
+                    htmlFor="status"
+                    className="text-stone-600 text-sm font-medium"
+                  >
+                   Name
+                  </label>
+                  <input
+                    id="status"
+                    name="name"
+                    onChange={handleChange}
+                    value={name}
+                    className="mt-2 block w-full rounded-md border border-gray-200 px-2 py-3 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                  />
+                
+                  
+                </div>
+                <div className="flex flex-col">
+                  <label
+                    htmlFor="status"
+                    className="text-stone-600 text-sm font-medium"
+                  >
+                    Email
+                  </label>
+                  <input
+                    id="status"
+                    name="email"
+                    onChange={handleChange}
+                    value={email}
+                    className="mt-2 block w-full rounded-md border border-gray-200 px-2 py-3 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                    readOnly
+                  />
+                  
+                </div>
+                <div className="flex flex-col">
+                  <label
+                    htmlFor="status"
+                    className="text-stone-600 text-sm font-medium"
+                  >
+                    Phone
+                  </label>
+                  <input
+                    id="status"
+                    name="phone"
+                    onChange={handleChange}
+                    value={phone}
+                    className="mt-2 block w-full rounded-md border border-gray-200 px-2 py-3 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                  />
+                  
+                </div>
+                <div className="flex flex-col">
+                  <label
+                    htmlFor="status"
+                    className="text-stone-600 text-sm font-medium"
+                  >
+                   Event Name
+                  </label>
+                  <input
+                    id="status"
+                    name="eventnamee"
+                    onChange={handleChange}
+                    value={eventnamee}
+                    className="mt-2 block w-full rounded-md border border-gray-200 px-2 py-3 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                    readOnly
+                  />
+                   
+                  
+                </div>
+              </div>
+              <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                <div className="flex flex-col">
+                  <label
+                    htmlFor="status"
+                    className="text-stone-600 text-sm font-medium"
+                  >
+                    Github
+                  </label>
+                  <input
+                    id="status"
+                    name="github"
+                    onChange={handleChange}
+                    value={github}
+                    className="mt-2 block w-full rounded-md border border-gray-200 px-2 py-3 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                  />
+                
+                  
+                </div>
+                <div className="flex flex-col">
+                  <label
+                    htmlFor="status"
+                    className="text-stone-600 text-sm font-medium"
+                  >
+                  Linkedin
+                  </label>
+                  <input
+                    id="status"
+                    name="linkedin"
+                    onChange={handleChange}
+                    value={linkedin}
+                    className="mt-2 block w-full rounded-md border border-gray-200 px-2 py-3 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                  />
+                  
+                </div>
+                <div className="flex flex-col">
+                  <label
+                    htmlFor="status"
+                    className="text-stone-600 text-sm font-medium"
+                  >
+                    Event Grp Link
+                  </label>
+                  <input
+                    id="status"
+                    name="eventgrplink"
+                    onChange={handleChange}
+                    value={eventgrplink}
+                    className="mt-2 block w-full rounded-md border border-gray-200 px-2 py-3 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                  />
+                  
+                </div>
+                <div className="flex flex-col">
+                  <label
+                    htmlFor="status"
+                    className="text-stone-600 text-sm font-medium"
+                  >
+                    College
+                  </label>
+                  <input
+                    id="status"
+                    name="clg"
+                    onChange={handleChange}
+                    value={clg}
+                    className="mt-2 block w-full rounded-md border border-gray-200 px-2 py-3 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                  />
+                   
+                  
+                </div>
+              </div>
+              <div className="mt-6 grid w-full grid-cols-2 justify-end space-x-4 md:flex">
+                <button
+                  className="active:scale-95 rounded-lg bg-gray-200 px-8 py-2 font-medium text-gray-600 outline-none focus:ring hover:opacity-90"
+                  onClick={handleClose}
+                >
+                  Cancel
+                </button>
+                <button
+                  className="active:scale-95 rounded-lg bg-blue-600 px-8 py-2 font-medium text-white outline-none focus:ring hover:opacity-90"
+                  onClick={handleSubmit}
+                >
+                  Save Changes
+                </button>
+              </div>
+            </div>
+          </div>
+  </Box>
+</Modal>
         </FullLayout>
       </ThemeProvider>
     </div>

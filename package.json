@@ -19,6 +19,7 @@
     "exceljs": "^4.4.0",
     "feather-icons": "^4.29.1",
     "feather-icons-react": "^0.6.2",
+    "file-saver": "^2.0.5",
     "framer-motion": "^10.16.4",
     "html-to-image": "^1.11.11",
     "jsonwebtoken": "^9.0.2",

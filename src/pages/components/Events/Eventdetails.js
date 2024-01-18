@@ -35,9 +35,11 @@ const Eventdetails = () => {
   const [github, setGithub] = useState("");
   const [title, setTitle] = useState("");
   const [img, setImage] = useState("");
+  const [openoops, setOopenoops] = useState(false);
   const router = useRouter();
   const dispatch = useDispatch();
   const userinfo = useSelector((state) => state.userData);
+
   //handle change function
   const handleChange = (e) => {
     if (e.target.name === "name") {
@@ -93,10 +95,13 @@ const Eventdetails = () => {
     }
     if (localStorage.getItem("innovateUuser")) {
       const data = JSON.parse(localStorage.getItem("innovateUuser")).token;
-
       getUser(data);
     }
   }, []);
+//handle close oops
+  const handlecloseoops = () => {
+    setOopenoops(false)
+  }
   //style for modal
   const style = {
     position: "absolute",
@@ -174,7 +179,13 @@ const Eventdetails = () => {
       }, 3000);
     } //end of if
     else {
-      handleOpen();
+      if (localStorage.getItem("innovateUuser")) {
+        handleOpen();
+      }
+      else{
+        setOopenoops(true)
+      }
+      
     }
   };
   const handleSubmit = async (e) => {
@@ -231,7 +242,7 @@ const Eventdetails = () => {
             <BlogSkeleton />
           </div>
         ) : (
-          event && (
+          event&& (
             <section className="py-10 font-poppins bg-[conic-gradient(at_bottom_right,_var(--tw-gradient-stops))] from-blue-700 via-blue-800 to-gray-900 my-20 mx-2 rounded-lg">
               <div className="max-w-6xl px-4 mx-auto">
                 <div className="flex flex-wrap mb-24 -mx-4 ">
@@ -949,7 +960,7 @@ const Eventdetails = () => {
                     {/* Checkbox */}
 
                     {/* End Checkbox */}
-                    {event.eventregfee == "free" && (
+                    {event&&event.eventregfee == "free" && (
                       <button
                         type="submit"
                         className="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
@@ -958,7 +969,7 @@ const Eventdetails = () => {
                         Register Now
                       </button>
                     )}
-                    {event.eventregfee != "free" && (
+                    {event&&event.eventregfee != "free" && (
                       <button
                         type="submit"
                         className="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
@@ -975,6 +986,31 @@ const Eventdetails = () => {
           </div>
         </Box>
       </Modal>
+      <Modal
+  open={openoops}
+  onClose={handlecloseoops}
+  aria-labelledby="modal-modal-title"
+  aria-describedby="modal-modal-description"
+>
+  <Box sx={style}>
+  <div className='absolute top-2 right-2 text-purple-600' onClick={handlecloseoops}>
+    <IoMdCloseCircle className='text-4xl'/>
+    </div>
+  <div className="bg-white p-8 rounded-lg shadow-lg text-center">
+        <div className="animate-tickScale inline-block bg-green-600 rounded-full">
+    
+           <img src="/oops.jpg" alt="no data img" className="h-52 w-52"/>
+        </div>
+        
+        <h1 className="lg:text-4xl md:text-4xl sm:text-2xl font-semibold text-gray-800 mb-4 font text-2xl">OOPS ! 🤭🤭🤭</h1>
+        <p className="text-lg text-gray-600 mb-4 font"> You have not created an account </p>
+        <p className="text-lg text-gray-600 mb-2 font">Please create an account. If already created, please log in with your credentials before registering for any <span className='font-bold text-green-600'>EVENT</span>.</p>
+        <Link href="/Signup" className="bg-blue-600 hover:bg-blue-800 text-white font-semibold py-2 px-4 rounded-full inline-block mx-2 my-4 ">Create an Account</Link>
+        <br/>
+        <Link href="/Login" className="bg-blue-600 hover:bg-blue-800 text-white font-semibold py-2 px-4 rounded-full inline-block">Login Now</Link>
+    </div>
+  </Box>
+</Modal>
     </>
   );
 };
