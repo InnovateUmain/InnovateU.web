@@ -107,8 +107,8 @@ const onChange=(e)=>{
         
        <div className="relative">
           <img
-            className="w-full rounded-xl object-cover h-60 w-96 "
-            src="https://images.unsplash.com/photo-1541701494587-cb58502866ab?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80"
+            className="w-full rounded-xl object-cover h-60  "
+            src={`${item.eventposter}`}
             alt="Colors"
           />
          { item.eventregfee=="free"&&<p className="absolute top-0 bg-yellow-300 text-gray-800 font-semibold py-1 px-3 rounded-br-lg rounded-tl-lg">
@@ -155,8 +155,8 @@ const onChange=(e)=>{
         
        <div className="relative">
           <img
-            className="w-full rounded-xl object-cover h-60 w-96 "
-            src="https://images.unsplash.com/photo-1541701494587-cb58502866ab?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80"
+            className="w-full rounded-xl object-cover h-60  "
+            src={`${item.eventposter}`}
             alt="Colors"
           />
          { item.eventregfee=="free"&&<p className="absolute top-0 bg-yellow-300 text-gray-800 font-semibold py-1 px-3 rounded-br-lg rounded-tl-lg">

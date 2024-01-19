@@ -19,7 +19,6 @@ const handler = async (req, res) => {
                     eventregfee:req.body.eventregfee,
                     eventreglastdate:req.body.eventreglastdate,
                     eventreglimit:req.body.eventreglimit,
-                    eventregstatus:req.body.eventregstatus,
                     eventregcount:req.body.eventregcount,
                     eventspeaker:req.body.eventspeaker,
                 })
@@ -28,7 +27,7 @@ const handler = async (req, res) => {
                }
                  catch(error){
                     console.log(error)
-                  res.status(500).json({success:false,message:"Internal server error. Please try again later"})
+                  res.status(500).json({success:false,message:"Internal server error. Please try again later.Recheck all fields."})
                  }
         }//end of if
         //
@@ -43,6 +42,7 @@ const handler = async (req, res) => {
         }//end of if
         //event update
         if(req.body.status=="update"){
+            console.log(req.body)
             const event = await Event.findByIdAndUpdate({_id:req.body.id},{
                 eventname:req.body.eventname,
                 eventdate:req.body.eventdate,
@@ -59,6 +59,7 @@ const handler = async (req, res) => {
                 eventregstatus:req.body.eventregstatus,
                 eventregcount:req.body.eventregcount,
                 eventspeaker:req.body.eventspeaker,
+                eventgrplink:req.body.eventgrplink,
             })
             res.status(200).json({success:true,message:"Event updated successfully",})
         }//end of if

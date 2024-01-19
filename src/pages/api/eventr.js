@@ -7,6 +7,15 @@ const nodemailer = require("nodemailer");
 import Event from "../../../models/Event";
 var QRCode = require("qrcode");
 const handler = async (req, res) => {
+  const transporter = await nodemailer.createTransport({
+    host: "smtp-relay.brevo.com",
+    port: 587,
+    secure: false,
+    auth: {
+        user: 'thebasirkhanofficial@gmail.com',
+        pass: 'bOTLR5E0phXVM2qm'
+    }
+  });
   //genrating ticketid randomly
   const ticketid = "IN" + Math.floor(Math.random() * 100000) + "D24";
   //genrating random id for razorpay reciept

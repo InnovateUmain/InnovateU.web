@@ -452,7 +452,7 @@ const Eventdetails = () => {
                                         Event Date
                                       </p>
                                       <h2 className="text-base font-semibold text-gray-700 dark:text-gray-400">
-                                        {event.eventdate}
+                                      {new Date(event.eventdate).toLocaleDateString("en-IN",{ weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
                                       </h2>
                                     </div>
                                   </div>
@@ -467,7 +467,7 @@ const Eventdetails = () => {
                                         Time & Duration
                                       </p>
                                       <h2 className="text-base font-semibold text-gray-700 dark:text-gray-400">
-                                        {event.eventdate} |{" "}
+                                        {event.eventtime} |{" "}
                                         {event.eventduration}
                                       </h2>
                                     </div>
