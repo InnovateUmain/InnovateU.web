@@ -24,6 +24,7 @@ const Appliedmember = () => {
   const [count, setCount] = useState(2);
   const [intialcount, setIntialcount] = useState(0);
   const [width,setWidth]= useState(0);
+  const [id,setid] = useState("");
   const [open, setOpen] = useState(false);
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
@@ -314,7 +315,7 @@ const Appliedmember = () => {
           email:item.email,
           phone:item.phone,
           ticketid:item.ticketid,
-          rdate:item.createdAt,
+          rdate:new Date(item.createdAt).toLocaleDateString("en-IN", {}),
           status:item.eventstatus,
           regd:"",
           sign:"",
@@ -329,7 +330,7 @@ const Appliedmember = () => {
  }
 const handleSubmit = async()=>{
   handleClose();
-  const data = { statuss: "eventupdate", name,email,phone,status,tiketclm,paymentstatus,eventgrplink,github,linkedin,clg };
+  const data = { statuss: "eventupdate", name,id,phone,status,tiketclm,paymentstatus,eventgrplink,github,linkedin,clg };
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_HOST}/api/admin/Get/getrevent`,
         {
@@ -683,7 +684,7 @@ const handleSubmit = async()=>{
                                         setClg(item.clg);
                                         setOrderid(item.orderid);
                                         setPaymentid(item.paymentid);
-
+                                        setid(item._id);  
                                       }}
                                     >
                                       <svg
@@ -826,7 +827,33 @@ const handleSubmit = async()=>{
                                       id=""
                                       type="button"
                                       className="py-1.5 px-2 inline-flex justify-center items-center gap-2 rounded-lg text-gray-700 align-middle focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-sm dark:text-gray-400 dark:hover:text-white dark:focus:ring-offset-gray-800"
-                                      onClick={handleOpen}
+                                      onClick={()=>{
+                                        handleOpen();
+                                        setName(item.name);
+                                        setEmail(item.email);
+                                        setPhone(item.phone);
+                                        setTicketid(item.ticketid);
+                                        setRdate(new Date(
+                                          item.createdAt
+                                        ).toLocaleDateString("en-IN", {
+                                          weekday: "long",
+                                          year: "numeric",
+                                          month: "long",
+                                          day: "numeric",
+                                        }));
+                                        setStatus(item.eventstatus);
+                                        setTiketclm(item.ticketstatus);
+                                        setPaymentamount(item.paymentamount);
+                                        setPaymentstatus(item.paymentstatus);
+                                        setEventgrplink(item.eventgrplink);
+                                        setEventnamee(item.eventname);
+                                        setGithub(item.github);
+                                        setLinkedin(item.linkedin);
+                                        setClg(item.clg);
+                                        setOrderid(item.orderid);
+                                        setPaymentid(item.paymentid);
+                                        setid(item._id);  
+                                      }}
                                     >
                                       <svg
                                         className="flex-shrink-0 w-4 h-4"

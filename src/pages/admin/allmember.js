@@ -289,7 +289,7 @@ const Allmember = () => {
                       </div>
                       <div>
                         <input
-                          type="text"
+                          type="search"
                           className="p-2 border-2 border-gray-300 rounded-lg w-96"
                           placeholder="Search for Name"
                           onChange={handleChange}

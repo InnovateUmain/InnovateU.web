@@ -62,7 +62,7 @@ const handler = async (req, res) => {
     if(req.body.statuss=="eventupdate"){
         console.log(req.body);
         try{
-        const eventdata = await Revent.findOneAndUpdate({email:req.body.email},{
+        const eventdata = await Revent.findByIdAndUpdate({_id:req.body.id},{
             name:req.body.name,
             phone:req.body.phone,
             eventstatus:req.body.status,
@@ -76,6 +76,7 @@ const handler = async (req, res) => {
         res.status(200).json({success:true,message:"updated successfully"})
         }
         catch(err){
+            console.log(err);
             res.status(200).json({success:false,message:"something went wrong" +err})
         }
     }

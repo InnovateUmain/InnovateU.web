@@ -18,7 +18,7 @@ const Menuitems = [
   {
     title: "All Events",
     icon: "calendar",
-    href: "/admin",
+    href: "/admin/AddEvent",
   },
   {
     title: "Teams",
