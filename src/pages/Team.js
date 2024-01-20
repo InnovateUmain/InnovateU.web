@@ -1,49 +1,86 @@
 import React, { useEffect, useState } from 'react'
-
+import Cardskeleton from './components/skeleton/Cardskeleton';
 const Team = () => {
-    const [array,setArray]=useState([])
-    // Team members data
-const teamMembers = [
+    const [array,setArray]=useState([]);
+    const[member,setMember]=useState([]);
+    const[manager,setManager]=useState([]);
+    const [lead,setLead]=useState([]);
+    const [loading,setLoading]=useState(false);
+    //fetchlead
+ const fetchlead = async () => {
+  setLoading(true);
+  const data = { status: "lead"};
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_HOST}/api/admin/Add/addteam`,
     {
-      name: 'Oliver Aguilerra',
-      role: 'Product Manager',
-      image: 'https://res.cloudinary.com/dawzncoau/image/upload/v1701185942/bohemian-man-with-his-arms-crossed-removebg-preview_jkathe.png',
-      description: "Vincent Van Gogh’s most popular painting, The Starry Night."
-    },
-    {
-      name: 'Marta Clermont',
-      role: 'Design Team Lead',
-      image: 'https://images.pexels.com/photos/2381069/pexels-photo-2381069.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-      description: "Amet I love liquorice jujubes pudding croissant I love pudding."
-    },
-    {
-      name: 'John Doe',
-      role: 'Software Engineer',
-      image: 'https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-      description: "Passionate about creating efficient and scalable software solutions."
-    },
-    {
-      name: 'Alice Johnson',
-      role: 'Marketing Specialist',
-      image: 'https://images.pexels.com/photos/3182767/pexels-photo-3182767.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-      description: "Strategizing and executing marketing campaigns to drive brand awareness."
-    },
-    // {
-    //   name: 'Ethan Williams',
-    //   role: 'UX/UI Designer',
-    //   image: 'https://images.pexels.com/photos/3768165/pexels-photo-3768165.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-    //   description: "Creating delightful user experiences through intuitive and visually appealing designs."
-    // },
-    // Add more team members
-  ];
-  
+      method: "POST", // or 'PUT'
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    }
+  );
+  const result = await res.json();
+  setLoading(false);
+  if (result.success) {
+    setLead(result.data);
+  }
+
+ }
+ //fetchmember
+  const fetchmember = async () => {
+    const data = { status: "member"};
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_HOST}/api/admin/Add/addteam`,
+      {
+        method: "POST", // or 'PUT'
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }
+    );
+    const result = await res.json();
+    setLoading(false);
+    if (result.success) {
+      setMember(result.data);
+    }
+  }
+  //fetchmanager
+  const fetchmanager = async () => {
+    const data = { status: "manager"};
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_HOST}/api/admin/Add/addteam`,
+      {
+        method: "POST", // or 'PUT'
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }
+    );
+    const result = await res.json();
+    setLoading(false);
+    if (result.success) {
+      setManager(result.data);
+    }
+  }
+
   useEffect(()=>{
-    setArray(teamMembers);
+    fetchlead();
+    fetchmanager();
+    fetchmember();
   },[])
+  console.log(lead);
+  console.log(manager);
+  console.log(member);
+  
+  
   
  
   return (
     <>
+    {loading?<div className='my-20'><Cardskeleton/></div>:<div>
      <style jsx>
 {
   `
@@ -65,19 +102,19 @@ const teamMembers = [
           </p>
         </div>
         <div className='flex flex-col justify-center items-center'>
-        <h1 className='text-white fontevent lg:text-5xl md:text-4xl text-4xl '>Our Mentors</h1>
+        <h1 className='text-white fontevent lg:text-5xl md:text-4xl text-4xl '>InnovateU Leads</h1>
         <div className='h-2 w-56 bg-purple-600 rounded-full my-4 text-center'></div>
         </div>
         
       </div>
-     <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4 ">
-     {teamMembers.map((item) => (
-  <div key={item.name} > 
-    <div className="z-10 relative overflow-hidden transition duration-300 transform rounded shadow-lg lg:hover:-translate-y-2 hover:shadow-2xl">
+     <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+     {lead.map((item) => (
+  <div key={item.name} className=''> 
+    <div className="z-10 relative overflow-hidden transition duration-300 transform rounded shadow-lg lg:hover:-translate-y-2 hover:shadow-2xl ">
         <div className='object-cover w-full h-56 md:h-64 xl:h-80 rounded-lg bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-blue-700 via-blue-800 to-gray-900'>
         <img
         className="object-cover w-full h-56 md:h-64 xl:h-80 rounded-lg"
-        src={`${item.image}`}
+        src={`${item.img}`}
         alt="Person"
       />
         </div>
@@ -85,9 +122,9 @@ const teamMembers = [
         <p className="mb-1 text-lg font-bold text-gray-100 my-4 fontevent text-center">{item.name}</p>
       <div className="absolute inset-0 flex flex-col justify-center px-5 py-4 text-center transition-opacity duration-300 bg-black bg-opacity-75 opacity-0 hover:opacity-100">
         <p className="mb-1 text-lg font-bold text-gray-100">{item.name}</p>
-        <p className="mb-4 text-xs text-gray-100">{item.role}</p>
+        <p className="mb-4 text-xs text-gray-100">{item.title}</p>
         <p className="mb-4 text-xs tracking-wide text-gray-400">
-          {item.description}
+          {item.desc}
         </p>
         <div className="flex items-center justify-center space-x-3">
           <a
@@ -113,26 +150,26 @@ const teamMembers = [
 ))}    
     </div>
     <div className='flex flex-col justify-center items-center my-8'>
-        <h1 className='text-white fontevent lg:text-5xl md:text-4xl text-4xl'>InnovateU Leads</h1>
+        <h1 className='text-white fontevent lg:text-5xl md:text-4xl text-4xl'>Community Mangers</h1>
         <div className='h-2 w-56 bg-purple-600 rounded-full my-4 text-center'></div>
         </div>
     <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
-     {teamMembers.map((item) => (
+     {manager.map((item) => (
   <div key={item.name}>
     <div className="relative overflow-hidden transition duration-300 transform rounded shadow-lg lg:hover:-translate-y-2 hover:shadow-2xl">
     <div className='object-cover w-full h-56 md:h-64 xl:h-80 rounded-lg bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-blue-700 via-blue-800 to-gray-900 shadow-gray-100 shadow-inner' >
         <img
         className="object-cover w-full h-56 md:h-64 xl:h-80 rounded-lg"
-        src={`${item.image}`}
+        src={`${item.img}`}
         alt="Person"
       />
         </div>
         <p className="mb-1 text-lg font-bold text-gray-100 my-4 fontevent text-center">{item.name}</p>
       <div className="absolute inset-0 flex flex-col justify-center px-5 py-4 text-center transition-opacity duration-300 bg-black bg-opacity-75 opacity-0 hover:opacity-100">
         <p className="mb-1 text-lg font-bold text-gray-100">{item.name}</p>
-        <p className="mb-4 text-xs text-gray-100">{item.role}</p>
+        <p className="mb-4 text-xs text-gray-100">{item.title}</p>
         <p className="mb-4 text-xs tracking-wide text-gray-400">
-          {item.description}
+          {item.desc}
         </p>
         <div className="flex items-center justify-center space-x-3">
           <a
@@ -160,26 +197,26 @@ const teamMembers = [
 
     </div>
     <div className='flex flex-col justify-center items-center my-8'>
-        <h1 className='text-white fontevent lg:text-5xl md:text-4xl text-4xl'>Core Community Maintainers</h1>
+        <h1 className='text-white fontevent lg:text-5xl md:text-4xl text-4xl'>Community Members</h1>
         <div className='h-2 w-96 bg-purple-600 rounded-full my-4 text-center'></div>
         </div>
     <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
-     {teamMembers.map((item) => (
+     {member.map((item) => (
   <div key={item.name}>
     <div className="relative overflow-hidden transition duration-300 transform rounded shadow-lg lg:hover:-translate-y-2 hover:shadow-2xl">
     <div className='object-cover w-full h-56 md:h-64 xl:h-80 rounded-lg bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-blue-700 via-blue-800 to-gray-900 shadow-gray-100 shadow-inner'>
         <img
         className="object-cover w-full h-56 md:h-64 xl:h-80 rounded-lg"
-        src={`${item.image}`}
+        src={`${item.img}`}
         alt="Person"
       />
         </div>
         <p className="mb-1 text-lg font-bold text-gray-100 my-4 fontevent text-center">{item.name}</p>
       <div className="absolute inset-0 flex flex-col justify-center px-5 py-4 text-center transition-opacity duration-300 bg-black bg-opacity-75 opacity-0 hover:opacity-100">
         <p className="mb-1 text-lg font-bold text-gray-100">{item.name}</p>
-        <p className="mb-4 text-xs text-gray-100">{item.role}</p>
+        <p className="mb-4 text-xs text-gray-100">{item.title}</p>
         <p className="mb-4 text-xs tracking-wide text-gray-400">
-          {item.description}
+          {item.desc}
         </p>
         <div className="flex items-center justify-center space-x-3">
           <a
@@ -208,6 +245,7 @@ const teamMembers = [
     </div>
     </div>
     </div>
+    </div>}
     </>
   )
 }

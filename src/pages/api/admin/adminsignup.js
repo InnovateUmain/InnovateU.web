@@ -34,11 +34,11 @@ else{
     })
     let a = await user.save();
     const token = jwt.sign({email:a.email,name:a.name}, process.env.JWT_SECRET,);
-    res.status(200).json({success: true,token,email:user.email,message:"User registered successfully"});
+    res.status(200).json({success: true,token,email:user.email,message:"Admin registered successfully"});
 
 
     const info = await transporter.sendMail({
-        from: '<support@InnovateU.com>', // sender address
+        from: '<Team@InnovateU.com>', // sender address
         to: `${req.body.email}`, // list of receivers
         subject: `🎉 Welcome to InnovateU! Your Admin Account is Ready 🚀`, // Subject line
         text: "Account Created Successfully", // plain text body
@@ -51,9 +51,9 @@ else{
                 <td style="padding: 40px 20px; text-align: center;">
                     <img src="https://res.cloudinary.com/dst73auvn/image/upload/v1698952130/2-removebg-preview_ljkree.png" alt="InnovateU Logo Logo" width="150">
                     <h1 style="font-size: 24px; margin-top: 30px; color: #333;">Welcome to InnovateU</h1>
-                    <p style="font-size: 16px; color: #666; margin-top: 20px;">You have successfully created your admin account on InnovateU.</p>
-                    <p style="font-size: 16px; color: #666;">Start managing your projects more efficiently and collaboratively with our powerful tools.</p>
-                    <p style="font-size: 16px; color: #666;">Here is your admin credentials . We will suggest you to please change the password after login the admin panel first time</p>
+                    <p style="font-size: 16px; color: #666; margin-top: 20px;">We are writing to inform you that your administrator status for InnovateU has been successfully activated by the InnovateU team.</p>
+                    <p style="font-size: 16px; color: #666;">Start managing projects,events more efficiently and collaboratively with our powerful tools.</p>
+                    <p style="font-size: 16px; color: #666;">We are pleased to provide you with the administrative credentials for your account. We strongly recommend that you change the password upon your initial login to the admin panel for enhanced security.</p>
                     <p style="font-size: 16px; color: #666; font-weight:bold;">Name:- ${req.body.name}</p>
                     <p style="font-size: 16px; color: #666; font-weight:bold;">Email:- ${req.body.email}</p>
                     <p style="font-size: 16px; color: #666; font-weight:bold;">Password:- ${req.body.password}</p>

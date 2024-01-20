@@ -23,17 +23,17 @@ const Menuitems = [
   {
     title: "Teams",
     icon: "user-check",
-    href: "/admin",
+    href: "/admin/Team",
   },
   {
     title: "Speakers",
     icon: "mic",
-    href: "/admin",
+    href: "/admin/Speaker",
   },
   {
     title: "New Admin",
     icon: "user-plus",
-    href: `/admin`,
+    href: `/admin/AddAdmin`,
   },
   {
     title: "All Projects",

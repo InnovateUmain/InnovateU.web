@@ -351,6 +351,7 @@ const handleSubmit = async()=>{
       }
       
 }
+
   return (
     <div>
       <Toaster position="top-right" reverseOrder={false} />
@@ -587,11 +588,7 @@ const handleSubmit = async()=>{
                               <td className="h-px w-px whitespace-nowrap">
                                 <div className="px-6 py-3">
                                   <div className="flex items-center gap-x-2">
-                                    <img
-                                      className="inline-block h-6 w-6 rounded-full"
-                                      src="https://images.unsplash.com/photo-1531927557220-a9e23c1e4794?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=300&h=300&q=80"
-                                      alt="Image Description"
-                                    />
+                                   
                                     <div className="grow">
                                       <span className="text-sm text-gray-600 dark:text-gray-400">
                                         {item.eventname}
@@ -755,11 +752,7 @@ const handleSubmit = async()=>{
                               <td className="h-px w-px whitespace-nowrap">
                                 <div className="px-6 py-3">
                                   <div className="flex items-center gap-x-2">
-                                    <img
-                                      className="inline-block h-6 w-6 rounded-full"
-                                      src="https://images.unsplash.com/photo-1531927557220-a9e23c1e4794?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=300&h=300&q=80"
-                                      alt="Image Description"
-                                    />
+                                   
                                     <div className="grow">
                                       <span className="text-sm text-gray-600 dark:text-gray-400">
                                         {item.eventname}

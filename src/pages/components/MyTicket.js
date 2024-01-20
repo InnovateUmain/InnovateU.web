@@ -281,7 +281,7 @@ const MyTicket = () => {
       />
       <div className="movie">
         <h4 className='text-black font navfont'>{item.name}</h4>
-        <p>{item.eventdate}</p>
+        <p>{new Date(item.eventdate).toLocaleDateString("en-IN",{ weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
         <p>Time | {item.eventtime
 }</p>
         <p>CUTM : BBSR CAMPUS</p>
