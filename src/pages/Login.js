@@ -5,6 +5,7 @@ import toast,{ Toaster } from 'react-hot-toast';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Spinner from './components/Spinner';
+import Head from 'next/head';
 const Login = () => {
     const router = useRouter();
     useEffect(()=>{
@@ -98,6 +99,9 @@ if(localStorage.getItem('innovateUuser')){
     }, []);
   return (
     <div className='text-white flex justify-center items-center'>
+        <Head>
+        <title>InnovateU - Login</title>
+        </Head>
         <Toaster position="top-center" reverseOrder={false}/>
         <video src="https://res.cloudinary.com/dst73auvn/video/upload/v1701241450/Login_bg_p8pvqt.mp4" className='w-[100vw] h-[100vh] object-cover' autoPlay muted loop></video>
         

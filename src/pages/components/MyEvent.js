@@ -8,7 +8,7 @@ import { MdEventNote } from "react-icons/md";
 import { RiSecurePaymentFill } from "react-icons/ri";
 import { IoMdCloseCircle } from "react-icons/io";
 import { motion } from 'framer-motion';
-
+import Head from 'next/head';
 import { MdOutlinePendingActions } from "react-icons/md";
 import Cardskeleton from './skeleton/Cardskeleton';
 import { set } from 'mongoose';
@@ -80,6 +80,9 @@ const MyEvent = () => {
 
   return (
     <>
+    <Head>
+      <title>InnovateU - My Events</title>
+    </Head>
     {loading?<div className='min-h-screen my-20'><Cardskeleton/></div>:<div className='flex items-center min-h-screen flex-col my-20 bg-[conic-gradient(at_bottom_right,_var(--tw-gradient-stops))] from-blue-700 via-blue-800 to-gray-900'>
     <style jsx>
 {

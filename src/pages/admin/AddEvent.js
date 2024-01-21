@@ -10,6 +10,7 @@ import toast,{Toaster} from "react-hot-toast";
 const excel = require("exceljs");
 import { saveAs } from 'file-saver'
 import { set } from "mongoose";
+import Head from "next/head";
 const AddEvent = () => {
   const [tabledata, setTabledata] = useState([]);
   const [searcharray, setSearcharray] = useState([]);
@@ -336,6 +337,9 @@ const AddEvent = () => {
     <ThemeProvider theme={theme}>
       <FullLayout>
         <Toaster position="top-center"/>
+        <Head>
+          <title>InnovateU - Add Event</title>
+        </Head>
         <style jsx global>{`
           #footer {
             display: none;

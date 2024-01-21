@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Cardskeleton from './components/skeleton/Cardskeleton';
+import Head from 'next/head';
 const Team = () => {
     const [array,setArray]=useState([]);
     const[member,setMember]=useState([]);
@@ -80,6 +81,9 @@ const Team = () => {
  
   return (
     <>
+    <Head>
+      <title>InnovateU - Team</title>
+    </Head>
     {loading?<div className='my-20'><Cardskeleton/></div>:<div>
      <style jsx>
 {

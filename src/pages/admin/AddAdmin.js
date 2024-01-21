@@ -4,6 +4,7 @@ import FullLayout from "../../../trc/layouts/FullLayout";
 import { ThemeProvider } from "@mui/material/styles";
 import { useEffect,useState } from 'react';
 import toast,{Toaster} from 'react-hot-toast';
+import Head from 'next/head';
 const AddAdmin = () => {
     const [name,setName] = useState('');
     const [email,setEmail] = useState('');
@@ -120,6 +121,9 @@ const AddAdmin = () => {
             display: none;
           }
         `}</style>
+        <Head>
+          <title>InnovateU - Add a New Admin</title>
+        </Head>
         <Toaster position='top-center'/>
        <section className="font-poppins ">
   <div className="hidden py-20 text-center bg-blue-100 dark:bg-gray-700 lg:block">

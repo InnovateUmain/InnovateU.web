@@ -6,6 +6,7 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import toast, { Toaster } from "react-hot-toast";
 import { IoMdCloseCircle } from "react-icons/io";
+import Head from "next/head";
 const Allmember = () => {
   const [user, setAlluser] = useState([]);
   const [serachuser, setSearchuser] = useState([]);
@@ -269,6 +270,10 @@ const Allmember = () => {
           }
         `}</style>
         <>
+          
+          <Head>
+            <title>Admin | All User details</title>
+            </Head>
           {/* Table Section */}
           <Toaster position="top-center" reverseOrder={false} />
           <div className="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">

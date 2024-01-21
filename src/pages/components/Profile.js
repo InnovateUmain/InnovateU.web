@@ -3,6 +3,7 @@ import toast, { Toaster } from "react-hot-toast";
 import Spinner from "./Spinner";
 import BlogSkeleton from "./skeleton/BlogSkeleton";
 import { motion } from "framer-motion";
+import Head from "next/head";
 const Profile = () => {
   const ref = useRef();
   const [name, setName] = useState("");
@@ -172,6 +173,9 @@ const Profile = () => {
   };
   return (
     <div className={`min-h-screen relative top-6 my-20}`}>
+      <Head>
+        <title>InnovateU - Profile</title>
+      </Head>
       <Toaster position="top-center" reverseOrder={false} />
       {loading ? (
         <div className="my-16">

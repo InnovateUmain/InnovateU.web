@@ -6,7 +6,7 @@ import 'react-toastify/dist/ReactToastify.css'
 import { ThemeProvider } from "@mui/material/styles";
 import Spinner from '../components/Spinner';
 import { useRouter } from 'next/router';
-
+import Head from 'next/head';
 const Changepassword = () => {
     const router =useRouter();
     const[password,setPassword]=useState('');
@@ -111,6 +111,10 @@ theme="light"
           display:none;
         }
       `}</style>
+      <Head>
+        <title>Change Password | InnovateU</title>
+        <meta name="description" content="Change your password" />
+        </Head>
        {loading?<div className='flex justify-center'><Spinner/></div>:<section className="bg-gray-50 dark:bg-gray-900">
   <div className="flex flex-col items-center  px-6 py-8 mx-auto md:h-screen lg:py-0">
 

@@ -9,6 +9,7 @@ import toast,{Toaster} from "react-hot-toast";
 const excel = require("exceljs");
 import { saveAs } from 'file-saver'
 import { set } from "mongoose";
+import Head from "next/head";
 const Appliedmember = () => {
   //all state
   const [event, setEvent] = useState([]);
@@ -356,6 +357,9 @@ const handleSubmit = async()=>{
     <div>
       <Toaster position="top-right" reverseOrder={false} />
       <ThemeProvider theme={theme}>
+        <Head>
+          <title>Admin | Applied Member</title>
+          </Head>
         <FullLayout>
           <div className="m-2 w-full px-4 lg:px-8 py-4 mx-auto">
             <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-lg">

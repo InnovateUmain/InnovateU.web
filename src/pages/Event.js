@@ -4,6 +4,7 @@ import { MdLocationOn } from "react-icons/md";
 import { FaMicrophone } from "react-icons/fa";
 import Cardskeleton from './components/skeleton/Cardskeleton';
 import Error from './Error';
+import Head from 'next/head';
 import Link from 'next/link';
 const Event = () => {
   const[searchq,setSearchq]=React.useState('');
@@ -55,6 +56,9 @@ const onChange=(e)=>{
 }
   return (
     <>
+    <Head>
+      <title>InnovateU - Events</title>
+    </Head>
     {loading?<div className='min-h-screen my-20'><Cardskeleton/></div>:<div className=' my-20  bg-gradient-to-b from-gray-900 to-gray-600 bg-gradient-to-r'>
   <div className=''>
   <div className=" flex justify-center items-center  bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 flex-col mb-10 h-full">

@@ -8,6 +8,7 @@ import toast,{ Toaster } from 'react-hot-toast';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { addUserData } from '@/appstore/userData';
+import Head from 'next/head';
 import Link from 'next/link';
 // import Razorpay from "razorpay";
 const Payment = () => {
@@ -96,6 +97,9 @@ font-families {
 `}
    </style>
    <Toaster position="top-center" reverseOrder={false}/>
+   <Head> 
+    <title>Payments for {router.query.name}</title>
+   </Head>
    <div className="shadow-[0_16px_16px_-8px_rgba(118,108,241,0.3)] max-w-sm bg-white m-6 flex flex-col rounded-2xl overflow-hidden justify-center relative lg:top-8 top-10">
   <img
     src={`${router.query.poster}`}

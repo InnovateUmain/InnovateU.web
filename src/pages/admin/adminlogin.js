@@ -3,6 +3,7 @@ import { FaEye ,FaEyeSlash } from "react-icons/fa";
 import toast,{ Toaster } from 'react-hot-toast';
 import Spinner from '../components/Spinner';
 import { useRouter } from 'next/router';
+import Head from 'next/head';
 const Adminlogin = () => {
     const router = useRouter();
     const [show,setShow] = useState(false);
@@ -45,6 +46,10 @@ const Adminlogin = () => {
     }
   return (
     <div className='min-h-screen relative top-20'>
+      <Head>
+        <title>Admin Login | InnovateU</title>
+        <meta name="description" content="Login to your admin account" />
+        </Head>
         <Toaster position="top-center" reverseOrder={false}/>
       {loading?<div className='flex justify-center '><Spinner/></div>:<>
       

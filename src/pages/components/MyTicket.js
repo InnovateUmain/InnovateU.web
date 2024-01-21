@@ -9,6 +9,7 @@ import { toPng, toJpeg, toBlob, toPixelData, toSvg } from 'html-to-image';
 import { jsPDF } from "jspdf";
 import Cardskeleton from './skeleton/Cardskeleton';
 import { set } from 'mongoose';
+import Head from 'next/head';
 const MyTicket = () => {
     const [event,setEvent] = useState([]);
     const [qr,setQr] = useState(""); //qr code for ticket id [not used
@@ -82,6 +83,9 @@ const MyTicket = () => {
     
   return (
 <div className='my-24 '>
+<Head>
+<title>InnovateU - My Ticket</title>
+</Head>
 <style jsx global>
 {`
 @import url('https://fonts.googleapis.com/css2?family=Cabin:wght@600&display=swap');

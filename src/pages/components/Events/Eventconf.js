@@ -9,6 +9,7 @@ import * as htmlToImage from 'html-to-image';
 import { toPng, toJpeg, toBlob, toPixelData, toSvg } from 'html-to-image';
 import { jsPDF } from "jspdf";
 import Spinner from '../Spinner'
+import Head from 'next/head'
 import Error from '@/pages/Error'
 const Eventconf = () => {
     const ref = useRef();
@@ -115,6 +116,9 @@ var rdate = new Date(event.createdAt);
   return (
     <>
 {con&&<div className='relative top-10' > 
+<Head>
+              <title>Event Confirmation - {event&& event.eventname}</title>
+</Head>
            <Confetti numberOfPieces={1500} width={width>=500?width:300} height={width>=500?width:1500} className='m-auto ' />
         </div>}
     {loading?<div className='min-h-screen flex justify-center items-center'><Spinner/></div>:<div className='relative top-20 mb-10'>

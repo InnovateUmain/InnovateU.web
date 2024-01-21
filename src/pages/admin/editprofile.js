@@ -8,6 +8,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import Spinner from '../components/Spinner';
 import { motion } from 'framer-motion';
 import updateadmin from '../api/admin/updateadmin';
+import Head from 'next/head';
 const Profile = () => {
   const ref = useRef();
   const[name,setName]= useState("");
@@ -141,7 +142,9 @@ setLoading(true);
     <div className={`  ${loading?"flex justify-center items-center":""}`}>
        <Toaster position="top-center" reverseOrder={false}/>
       {loading?<div className='flex justify-center'><Spinner/></div>:<>
-     
+     <Head>
+        <title>Admin Profile | InnovateU</title>
+     </Head>
   {/* Card Section */}
   <div className="max-w-4xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
     {/* Card */}

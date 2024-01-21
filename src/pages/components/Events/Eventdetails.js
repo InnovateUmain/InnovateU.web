@@ -11,6 +11,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { addUserData } from "@/appstore/userData";
 import Error from "@/pages/Error";
+import Head from "next/head";
 import Link from "next/link";
 import {
   VerticalTimeline,
@@ -236,6 +237,9 @@ const Eventdetails = () => {
   return (
     <>
       <Toaster position="top-center" reverseOrder={false} />
+      <Head>
+        <title>Event Details - {event&&event.eventname}</title>
+      </Head>
       <div>
         {loading ? (
           <div className="min-h-screen my-20">

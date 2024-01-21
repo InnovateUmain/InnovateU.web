@@ -11,6 +11,7 @@ import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { useRouter } from 'next/router';
 import { IoMdCloseCircle } from "react-icons/io";
+import Head from 'next/head';
 const Signup = () => {
 
     const [emailt, setEmailt] = useState(false);
@@ -147,6 +148,9 @@ setOpen(true);
   return (
 
     <div className='text-white flex justify-center items-center'>
+      <Head>
+        <title>InnovateU - Signup</title>
+      </Head>
         <style jsx>
         {`
           @import url("https://fonts.googleapis.com/css2?family=Rubik:wght@500&display=swap");

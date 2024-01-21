@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Cardskeleton from "./skeleton/Cardskeleton";
-
+import Head from "next/head";
 const Team = () => {
     const [speaker,setSpeaker]=useState([]);
     const [loading,setLoading]=useState(false);
@@ -40,6 +40,9 @@ const Team = () => {
  
   return (
     <>
+    <Head>
+      <title>InnovateU - Speakers</title>
+    </Head>
     {loading?<div className='my-20'><Cardskeleton/></div>:<div>
      <style jsx>
 {
@@ -79,11 +82,11 @@ const Team = () => {
       />
         </div>
     
-        <p className="mb-1 text-lg font-bold text-gray-100 my-4 fontevent text-center">{item.name}</p>
-        <p className="mb-1 text-lg font-bold text-gray-100 my-4 fontevent text-center">{item.position}</p>
+        <p className="mb-1 text-lg font-bold text-gray-100 my-4 fontevent text-center">{item.name} <span className="text-purple-600">({item.position})</span></p>
+      
       <div className="absolute inset-0 flex flex-col justify-center px-5 py-4 text-center transition-opacity duration-300 bg-black bg-opacity-75 opacity-0 hover:opacity-100">
         <p className="mb-1 text-lg font-bold text-gray-100">{item.name}</p>
-        <p className="mb-4 text-xs text-gray-100">{item.title}</p>
+        <p className="mb-4 text-xs text-gray-100">{item.position}</p>
         <p className="mb-4 text-xs tracking-wide text-gray-400">
           {item.desc}
         </p>

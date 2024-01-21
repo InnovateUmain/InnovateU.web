@@ -9,7 +9,7 @@ import { useState, useEffect } from "react";
 import toast,{Toaster} from "react-hot-toast";
 const excel = require("exceljs");
 import { saveAs } from 'file-saver'
-import { set } from "mongoose";
+import Head from "next/head";
 const Speaker = () => {
   const [tabledata, setTabledata] = useState([]);
   const [searcharray, setSearcharray] = useState([]);
@@ -294,6 +294,9 @@ const Speaker = () => {
   return (
     <ThemeProvider theme={theme}>
       <FullLayout>
+        <Head>
+          <title>Add Speaker</title>
+        </Head>
         <Toaster position="top-center"/>
         <style jsx global>{`
           #footer {
@@ -767,7 +770,7 @@ const Speaker = () => {
               handleOpenu();
             }}
           >
-            Update Event
+            Update Speaker
           </button>
           <button
             
@@ -777,7 +780,7 @@ const Speaker = () => {
               handleDeleteTeam();
             }}
           >
-            Delete Event
+            Delete Speaker
           </button>
           </div>
               </div>))}
@@ -1269,14 +1272,14 @@ const Speaker = () => {
                 onClick={handleDeleteTeam}
                   
                 >
-                  Delete Event
+                  Delete Speaker
                 </button>
                 <button
                   className="active:scale-95 rounded-lg bg-blue-600 px-8 py-2 font-medium text-white outline-none focus:ring hover:opacity-90"
                 onClick={handleUpdateTeam}
                   
                 >
-                  Update Event
+                  Update Speaker
                 </button>
                 
               </div>

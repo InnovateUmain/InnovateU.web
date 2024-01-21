@@ -9,7 +9,7 @@ import { useState, useEffect } from "react";
 import toast,{Toaster} from "react-hot-toast";
 const excel = require("exceljs");
 import { saveAs } from 'file-saver'
-import { set } from "mongoose";
+import Head from "next/head";
 const AddEvent = () => {
   const [tabledata, setTabledata] = useState([]);
   const [searcharray, setSearcharray] = useState([]);
@@ -294,6 +294,9 @@ const AddEvent = () => {
   return (
     <ThemeProvider theme={theme}>
       <FullLayout>
+        <Head>
+          <title>Admin | Add Team Member</title>
+        </Head>
         <Toaster position="top-center"/>
         <style jsx global>{`
           #footer {
@@ -765,7 +768,7 @@ const AddEvent = () => {
               handleOpenu();
             }}
           >
-            Update Event
+            Update Team
           </button>
           <button
             
@@ -775,7 +778,7 @@ const AddEvent = () => {
               handleDeleteTeam();
             }}
           >
-            Delete Event
+            Delete Team
           </button>
           </div>
               </div>))}
@@ -1277,14 +1280,14 @@ const AddEvent = () => {
                 onClick={handleDeleteTeam}
                   
                 >
-                  Delete Event
+                  Delete Team
                 </button>
                 <button
                   className="active:scale-95 rounded-lg bg-blue-600 px-8 py-2 font-medium text-white outline-none focus:ring hover:opacity-90"
                 onClick={handleUpdateTeam}
                   
                 >
-                  Update Event
+                  Update Team
                 </button>
                 
               </div>
