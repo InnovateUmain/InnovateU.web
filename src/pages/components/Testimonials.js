@@ -30,7 +30,7 @@ const Testimonials = () => {
           <div className="flex flex-col  rounded-xl bg-slate-800">
             <div className="flex-auto p-4 md:p-6">
               <p className="text-base italic md:text-lg  text-gray-200">
-              The innovationU website is a collaborative oasis! The platform links developers all over the world with ease. Learning and sharing are enjoyable because of the encouraging group and the worthwhile projects I was able to participate in. 
+              The innovateU website is a collaborative oasis! The platform links developers all over the world with ease. Learning and sharing are enjoyable because of the encouraging group and the worthwhile projects I was able to participate in. 
               </p>
             </div>
             <div className="p-4  rounded-b-xl md:px-7 bg-slate-700">
@@ -38,16 +38,16 @@ const Testimonials = () => {
                 <div className="flex-shrink-0">
                   <img
                     className="h-8 w-8 rounded-full sm:h-[2.875rem] sm:w-[2.875rem]"
-                    src="https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=320&h=320&q=80"
+                    src="https://res.cloudinary.com/dst73auvn/image/upload/v1705854744/qqwbakh2eqyjkkjjzhfo.png"
                     alt="Image Description"
                   />
                 </div>
                 <div className="grow ms-3">
                   <p className="text-sm sm:text-base font-semibold text-gray-200">
-                    Josh Tyson
+                    Saneev Kumar Das
                   </p>
                   <p className="text-xs text-gray-400">
-                    Product Manager | Capsule
+                    Professor | @CUTM 
                   </p>
                 </div>
               </div>
@@ -68,16 +68,16 @@ const Testimonials = () => {
                 <div className="flex-shrink-0">
                   <img
                     className="h-8 w-8 rounded-full sm:h-[2.875rem] sm:w-[2.875rem]"
-                    src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=320&h=320&q=80"
+                    src="https://res.cloudinary.com/dst73auvn/image/upload/v1705910912/dpahrpch4gnkgnje7t4q.png"
                     alt="Image Description"
                   />
                 </div>
                 <div className="grow ms-3">
                   <p className="text-sm sm:text-base font-semibold text-gray-200">
-                    Luisa
+                    Animesh Singh
                   </p>
                   <p className="text-xs text-gray-400">
-                    Senior Director of Operations | Redhat
+                     Lead Manager | @InnovateU
                   </p>
                 </div>
               </div>
@@ -98,16 +98,16 @@ const Testimonials = () => {
                 <div className="flex-shrink-0">
                   <img
                     className="h-8 w-8 rounded-full sm:h-[2.875rem] sm:w-[2.875rem]"
-                    src="https://images.unsplash.com/photo-1579017331263-ef82f0bbc748?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=900&h=900&q=80"
+                    src="https://res.cloudinary.com/dst73auvn/image/upload/v1705863224/wxhjqh7u16zn9eqwgpuy.jpg"
                     alt="Image Description"
                   />
                 </div>
                 <div className="grow ms-3">
                   <p className="text-sm sm:text-base font-semibold text-gray-200">
-                    Alisa Williams
+                    Basir Khan
                   </p>
                   <p className="text-xs text-gray-400">
-                    Entrepreneur | Happy customer
+                   Lead Developer | @InnovateU
                   </p>
                 </div>
               </div>

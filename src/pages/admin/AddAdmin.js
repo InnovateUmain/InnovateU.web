@@ -5,6 +5,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import { useEffect,useState } from 'react';
 import toast,{Toaster} from 'react-hot-toast';
 import Head from 'next/head';
+import Spinner from '../components/Spinner';
 const AddAdmin = () => {
     const [name,setName] = useState('');
     const [email,setEmail] = useState('');
@@ -12,7 +13,10 @@ const AddAdmin = () => {
     const [password,setPassword] = useState('');
     const [alladmin,setallAdmin] = useState([]);
     const [viewpassword,setViewpassword] = useState(false);
+    const [loading, setLoading] = useState(false);
     const fetchadmin = async () => {
+      setLoading(true)
+
         const data = { status: "getalldata"};
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_HOST}/api/admin/admincontrol`,
@@ -25,6 +29,7 @@ const AddAdmin = () => {
           }
         );
         const result = await res.json();
+        setLoading(false)
         if (result.success) {
           setallAdmin(result.data)
         } else {
@@ -51,6 +56,7 @@ const AddAdmin = () => {
         }
     }
     const handleSubmit = async (e) => {
+      setLoading(true)
      e.preventDefault();
      console.log(name,email,phone,password)
      if(name=="" || email=="" || phone=="" || password==""){
@@ -69,6 +75,7 @@ const AddAdmin = () => {
           }
         );
         const result = await res.json();
+        setLoading(false)
         if (result.success) {
           toast.success(result.message);
             fetchadmin();
@@ -84,9 +91,11 @@ const AddAdmin = () => {
     }
     //handle delete admin
     const handleDelete = async (id) => {
+      
         let a  = prompt("Are you sure you want to delete this admin? Type password to confirm");
         if(a == "752050"){
             const data = { status: "delete",id};
+            setLoading(true)
             const res = await fetch(
               `${process.env.NEXT_PUBLIC_HOST}/api/admin/admincontrol`,
               {
@@ -98,14 +107,17 @@ const AddAdmin = () => {
               }
             );
             const result = await res.json();
+            setLoading(false)
             if (result.success) {
               toast.success(result.message);
               fetchadmin();
             } else {
+            
               toast.error(result.message);
             }
         }
         else{
+          setLoading(false)
             toast.error("Wrong password");
         }
         
@@ -125,6 +137,7 @@ const AddAdmin = () => {
           <title>InnovateU - Add a New Admin</title>
         </Head>
         <Toaster position='top-center'/>
+       {loading ?<div className='flex justify-center items-center my-40'><Spinner/> </div>: <>
        <section className="font-poppins ">
   <div className="hidden py-20 text-center bg-blue-100 dark:bg-gray-700 lg:block">
     <div className="max-w-6xl mx-auto mb-24">
@@ -467,6 +480,7 @@ const AddAdmin = () => {
             </div>
             {/* End Card */}
           </div>
+          </>}
        </FullLayout>
       </ThemeProvider> 
  
