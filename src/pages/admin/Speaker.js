@@ -8,8 +8,10 @@ import { ThemeProvider } from "@mui/material/styles";
 import { useState, useEffect } from "react";
 import toast,{Toaster} from "react-hot-toast";
 const excel = require("exceljs");
+import Spinner from "../components/Spinner";
 import { saveAs } from 'file-saver'
 import Head from "next/head";
+
 const Speaker = () => {
   const [tabledata, setTabledata] = useState([]);
   const [searcharray, setSearcharray] = useState([]);
@@ -36,6 +38,7 @@ const Speaker = () => {
  const [id, setId] = useState("");
 
   const fetchevent = async () => {
+    setLoading(true)
     const data = { status: "getall" };
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_HOST}/api/admin/Add/addspeaker`,
@@ -48,6 +51,7 @@ const Speaker = () => {
       }
     );
     const result = await res.json();
+    setLoading(false)
     setTabledata(result.data);
   };
   useEffect(() => {
@@ -204,6 +208,7 @@ const Speaker = () => {
         }
 //else 
         else{
+          setLoading(true)
         const data = { status: "addteam",name, email, phone, desc, github, linkedin, twitter, title, img:teamimg, position};
         //fetch api
         const res = await fetch(
@@ -217,6 +222,7 @@ const Speaker = () => {
           }
         );
         const result = await res.json();
+        setLoading(false)
       if(result.success){
         toast.success(result.message)
         fetchevent();
@@ -240,6 +246,7 @@ const Speaker = () => {
       };
       //delete event function
       const handleUpdateTeam = async () => {
+        setLoading(true)
         const data = { status: "updateteam" ,name, email, phone, desc, github, linkedin, twitter, title, teamimg, position,id};
         console.log(data);
         const res = await fetch(
@@ -253,6 +260,7 @@ const Speaker = () => {
           }
         );
         const result = await res.json();
+        setLoading(false)
         if(result.success){
           toast.success(result.message)
           fetchevent();
@@ -265,6 +273,7 @@ const Speaker = () => {
       }
 
       const handleDeleteTeam = async () => {
+        setLoading(true)
         let a  = confirm("Are you sure you want to delete this event?");
         if(a){
           const data = { status: "delete" ,id};
@@ -279,6 +288,7 @@ const Speaker = () => {
             }
           );
           const result = await res.json();
+          setLoading(false)
           if(result.success){
             toast.success(result.message)
             fetchevent();
@@ -298,6 +308,7 @@ const Speaker = () => {
           <title>Add Speaker</title>
         </Head>
         <Toaster position="top-center"/>
+        {loading?<div className="flex justify-center items-center my-52"><Spinner/></div>:<>
         <style jsx global>{`
           #footer {
             display: none;
@@ -1287,6 +1298,7 @@ const Speaker = () => {
           </div>
   </Box>
 </Modal>
+</>}
       </FullLayout>
     </ThemeProvider>
   );

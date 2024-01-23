@@ -9,8 +9,9 @@ import { useState, useEffect } from "react";
 import toast,{Toaster} from "react-hot-toast";
 const excel = require("exceljs");
 import { saveAs } from 'file-saver'
-import { set } from "mongoose";
+import Spinner from "../components/Spinner";
 import Head from "next/head";
+import { set } from "mongoose";
 const AddEvent = () => {
   const [tabledata, setTabledata] = useState([]);
   const [searcharray, setSearcharray] = useState([]);
@@ -44,6 +45,7 @@ const AddEvent = () => {
  const [id, setId] = useState("");
 
   const fetchevent = async () => {
+    setLoading(true);
     const data = { status: "get" };
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_HOST}/api/admin/Add/addevent`,
@@ -56,6 +58,7 @@ const AddEvent = () => {
       }
     );
     const result = await res.json();
+    setLoading(false);
     setTabledata(result.event);
   };
   useEffect(() => {
@@ -233,6 +236,7 @@ const AddEvent = () => {
       };
 //add event function
       const handleAddEvent = async () => {
+        setLoading(true);
         if(eventname=="" && eventposter=="" ){
           toast.error("Please fill all the fields")
         }
@@ -251,6 +255,7 @@ const AddEvent = () => {
           }
         );
         const result = await res.json();
+        setLoading(false);
       if(result.success){
         toast.success(result.message)
         fetchevent();
@@ -282,6 +287,7 @@ const AddEvent = () => {
       };
       //delete event function
       const handleUpdateEvent = async () => {
+        setLoading(true);
         const data = { status: "update" ,id, eventname, eventdate, eventtime, eventduration, eventtype, eventvenue, eventregfee, eventreglimit, eventregstatus:eventstatus, eventposter, eventspeaker, eventdesc:eventdescription, eventreglink:eventlink, eventregcount, eventreglastdate,eventgrplink};
         console.log(data);
         const res = await fetch(
@@ -295,6 +301,7 @@ const AddEvent = () => {
           }
         );
         const result = await res.json();
+        setLoading(false);
         if(result.success){
           toast.success(result.message)
           fetchevent();
@@ -307,6 +314,7 @@ const AddEvent = () => {
       }
 
       const handleDeleteEvent = async () => {
+        setLoading(true);
         let a  = confirm("Are you sure you want to delete this event?");
         if(a){
           const data = { status: "delete" ,id};
@@ -321,6 +329,7 @@ const AddEvent = () => {
             }
           );
           const result = await res.json();
+        setLoading(false);
           if(result.success){
             toast.success(result.message)
             fetchevent();
@@ -340,6 +349,7 @@ const AddEvent = () => {
         <Head>
           <title>InnovateU - Add Event</title>
         </Head>
+        {loading?<div className="flex justify-center items-center my-52"><Spinner/></div>:<>
         <style jsx global>{`
           #footer {
             display: none;
@@ -1626,6 +1636,7 @@ const AddEvent = () => {
           </div>
   </Box>
 </Modal>
+</>}
       </FullLayout>
     </ThemeProvider>
   );

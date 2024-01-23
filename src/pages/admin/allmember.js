@@ -7,6 +7,8 @@ import Modal from "@mui/material/Modal";
 import toast, { Toaster } from "react-hot-toast";
 import { IoMdCloseCircle } from "react-icons/io";
 import Head from "next/head";
+import Spinner from "../components/Spinner";
+
 const Allmember = () => {
   const [user, setAlluser] = useState([]);
   const [serachuser, setSearchuser] = useState([]);
@@ -56,6 +58,7 @@ const Allmember = () => {
     getalluser();
   }, []);
   const getalluser = async () => {
+    setLoading(true);
     const data = { id: "innovateUadminhandle", status: "user" };
     const pr = await fetch(
       `${process.env.NEXT_PUBLIC_HOST}/api/admin/getalldata`,
@@ -68,6 +71,7 @@ const Allmember = () => {
       }
     );
     const res = await pr.json();
+    setLoading(false);
     if (res.data != null) {
       setAlluser(res.data);
     }
@@ -240,12 +244,14 @@ const Allmember = () => {
   //update password
 
   const handleUpdate = () => {
+    setLoading(true);
     if (password === "" || npassword === "") {
       updateuser();
     } else if (password != "" && npassword != "") {
       updatepassword();
       updateuser();
     }
+   setLoading(false); 
   };
   const alldata = () => {
     setCount(user.length);
@@ -269,12 +275,13 @@ const Allmember = () => {
             display: none;
           }
         `}</style>
-        <>
+       {loading?<div className="flex justify-center items-center my-52"><Spinner/></div>:<>
           
           <Head>
             <title>Admin | All User details</title>
             </Head>
           {/* Table Section */}
+          <>
           <Toaster position="top-center" reverseOrder={false} />
           <div className="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
             {/* Card */}
@@ -1017,6 +1024,7 @@ const Allmember = () => {
           </Modal>
           {/* End Table Section */}
         </>
+        </>}
       </FullLayout>
     </ThemeProvider>
   );

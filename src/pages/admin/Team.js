@@ -9,6 +9,7 @@ import { useState, useEffect } from "react";
 import toast,{Toaster} from "react-hot-toast";
 const excel = require("exceljs");
 import { saveAs } from 'file-saver'
+import Spinner from "../components/Spinner";
 import Head from "next/head";
 const AddEvent = () => {
   const [tabledata, setTabledata] = useState([]);
@@ -36,6 +37,7 @@ const AddEvent = () => {
  const [id, setId] = useState("");
 
   const fetchevent = async () => {
+    setLoading(true);
     const data = { status: "getall" };
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_HOST}/api/admin/Add/addteam`,
@@ -48,7 +50,9 @@ const AddEvent = () => {
       }
     );
     const result = await res.json();
+
     setTabledata(result.data);
+    setLoading(false)
   };
   useEffect(() => {
     fetchevent();
@@ -199,11 +203,13 @@ const AddEvent = () => {
       };
 //add event function
       const handleAddTeam = async () => {
+        
         if(name=="" && teamimg=="" ){
           toast.error("Please fill all the fields")
         }
 //else 
         else{
+          setLoading(true)
         const data = { status: "addteam",name, email, phone, desc, github, linkedin, twitter, title, img:teamimg, position};
         //fetch api
         const res = await fetch(
@@ -216,6 +222,7 @@ const AddEvent = () => {
             body: JSON.stringify(data),
           }
         );
+        setLoading(false);
         const result = await res.json();
       if(result.success){
         toast.success(result.message)
@@ -240,6 +247,7 @@ const AddEvent = () => {
       };
       //delete event function
       const handleUpdateTeam = async () => {
+        setLoading(true)
         const data = { status: "updateteam" ,name, email, phone, desc, github, linkedin, twitter, title, teamimg, position,id};
         console.log(data);
         const res = await fetch(
@@ -253,6 +261,7 @@ const AddEvent = () => {
           }
         );
         const result = await res.json();
+        setLoading(false);
         if(result.success){
           toast.success(result.message)
           fetchevent();
@@ -267,6 +276,7 @@ const AddEvent = () => {
       const handleDeleteTeam = async () => {
         let a  = confirm("Are you sure you want to delete this event?");
         if(a){
+          setLoading(true)
           const data = { status: "delete" ,id};
           const res = await fetch(
             `${process.env.NEXT_PUBLIC_HOST}/api/admin/Add/addteam`,
@@ -279,6 +289,7 @@ const AddEvent = () => {
             }
           );
           const result = await res.json();
+          setLoading(false)
           if(result.success){
             toast.success(result.message)
             fetchevent();
@@ -298,6 +309,7 @@ const AddEvent = () => {
           <title>Admin | Add Team Member</title>
         </Head>
         <Toaster position="top-center"/>
+        {loading?<div className="flex justify-center items-center my-52"><Spinner/></div>:<>        
         <style jsx global>{`
           #footer {
             display: none;
@@ -1295,6 +1307,7 @@ const AddEvent = () => {
           </div>
   </Box>
 </Modal>
+</>}
       </FullLayout>
     </ThemeProvider>
   );
