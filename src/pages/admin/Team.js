@@ -11,6 +11,7 @@ const excel = require("exceljs");
 import { saveAs } from 'file-saver'
 import Spinner from "../components/Spinner";
 import Head from "next/head";
+
 const AddEvent = () => {
   const [tabledata, setTabledata] = useState([]);
   const [searcharray, setSearcharray] = useState([]);
