@@ -34,15 +34,17 @@ const Hero1 = () => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ type: "spring", stiffness: 100 }}
             >
-              <p className="text-base font-semibold tracking-wider text-yellow-400 uppercase navfont mx-4">
+              
+              <p className="text-base font-semibold tracking-wider text-yellow-400 uppercase navfont mx-4 text-center lg:text-left md:text-left sm:text-left">
                 A Community for learners
               </p>
-              <h1 className="mt-4 text-4xl font-bold text-white lg:mt-8 sm:text-6xl xl:text-8xl navfont">
+              <h1 className="mt-4 text-4xl font-bold text-white lg:mt-8 sm:text-6xl xl:text-8xl navfont text-center lg:text-left md:text-left sm:text-left">
                 Connect &amp; learn from the experts
               </h1>
-              <p className="mt-4 text-base text-white lg:mt-8 sm:text-xl">
+              <p className="mt-4 text-base text-white lg:mt-8 sm:text-xl text-center lg:text-left md:text-left sm:text-left xl:text-left">
                 Grow your career fast with right mentor.
               </p>
+               <div className="flex flex-row items-center">
               <Link href={"/Signup"}>
               <motion.button
                  whileHover={{ scale: 1.1 }}
@@ -67,6 +69,7 @@ const Hero1 = () => {
                   />
                 </svg>
               </motion.button>
+                
               </Link>
               <Link href={"/Event"}>
               <motion.button
@@ -92,6 +95,7 @@ const Hero1 = () => {
                 </svg>
               </motion.button>
               </Link>
+              </div>
             </motion.div>
 
             <div className="overflow-hidden">
