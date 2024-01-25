@@ -17,7 +17,7 @@ const Speaker = () => {
   const [searcharray, setSearcharray] = useState([]);
   const [isSearch, setIsSearch] = useState(false);
   const [searchquery, setSearchquery] = useState("");
-  const [count, setCount] = useState(2);
+  const [count, setCount] = useState(6);
   const [intialcount, setIntialcount] = useState(0);
   const [open, setOpen] = useState(false);
   const [width,setWidth]= useState(0);
@@ -247,7 +247,7 @@ const Speaker = () => {
       //delete event function
       const handleUpdateTeam = async () => {
         setLoading(true)
-        const data = { status: "updateteam" ,name, email, phone, desc, github, linkedin, twitter, title, teamimg, position,id};
+        const data = { status: "updateteam" ,name, email, phone, desc, github, linkedin, twitter, title, img:teamimg, position,id};
         console.log(data);
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_HOST}/api/admin/Add/addspeaker`,
@@ -652,8 +652,8 @@ const Speaker = () => {
                             className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
                             onClick={() => {
                               if (intialcount > 0) {
-                                setIntialcount(intialcount - 2);
-                                setCount(count - 2);
+                                setIntialcount(intialcount - 6);
+                                setCount(count - 6);
                               }
                             }}
                           >
@@ -679,10 +679,10 @@ const Speaker = () => {
                             onClick={() => {
                               if (count < tabledata.length) {
                                 setIntialcount(count);
-                                setCount(count + 2);
+                                setCount(count + 6);
                               } else if (count < searcharray.length) {
                                 setIntialcount(count);
-                                setCount(count + 2);
+                                setCount(count + 6);
                               }
                             }}
                           >

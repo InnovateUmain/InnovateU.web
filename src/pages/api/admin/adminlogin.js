@@ -13,15 +13,15 @@ if(req.method=="POST"){
 
         if(req.body.email==user.email&&req.body.password==decryptpass){ 
           const token = jwt.sign({email:user.email,name:user.name}, process.env.JWT_SECRET,);
-    res.status(200).json({success: true,token,email:user.email,message:"User logged in successfully"});
+    res.status(200).json({success: true,token,email:user.email,message:"Admin logged in successfully"});
 }
 else{
 
-res.status(200).json({ success: false,message:"Invalid credentials"});
+res.status(200).json({ success: false,message:"Invalid credentials .Please check email and password"});
 }
 }
 else{
-    res.status(200).json({ success: false,message:"No user found"});
+    res.status(200).json({ success: false,message:"No Admin Found."});
 }
 }
 else{

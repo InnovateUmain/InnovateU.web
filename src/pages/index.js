@@ -53,7 +53,9 @@ const Index = () => {
 </Head>
   <div className="overflow-hidden scroll-smooth bg-[conic-gradient(at_bottom_right,_var(--tw-gradient-stops))] from-slate-900 via-purple-900 to-slate-900">
   <Hero1/>
+  <div >
   <About/>
+  </div>
   <div className="relative">
       <GetStarted />
       <div className="gradient-04 z-0" />

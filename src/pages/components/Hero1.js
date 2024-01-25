@@ -1,118 +1,114 @@
-import React from 'react';
-import Link from 'next/link';
-import { BsFillCalendarCheckFill} from 'react-icons/bs';
-import { RiTwitterXLine} from 'react-icons/ri';
-import { FaMapLocationDot,FaLinkedinIn,FaInstagram } from 'react-icons/fa6';
-import { motion } from 'framer-motion';
+import React from "react";
+import Link from "next/link";
+import { BsFillCalendarCheckFill } from "react-icons/bs";
+import { RiTwitterXLine } from "react-icons/ri";
+import { FaMapLocationDot, FaLinkedinIn, FaInstagram } from "react-icons/fa6";
+import { motion } from "framer-motion";
 const Hero1 = () => {
   return (
-    <div className='h-[100vh] w-[100vw] '>
-    <style jsx >
-{
-  `
-  @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap');
-  @import url('https://fonts.googleapis.com/css2?family=Lilita+One&display=swap');
-  .herofont{
-    font-family: 'Lilita One', sans-serif;
-  }
-  .dt{
-    font-family: 'Roboto', sans-serif;
-  }
-  @media screen and (max-width: 416px) {
-    .dt1{
-        font-family: 'Roboto', sans-serif;
-      font-size: 16px;
-    }
-  }
-  `
-}
-    </style>
-    <video src="https://res.cloudinary.com/dst73auvn/video/upload/v1701239275/home_bg_ccrlud.mp4" autoPlay muted loop className=' relative w-[100vw] h-[100vh] object-cover' style={{opacity:0.7}}></video>
-    <section className="pt-12 bg-none sm:pt-16 absolute top-14 w-[100vw] h-[80vh] flex justify-center items-center">
-      
-          <motion.div className="lg:px-8 "
-          initial={{opacity:0 ,x:-200}}
-          animate={{x:0,opacity:1}}
-          whileInView={{x:0,opacity:1}}
-          transition={{type:'spring',stiffness:50,when:'beforeChildren'}}
-          >
-            <div className=" mx-auto text-center ">
-              <h1 className="px-6 text-lg text-gray-200 herofont">
-                Welcome Innovators🧑‍💻
-              </h1>
-              <motion.div 
-              drag
-              dragConstraints={{left:0,right:4,top:4,bottom:4}}
-              >
-              <p className=" herofont hero-text font-bold  text-white sm:text-4xl lg:text-9xl leading-tight text-4xl md:text-6xl herofont my-2"
-            
-              >
-               Inspire. Educate. 
-                {/* <span className="bg-gradient-to-r from-[#44BCFF] via-[#FF44EC] to-[#FF675E] blur-lg filter opacity-30 w-full h-full absolute inset-0"></span> */}
-                <br /><span className="herofont text-purple-600">
-                  {" "}
-                  Empower{" "}
-                </span>
+    <div className="overflow-hidden flex justify-center">
+      <style jsx>
+        {`
+          @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap");
+          @import url("https://fonts.googleapis.com/css2?family=Lilita+One&display=swap");
+          .herofont {
+            font-family: "Lilita One", sans-serif;
+          }
+          .dt {
+            font-family: "Roboto", sans-serif;
+          }
+          @media screen and (max-width: 416px) {
+            .dt1 {
+              font-family: "Roboto", sans-serif;
+              font-size: 16px;
+            }
+          }
+        `}
+      </style>
+
+      <section className=" bg-opacity-30 py-24 lg:py-24 ">
+        <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+          <div className="grid items-center grid-cols-1 gap-12 lg:grid-cols-2">
+            <motion.div
+              initial={{ opacity: 0, x: -300 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ type: "spring", stiffness: 100 }}
+            >
+              <p className="text-base font-semibold tracking-wider text-yellow-400 uppercase navfont mx-4">
+                A Community for learners
               </p>
-              </motion.div>
-
-              <div className="px-8 sm:items-center sm:justify-center sm:px-0 sm:space-x-5 sm:flex mt-4 lg:w-[60vw] w-[100vw] text-white">
-                <div className='flex justify-center items-center  mx-2 my-2'>
-
-<p className='lg:text-2xl text-xl dt font-bold'>This is a community which provides <span className='text-yellow-600'>free hands-on training </span>in various fields of computer science and have an inclusive community focusing on a <span className='text-yellow-600'>learn by doing</span> approach.</p>
-                </div>
+              <h1 className="mt-4 text-4xl font-bold text-white lg:mt-8 sm:text-6xl xl:text-8xl navfont">
+                Connect &amp; learn from the experts
+              </h1>
+              <p className="mt-4 text-base text-white lg:mt-8 sm:text-xl">
+                Grow your career fast with right mentor.
+              </p>
+              <Link href={"/Signup"}>
+              <motion.button
+                 whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
                 
-                {/* <a
-                  href="#Devtools"
-                  title=""
-                  className="inline-flex  items-center justify-center w-full px-8 py-3 text-lg font-bold text-white transition-all duration-200 bg-purple-600 border-2 border-transparent sm:w-auto rounded-xl font-pj hover:bg-purple-950 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
-                  role="button"
-                >
-                  Explore More
-                </a> */}
-
-              </div>
-              <div className="px-8 sm:items-center sm:justify-center sm:px-0 sm:space-x-5 sm:flex mt-6">
-                <Link href={"/Event"}> <motion.button
-                
-                  className="inline-flex  items-center justify-center px-8 py-2 text-lg text-white transition-all duration-200 bg-purple-600 border-2 border-none sm:w-auto rounded-full  dt font-bold mx-2 my-2"
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 ,rotate:1}}
-                  transition={{ duration: 0.1 }}
-                >
-                  Events &gt;
-                </motion.button>
-                </Link>
-                <Link href={"/Signup"}>
-                <motion.button
-                
-                className="inline-flex  items-center justify-center px-8 py-2 text-lg text-white transition-all duration-200 bg-purple-600 border-2 border-none sm:w-auto rounded-full  dt font-bold mx-2 my-2"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 ,rotate:1}}
-                transition={{ duration: 0.1 }}
+                className="inline-flex items-center px-6 py-4 mt-8 font-semibold text-white transition-all duration-200 bg-purple-600 rounded-full lg:mt-16 hover:bg-purple-800 w-auto sm:w-auto md:w-auto lg:w-auto xl:w-auto "
+                role="button"
               >
-                Join &gt;
+                Join Now
+                <svg
+                  className="w-6 h-6 ml-8 -mr-2"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="1.5"
+                    d="M13 9l3 3m0 0l-3 3m3-3H8m13 0a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
               </motion.button>
               </Link>
-                <motion.button
-                
-                className="inline-flex  items-center justify-center px-8 py-2 text-lg  transition-all duration-200 bg-purple-600   dt font-bold mx-2 my-2 rounded-full text-white"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 ,rotate:1}}
-                transition={{ duration: 0.1 }}
+              <Link href={"/Event"}>
+              <motion.button
+                 whileHover={{ scale: 1.1 }}
+                 whileTap={{ scale: 0.9 }}
+                className="inline-flex items-center px-6 py-4 mt-8 font-semibold text-white transition-all duration-200 bg-purple-600 rounded-full lg:mt-16 hover:bg-purple-800  mx-4"
+                role="button"
               >
-                Courses &gt;
+                Events
+                <svg
+                  className="w-6 h-6 ml-8 -mr-2"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="1.5"
+                    d="M13 9l3 3m0 0l-3 3m3-3H8m13 0a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
               </motion.button>
-              </div>
-            
+              </Link>
+            </motion.div>
+
+            <div className="overflow-hidden">
+              <motion.img
+               initial={{ opacity: 0, x: 300 }}
+               animate={{ opacity: 1, x: 0 }}
+               transition={{ type: "spring", stiffness: 100 }}
+                className="w-full"
+                src="https://cdn.rareblocks.xyz/collection/celebration/images/hero/1/hero-img.png"
+                alt=""
+              />
             </div>
-          </motion.div>
-
-          <div className="pb-12 bg-none"></div>
-        </section>  
-      
+          </div>
+        </div>
+      </section>
     </div>
-  )
-}
+  );
+};
 
-export default Hero1
+export default Hero1;
