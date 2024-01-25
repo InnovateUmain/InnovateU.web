@@ -44,7 +44,7 @@ const Hero1 = () => {
               <p className="mt-4 text-base text-white lg:mt-8 sm:text-xl text-center lg:text-left md:text-left sm:text-left xl:text-left">
                 Grow your career fast with right mentor.
               </p>
-               <div className="flex flex-row items-center">
+               <div className="flex flex-row items-center justify-center lg:justify-start md:justify-start sm:justify-start xl:justify-start">
               <Link href={"/Signup"}>
               <motion.button
                  whileHover={{ scale: 1.1 }}
