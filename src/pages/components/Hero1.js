@@ -36,7 +36,7 @@ const Hero1 = () => {
             >
               
               <p className="text-base font-semibold tracking-wider text-yellow-400 uppercase navfont mx-4 text-center lg:text-left md:text-left sm:text-left">
-                A Community for learners
+                A Community for Innovators
               </p>
               <h1 className="mt-4 text-4xl font-bold text-white lg:mt-8 sm:text-6xl xl:text-8xl navfont text-center lg:text-left md:text-left sm:text-left">
                 Connect &amp; learn from the experts
