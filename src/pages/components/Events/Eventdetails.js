@@ -11,6 +11,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { addUserData } from "@/appstore/userData";
 import Error from "@/pages/Error";
+
 import Head from "next/head";
 import Link from "next/link";
 import {
@@ -21,6 +22,7 @@ import { useRouter } from "next/router";
 import "react-vertical-timeline-component/style.min.css";
 import BlogSkeleton from "../skeleton/BlogSkeleton";
 import { useSelector } from "react-redux";
+
 
 const Eventdetails = () => {
   const [event, setEvent] = useState([]);
@@ -40,7 +42,6 @@ const Eventdetails = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const userinfo = useSelector((state) => state.userData);
-
   //handle change function
   const handleChange = (e) => {
     if (e.target.name === "name") {
@@ -190,6 +191,7 @@ const Eventdetails = () => {
     }
   };
   const handleSubmit = async (e) => {
+    setLoading(true);
     const data = {
       name,
       email,
@@ -209,7 +211,7 @@ const Eventdetails = () => {
       },
       body: JSON.stringify(data),
     });
-
+    setLoading(false);
     const result = await res.json();
     if (result.success == true) {
       toast.success(result.message, { icon: "👏" });
@@ -776,7 +778,7 @@ const Eventdetails = () => {
           </div>
         </>
       )}
-      <Modal
+     {loading?<div className="flex justify-center items-center text-white navfont text-2xl">Loading....</div>:<><Modal
         open={open}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
@@ -989,7 +991,7 @@ const Eventdetails = () => {
             </div>
           </div>
         </Box>
-      </Modal>
+      </Modal></>}
       <Modal
   open={openoops}
   onClose={handlecloseoops}

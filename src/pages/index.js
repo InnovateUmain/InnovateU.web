@@ -72,6 +72,7 @@ const Index = () => {
   <Contact/>
   <Footer/>
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script src="https://unpkg.com/@zegocloud/zego-uikit-prebuilt/zego-uikit-prebuilt.js"></script>
   </div>
   </>
   )
