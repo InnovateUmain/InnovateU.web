@@ -213,6 +213,7 @@ const Eventdetails = () => {
     });
     setLoading(false);
     const result = await res.json();
+    console.log(result)
     if (result.success == true) {
       toast.success(result.message, { icon: "👏" });
 
@@ -227,7 +228,7 @@ const Eventdetails = () => {
           `/components/Events/Payment?orderid=${result.order.orderid}&&name=${result.event.eventname}&&amount=${result.event.eventregfee}&&id=${result.event._id}&&poster=${event.eventposter}`
         );
       }
-      if (result.order == null) {
+      if (result.orderid== null) {
         router.push(`/components/Events/Eventconf?id=${result.id}`);
       }
 

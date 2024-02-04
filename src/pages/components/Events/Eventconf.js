@@ -65,8 +65,10 @@ const getUser=async(token)=>{
 }
     const fetchEventDetails=async()=>{
       setLoading(true);
+      
         const userdata = { id,estatus:"getdata"};
-        console.log(userdata)
+
+        console.log("udat",userdata)
         const checkuser = await fetch(
           `${process.env.NEXT_PUBLIC_HOST}/api/eventr`,
           {
@@ -78,6 +80,7 @@ const getUser=async(token)=>{
           }
         );
         const userresult = await checkuser.json();
+        console.log(userresult)
         setLoading(false)
         if(userresult.data!=null){
             setEvent(userresult.data);

@@ -25,17 +25,15 @@ const handler = async (req, res) => {
   if (req.method === "POST") {
     //get user data for event (used in confirmation page)
     if (req.body.estatus == "getdata") {
-     
+     console.log(req.body.id);
       try {
         let a = await Revent.findById(req.body.id);
-        if(a.paymentstatus=="free"){
-          var img = await QRCode.toDataURL(a.eventgrplink);
-        }
-        else{
+        
           var img = await QRCode.toDataURL(a.ticketid);
-        }
+      
         res.status(200).json({ success: true, data: a, url: img });
       } catch (err) {
+        
         res
           .status(200)
           .json({ success: true, message: "something went wrong" + err });
@@ -3153,7 +3151,7 @@ const handler = async (req, res) => {
             let a = await eventr.save();
             var img1;
             if(a.paymentstatus=="free"){
-               var img = await QRCode.toDataURL(a.eventgrplink);
+               var img = await QRCode.toDataURL(a.ticketid);
                img1=img;
             }
             else{
