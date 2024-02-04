@@ -158,8 +158,8 @@ const handler = async (req, res) => {
             const info = await transporter.sendMail({
               from: '<support@InnovateU.com>', // sender address
               to: `${req.body.email}`, // list of receivers
-              subject: `🎉 Welcome to InnovateU! Your Account is Ready 🚀`, // Subject line
-              text: "Account Created Successfully", // plain text body
+              subject: `🎉 Successfully Registered for the event ${event.eventname}🚀`, // Subject line
+              text: "Event Registratation Confirmation", // plain text body
               html: `
               <body
     class="clean-body"
@@ -3166,8 +3166,8 @@ const handler = async (req, res) => {
             const info = await transporter.sendMail({
               from: '<support@InnovateU.com>', // sender address
               to: `${req.body.email}`, // list of receivers
-              subject: `🎉 Welcome to InnovateU! Your Account is Ready 🚀`, // Subject line
-              text: "Account Created Successfully", // plain text body
+              subject: `🎉 Successfully Registered for the event ${event.eventname}🚀`, // Subject line
+              text: "Event Registratation Confirmation", // plain text body
               html: `
               <body
     class="clean-body"
