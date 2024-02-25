@@ -39,10 +39,10 @@ const Hero1 = () => {
                 A Community for Innovators
               </p>
               <h1 className="mt-4 text-4xl font-bold text-white lg:mt-8 sm:text-6xl xl:text-8xl navfont text-center lg:text-left md:text-left sm:text-left">
-                Connect &amp; learn from the experts
+                Connect &amp; learn from experience
               </h1>
               <p className="mt-4 text-base text-white lg:mt-8 sm:text-xl text-center lg:text-left md:text-left sm:text-left xl:text-left">
-                Grow your career fast with right mentor.
+                Grow your knowledge fast with right Technology.
               </p>
                <div className="flex flex-row items-center justify-center lg:justify-start md:justify-start sm:justify-start xl:justify-start">
               <Link href={"/Signup"}>
@@ -53,7 +53,7 @@ const Hero1 = () => {
                 className="inline-flex items-center px-6 py-4 mt-8 font-semibold text-white transition-all duration-200 bg-purple-600 rounded-full lg:mt-16 hover:bg-purple-800 w-auto sm:w-auto md:w-auto lg:w-auto xl:w-auto "
                 role="button"
               >
-                Join Now
+                Join us
                 <svg
                   className="w-6 h-6 ml-8 -mr-2"
                   xmlns="http://www.w3.org/2000/svg"
@@ -78,7 +78,7 @@ const Hero1 = () => {
                 className="inline-flex items-center px-6 py-4 mt-8 font-semibold text-white transition-all duration-200 bg-purple-600 rounded-full lg:mt-16 hover:bg-purple-800  mx-4"
                 role="button"
               >
-                Events
+                Event lineup
                 <svg
                   className="w-6 h-6 ml-8 -mr-2"
                   xmlns="http://www.w3.org/2000/svg"
@@ -104,7 +104,7 @@ const Hero1 = () => {
                animate={{ opacity: 1, x: 0 }}
                transition={{ type: "spring", stiffness: 100 }}
                 className="w-full"
-                src="https://cdn.rareblocks.xyz/collection/celebration/images/hero/1/hero-img.png"
+                src="https://res.cloudinary.com/dst73auvn/image/upload/v1708706374/developer_male-removebg_kllxdi.png"
                 alt=""
               />
             </div>
