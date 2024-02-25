@@ -238,7 +238,7 @@ setOpen(true);
                      if(e.key === 'Enter'){
                          setResult(true);
                      }
-                 }} />
+                 }} autoFocus/>
                  
                  </div>
                  </motion.div>

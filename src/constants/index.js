@@ -54,31 +54,50 @@ export const newFeatures = [
 
 export const insights = [
   {
-    id: 1,
-    title: "What is DevFest?",
-    ans: "DevFest is an annual technology conference organized by the developer community. It brings together developers, designers, and tech enthusiasts to learn, share knowledge, and network."
-  },
-  {
-    id: 2,
-    title: "When and Where is DevFest happening this year?",
-    ans: "DevFest is scheduled to take place on [insert date] at [insert venue]. Check the official DevFest website for the most up-to-date information."
-  },
-  {
-    id: 3,
-    title: "How can I register for DevFest?",
-    ans: "You can register for DevFest on the official website. Look for the 'Register' or 'Get Tickets' button, and follow the registration process to secure your spot."
-  },
-  {
-    id: 4,
-    title: "Are there any prerequisites for attending DevFest?",
-    ans: "DevFest is open to anyone interested in technology. While some sessions may have specific prerequisites, most of the content is designed to be accessible to a broad audience. Check the session descriptions for any requirements."
-  },
-  {
-    id: 5,
-    title: "Is there a code of conduct for DevFest atendees?",
-    ans: "Yes, there is a code of conduct that all DevFest attendees are expected to follow. It includes guidelines for respectful behavior, inclusivity, and creating a positive conference experience for everyone. Familiarize yourself with the code of conduct before attending."
-  },
-  
+    "id": 1,
+    "title": "What is TechFest?",
+    "ans": "TechFest is an annual technology festival featuring various events and activities aimed at fostering innovation, learning, and networking within the tech community."
+},
+{
+    "id": 2,
+    "title": "When and where is TechFest happening this year?",
+    "ans": "TechFest is scheduled to take place on [insert date] at [insert venue]. Check the official TechFest website for the most up-to-date information."
+},
+{
+    "id": 3,
+    "title": "How can I register for TechFest?",
+    "ans": "You can register for TechFest on the official website. Look for the 'Register' or 'Get Tickets' button, and follow the registration process to secure your spot."
+},
+{
+    "id": 4,
+    "title": "Are there any prerequisites for attending TechFest?",
+    "ans": "TechFest is open to anyone interested in technology. While some events may have specific requirements, most of the content is designed to be accessible to a broad audience. Check the event descriptions for any prerequisites."
+},
+{
+    "id": 5,
+    "title": "Is there a code of conduct for TechFest attendees?",
+    "ans": "Yes, there is a code of conduct that all TechFest attendees are expected to follow. It includes guidelines for respectful behavior, inclusivity, and creating a positive festival experience for everyone. Familiarize yourself with the code of conduct before attending."
+},
+{
+    "id": 6,
+    "title": "What is the Hackathon at TechFest?",
+    "ans": "The Hackathon at TechFest is a marathon coding session where teams compete to develop innovative solutions to real-world challenges within a limited timeframe. From software applications to hardware prototypes, the Hackathon encourages creativity, collaboration, and problem-solving skills."
+},
+{
+    "id": 7,
+    "title": "When and where is the Hackathon?",
+    "ans": "The Hackathon is scheduled to take place on [insert date] at [insert venue]. Check the official TechFest website for more details."
+},
+{
+    "id": 8,
+    "title": "What is the Coding Competition at TechFest?",
+    "ans": "The Coding Competition at TechFest is an opportunity for individuals or teams to test their programming prowess by solving challenging problems and puzzles within a set time frame."
+},
+{
+    "id": 9,
+    "title": "When and where is the Coding Competition?",
+    "ans": "The Coding Competition is scheduled to take place on [insert date] at [insert venue]. Check the official TechFest website for more details."
+},
 ];
 
 export const socials = [

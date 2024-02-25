@@ -17,8 +17,8 @@ const AddEvent = () => {
   const [searcharray, setSearcharray] = useState([]);
   const [isSearch, setIsSearch] = useState(false);
   const [searchquery, setSearchquery] = useState("");
-  const [count, setCount] = useState(6);
   const [intialcount, setIntialcount] = useState(0);
+  const [count, setCount] = useState(6);
   const [open, setOpen] = useState(false);
   const [width,setWidth]= useState(0);
   const [name, setName] = useState("");

@@ -17,8 +17,7 @@ const MyTicket = () => {
     const [loading,setLoading] = useState(false);
     const fetchEventDetails=async(email)=>{
       setLoading(true);
-        const userdata = { email,estatus:"getdataviaemail"};
-        console.log(userdata)
+        const userdata = { email,estatus:"getdataviaemailticket"};
         const checkuser = await fetch(
           `${process.env.NEXT_PUBLIC_HOST}/api/eventr`,
           {
@@ -295,7 +294,7 @@ const MyTicket = () => {
     <div className="ticket-details">
     <QRCode
     className='scan'
-    value={item.paymentstatus=="free"?item.eventgrplink:item.ticketid}
+    value={item.ticketid}
     />
       <div className="ticket">
         <p>1-Ticket</p>
