@@ -47,7 +47,7 @@ const Testimonials = () => {
                     Saneev Kumar Das
                   </p>
                   <p className="text-xs text-gray-400">
-                    Professor | @CUTM 
+                    Asst.Professor | @CUTM 
                   </p>
                 </div>
               </div>

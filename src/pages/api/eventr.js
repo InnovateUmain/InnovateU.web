@@ -30,7 +30,6 @@ const handler = async (req, res) => {
         let a = await Revent.findById(req.body.id);
         
           var img = await QRCode.toDataURL(a.ticketid);
-      
         res.status(200).json({ success: true, data: a, url: img });
       } catch (err) {
         
@@ -40,21 +39,33 @@ const handler = async (req, res) => {
       }
       return;
     }
-    //get user data via email (used in myevent and my ticket section)
+    //get user data via email (used in myevent section)
     if (req.body.estatus == "getdataviaemail") {
       try {
         let a = await Revent.find({ email: req.body.email });
-        // var img = await QRCode.toDataURL(a.ticketid);
-        console.log(a);
-        res.status(200).json({ success: true, data: a, url: "hello iam bk" });
+        console.log("logged ");
+        res.status(200).json({ success: true, data: a, url:"this is url"});
       } catch (err) {
         res
-          .status(200)
-          .json({ success: true, message: "something went wrong" + err });
+          .status(404)
+          .json({ success: false, message: "something went wrong" + err });
       }
       return;
     }
-
+    //get user data via email (used in myTicket section)
+    if (req.body.estatus == "getdataviaemailticket") {
+      try {
+        let a = await Revent.find({ email: req.body.email ,eventstatus:"success"});
+        console.log("logged ");
+        res.status(200).json({ success: true, data: a});
+      } catch (err) {
+        res
+          .status(404)
+          .json({ success: false, message: "something went wrong" + err });
+      }
+      return;
+    }
+    //end
     if (req.body.estatus == "checkuser") {
       try {
         let a = await Revent.findOne({ email: req.body.email });
