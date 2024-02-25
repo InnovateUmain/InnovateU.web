@@ -45,7 +45,7 @@ const Hero1 = () => {
                 Grow your knowledge fast with right Technology.
               </p>
                <div className="flex flex-row items-center justify-center lg:justify-start md:justify-start sm:justify-start xl:justify-start">
-              <Link href={"/Signup"}>
+              {/* <Link href={"/Signup"}>
               <motion.button
                  whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
@@ -70,7 +70,7 @@ const Hero1 = () => {
                 </svg>
               </motion.button>
                 
-              </Link>
+              </Link> */}
               <Link href={"/Event"}>
               <motion.button
                  whileHover={{ scale: 1.1 }}
