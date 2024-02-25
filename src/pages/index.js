@@ -40,6 +40,9 @@ const Index = () => {
 
       getUser(data);
     }
+
+    console.log(process.env.NEXT_PUBLIC_HOST);
+    console.log(process.env.MONGO_URL);
   },[])
   const info = useSelector((state)=>state.userData)
   // console.log(info)
