@@ -30,7 +30,7 @@ const Testimonials = () => {
           <div className="flex flex-col  rounded-xl bg-slate-800">
             <div className="flex-auto p-4 md:p-6">
               <p className="text-base italic md:text-lg  text-gray-200">
-              The innovateU website is a collaborative oasis! The platform links developers all over the world with ease. Learning and sharing are enjoyable because of the encouraging group and the worthwhile projects I was able to participate in. 
+              As the Managing Director of InnovateU, fostering collaboration with our team of innovators and providing essential resources has been a gratifying endeavor. Witnessing our collective efforts transform an idea into a tangible reality fills me with immense pride and joy. Investing my knowledge and expertise into this community has been incredibly rewarding, knowing that we're empowering aspiring developers and fostering a culture of innovation. I'm thrilled to have played a part in bringing this vision to life and look forward to the continued success and impact of InnovateU.
               </p>
             </div>
             <div className="p-4  rounded-b-xl md:px-7 bg-slate-700">
@@ -60,7 +60,7 @@ const Testimonials = () => {
           <div className="flex flex-col rounded-xl bg-slate-800">
             <div className="flex-auto p-4 md:p-6">
               <p className="text-base italic md:text-lg text-gray-200">
-              Excellent work on the open-source community webpage! There are a ton of projects and prospects for collaboration there. Both novice and seasoned developers are encouraged to participate and progress together by the friendly environment and diversified community. 
+              Founding and nurturing an open-source community has been an incredibly rewarding journey. Collaborating with the talented team at InnovateU was instrumental in bringing our vision to life. Together, we've created a dynamic platform that empowers new developers with hands-on projects and exposure to cutting-edge technologies. The experience has been nothing short of phenomenal, and I'm excited to see how our community continues to flourish and inspire the next generation of software developers.
               </p>
             </div>
             <div className="p-4  rounded-b-xl md:px-7 bg-slate-700">
@@ -87,10 +87,10 @@ const Testimonials = () => {
         {/* End Card */}
         {/* Card */}
         <div className="flex h-auto">
-          <div className="flex flex-col  rounded-xl bg-slate-900">
+          <div className="flex flex-col  rounded-xl bg-slate-800">
             <div className="flex-auto p-4 md:p-6">
               <p className="text-base italic md:text-lg text-gray-200">
-              For me, finding this open-source community website was pivotal. The projects span a wide range of interests, and the collaborative spirit is contagious. This platform offers an ideal environment for learning and contributing, regardless of your level of experience.
+              As the Development Head at InnovateU, leading the creation of our open-source community platform has been an exciting journey. Collaborating with our dynamic team, we've not only built a platform but also fostered an environment where new developers can thrive. It's been fulfilling to work with passionate individuals who empower others in software development, inspiring the next generation of innovators. I'm proud of what we've achieved and eager to see our community's continued growth and impact.
               </p>
             </div>
             <div className="p-4  rounded-b-xl md:px-7 bg-slate-700">

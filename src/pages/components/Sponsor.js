@@ -65,13 +65,13 @@ export default function CarouselLogo() {
                 className="m-auto h-20 max-h-full w-auto max-w-full"
               />
             </li>
-            {/* <li>
+            <li>
               <img
-                src="https://Tailwindmix.b-cdn.net/carousel/logos/carousel-logo-image-5.svg"
+                src="https://res.cloudinary.com/dst73auvn/image/upload/v1708926623/ieee_fgsw6d.png"
                 className="m-auto h-20 max-h-full w-auto max-w-full"
               />
             </li>
-            <li>
+            {/* <li>
               <img
                 src="https://Tailwindmix.b-cdn.net/carousel/logos/carousel-logo-image-6.svg"
                 className="m-auto h-20 max-h-full w-auto max-w-full"
