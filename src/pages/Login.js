@@ -106,7 +106,7 @@ if(localStorage.getItem('innovateUuser')){
         <video src="https://res.cloudinary.com/dst73auvn/video/upload/v1701241450/Login_bg_p8pvqt.mp4" className='w-[100vw] h-[100vh] object-cover' autoPlay muted loop></video>
         
      {!loading?<motion.section className='absolute top-36' drag dragConstraints={{left:0,right:6,top:4,bottom:4}}>
-     <div className="flex flex-col md:w-[50vw] md:h-auto bg-gray-900 text-gray-200 font-mono lg:w-[60vw] lg:h-auto sm:w-[90vw] sm:h-auto w-[90vw] h-auto">
+     <div className="flex flex-col md:w-[50vw] md:h-auto bg-gray-900 text-gray-200 font-mono lg:w-[60vw] lg:h-auto sm:w-[90vw] sm:h-auto w-[90vw] h-auto ">
      <form >
     <div className="flex items-center h-10 px-4 bg-gray-800">
         <div className="h-3 w-3 mr-2 rounded-full bg-red-500"></div>
@@ -114,7 +114,7 @@ if(localStorage.getItem('innovateUuser')){
         <div className="h-3 w-3 rounded-full bg-green-500"></div>
     </div>
 
-    <div className="flex-1 p-4">
+    <div className="flex-1 p-4 ">
         
         <h1 className='my-2 mx-2'>{text}</h1>
       
@@ -132,7 +132,7 @@ if(localStorage.getItem('innovateUuser')){
              </motion.div>
             {emailt&&
             <motion.div initial={{opacity:0}} animate={{opacity:1}} transition={{duration:1}}>
-            <div className='flex my-2'>
+            <div className='flex my-2 '>
 <BsCheck2Circle className='text-green-600 text-2xl'/>
 <h1 className='text-green-600 mx-2'>{email}</h1>
             </div>
@@ -171,8 +171,11 @@ if(localStorage.getItem('innovateUuser')){
     </form>
 </div>
 
-<h1 className='text-center my-4'>Not an account ?<Link href={"/Signup"} className='text-green-400'> Create a new account !</Link>
-<Link href={"/forgot"} className='text-purple-500'> Forgot Your Password</Link></h1>
+<h1 className=' my-4 flex justify-center items-center flex-wrap'>Not an account ? <Link href={"/Signup"} className='text-green-400 mx-2'> Create a new account !</Link>
+</h1>
+<h1 className='text-center'>
+<Link href={"/forgot"} className='text-green-500 mx-2'> Forgot Your Password</Link>
+</h1>
      </motion.section>:<Spinner/>}
     
   </div>
