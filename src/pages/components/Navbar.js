@@ -17,6 +17,7 @@ import { IoTicket } from "react-icons/io5";
 import { BsCalendar2EventFill } from "react-icons/bs";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
+import { set } from "mongoose";
 const Navbar = ({logout,user}) => {
   const router = useRouter();
   const userinfo = useSelector((state)=>state.userData);
@@ -28,6 +29,7 @@ const Navbar = ({logout,user}) => {
   const [data4, setData4] = useState(false);
   const [data5, setData5] = useState(false);
   const [data6, setData6] = useState(false);
+  const [data7, setData7] = useState(false);
   const [dropdown,setDropdown]=useState(false);
   const [scrolling, setScrolling] = useState(false);
   const [name,setName]= useState("IN");
@@ -99,15 +101,16 @@ const Navbar = ({logout,user}) => {
       <nav
         className={`fixed top-0 z-50 w-[100vw] h-20 flex justify-center items-center rounded ${
           scrolling ? "backdrop-blur-xl" : ""
-        }`}
+        
+        } ${isOpen == true ? "bg-black bg-opacity-80 backdrop-filter backdrop-blur-xl" : ""} `}
         id="navbar"
       >
         <div className="container px-6 py-4 mx-auto ">
           <div className="lg:flex lg:items-center lg:justify-between">
             <motion.div
               className="flex items-center justify-between"
-              initial={{ opacity: 0, x: -100 }}
-              animate={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: -100 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ type: "spring", stiffness: 100 }}
             >
               <Link href={"/"}>
@@ -176,13 +179,12 @@ const Navbar = ({logout,user}) => {
                 </button>
               </div>
             </motion.div>
-
-            <div
+<div
               className={` ${
                 isOpen == true
-                  ? "translate-x-0 opacity-100 border2"
-                  : "opacity-0 -translate-x-full"
-              } absolute inset-x-0 z-20 w-full px-6 py-4 transition-all duration-300 ease-in-out bg-gray-800 lg:mt-0 lg:p-0 lg:top-0 lg:relative lg:bg-transparent lg:w-auto lg:opacity-100 lg:translate-x-0 lg:flex lg:items-center`}
+                  ? "translate-x-0 opacity-100 border2 border2 w-full h-[100vh] bg-opacity-80 backdrop-filter backdrop-blur-xl"
+                  : "opacity-0 translate-x-full"
+              } absolute inset-x-0 z-20 w-full px-6 py-4 transition-all duration-300 ease-in-out bg-black lg:mt-0 lg:p-0 lg:top-0 lg:relative lg:bg-transparent lg:w-auto lg:opacity-100 lg:translate-x-0 lg:flex lg:items-center`}
             >
               <motion.div
                 className="flex flex-col -mx-6 lg:flex-row lg:items-center lg:mx-8"
@@ -192,7 +194,9 @@ const Navbar = ({logout,user}) => {
               >
                 <Link href={"/#about"}>
                   <motion.li
-                    className=" list-none px-3 py-2 mx-3 mt-2  transition-colors duration-300 transform rounded-md lg:mt-0 text-white  navfont "
+                    className=" list-none px-3 py-2 mx-3 mt-2  transition-colors duration-300 transform rounded-md lg:mt-0 text-white  navfont 
+                    text-lg lg:text-base md:text-base sm:text-lg
+                    "
                     whileTap={{ scale: 0.9, rotate: 1 }}
                     transition={{ type: "spring", stiffness: 400 }}
                     onMouseEnter={() => {
@@ -201,6 +205,7 @@ const Navbar = ({logout,user}) => {
                     onMouseLeave={() => {
                       setData2(false);
                     }}
+                    onClick={() =>setIsOpen(false)}
                   >
                     About
                     {data2 && (
@@ -215,7 +220,8 @@ const Navbar = ({logout,user}) => {
                   </Link>
                   <Link href="/Event">
                   <motion.li
-                    className=" list-none px-3 py-2 mx-3 mt-2  transition-colors duration-300 transform rounded-md lg:mt-0 text-white  navfont "
+                    className=" list-none px-3 py-2 mx-3 mt-2  transition-colors duration-300 transform rounded-md lg:mt-0 text-white  navfont 
+                    text-lg lg:text-base md:text-base sm:text-lg"
                     whileTap={{ scale: 0.9, rotate: 1 }}
                     transition={{ type: "spring", stiffness: 400 }}
                     onMouseEnter={() => {
@@ -224,6 +230,7 @@ const Navbar = ({logout,user}) => {
                     onMouseLeave={() => {
                       setData6(false);
                     }}
+                    onClick={() =>setIsOpen(false)}
                   >
                    Events
                     {data6 && (
@@ -232,13 +239,14 @@ const Navbar = ({logout,user}) => {
                         initial={{ width: 0, opacity: 0 }}
                         animate={{ width: 30, opacity: 1 }}
                         transition={{ type: "spring", stiffness: 250 }}
+                        onClick={() =>setIsOpen(false)}
                       ></motion.div>
                     )}
                   </motion.li>
                   </Link>
                 <Link href={"/components/Speaker"}>
                   <motion.li
-                    className="list-none px-3 py-2 mx-3 mt-2 transition-colors duration-300 transform rounded-md lg:mt-0 text-white  navfont"
+                    className="list-none px-3 py-2 mx-3 mt-2 transition-colors duration-300 transform rounded-md lg:mt-0 text-white  navfont text-lg lg:text-base md:text-base sm:text-lg"
                     whileTap={{ scale: 0.9, rotate: 1 }}
                     transition={{ type: "spring", stiffness: 400 }}
                     onMouseEnter={() => {
@@ -247,6 +255,7 @@ const Navbar = ({logout,user}) => {
                     onMouseLeave={() => {
                       setData1(false);
                     }}
+                    onClick={() =>setIsOpen(false)}
                   >
                   Our Speakers
                    
@@ -263,7 +272,9 @@ const Navbar = ({logout,user}) => {
 
                 <Link href={"/Team"}>
                   <motion.li
-                    className="px-3 py-2 mx-3 mt-2  transition-colors duration-300 transform rounded-md lg:mt-0 text-white navfont list-none "
+                    className="px-3 py-2 mx-3 mt-2  transition-colors duration-300 transform rounded-md lg:mt-0 text-white navfont list-none 
+                    text-lg lg:text-base md:text-base sm:text-lg
+                    "
                     whileTap={{ scale: 0.9, rotate: 1 }}
                     transition={{ type: "spring", stiffness: 400 }}
                     onMouseEnter={() => {
@@ -272,6 +283,7 @@ const Navbar = ({logout,user}) => {
                     onMouseLeave={() => {
                       setData3(false);
                     }}
+                    onClick={() =>setIsOpen(false)}
                   >
                     Teams
                     {data3 && (
@@ -286,7 +298,9 @@ const Navbar = ({logout,user}) => {
                 </Link>
                <Link  href={"/#newsroom"}>
                   <motion.li
-                    className="px-3 py-2 mx-3 mt-2  transition-colors duration-300 transform rounded-md lg:mt-0 text-white  navfont list-none"
+                    className="px-3 py-2 mx-3 mt-2  transition-colors duration-300 transform rounded-md lg:mt-0 text-white  navfont list-none
+                    text-lg lg:text-base md:text-base sm:text-lg
+                    "
                     whileTap={{ scale: 0.9, rotate: 1 }}
                     transition={{ type: "spring", stiffness: 400 }}
                     onMouseEnter={() => {
@@ -295,6 +309,7 @@ const Navbar = ({logout,user}) => {
                     onMouseLeave={() => {
                       setData4(false);
                     }}
+                    onClick={() =>setIsOpen(false)}
                   >
                     News Room
                     {data4 && (
@@ -309,7 +324,9 @@ const Navbar = ({logout,user}) => {
                   </Link>
                 <Link href={"/#sponsor"}>
                   <motion.li
-                    className="px-3 py-2 mx-3 mt-2  transition-colors duration-300 transform rounded-md lg:mt-0 text-white navfont list-none"
+                    className="px-3 py-2 mx-3 mt-2  transition-colors duration-300 transform rounded-md lg:mt-0 text-white navfont list-none
+                    text-lg lg:text-base md:text-base sm:text-lg
+                    "
                     whileTap={{ scale: 0.9, rotate: 1 }}
                     transition={{ type: "spring", stiffness: 400 }}
                     onMouseEnter={() => {
@@ -318,6 +335,8 @@ const Navbar = ({logout,user}) => {
                     onMouseLeave={() => {
                       setData5(false);
                     }}
+                    onClick={() =>setIsOpen(false)}
+                  
                   >
                     Sponsors
                     {data5 && (
@@ -329,11 +348,40 @@ const Navbar = ({logout,user}) => {
                       ></motion.div>
                     )}
                   </motion.li>
+                  
+                </Link>
+                <Link href={"/Signup"}>
+                  <motion.li
+                    className="px-3 py-2 mx-3 mt-2  transition-colors duration-300 transform rounded-md lg:mt-0 text-white navfont list-none
+                    text-lg lg:text-base md:text-base sm:text-lg block lg:hidden
+                    "
+                    whileTap={{ scale: 0.9, rotate: 1 }}
+                    transition={{ type: "spring", stiffness: 400 }}
+                    onMouseEnter={() => {
+                      setData7(true);
+                    }}
+                    onMouseLeave={() => {
+                      setData7(false);
+                    }}
+                    onClick={() =>setIsOpen(false)}
+                  
+                  >
+                    Join Now
+                    {data7 && (
+                      <motion.div
+                        className="h-1 bg-purple-600 rounded-full "
+                        initial={{ width: 0, opacity: 0 }}
+                        animate={{ width: 20, opacity: 1 }}
+                        transition={{ type: "spring", stiffness: 250 }}
+                      ></motion.div>
+                    )}
+                  </motion.li>
+                  
                 </Link>
               </motion.div>
 
                 {!user&&<Link href={"/Signup"} className="mx-4">
-                  <motion.button className=" rounded-full bg-purple-600 px-6 py-2 navfont text-white lg:text-xl md:text-xl" whileTap={{scale:0.8}}>
+                  <motion.button className=" rounded-full bg-purple-600 px-6 py-2 navfont text-white lg:text-xl md:text-xl hidden lg:block" whileTap={{scale:0.8}}>
                     Join &gt;
                   </motion.button>{" "}
                 </Link>}

@@ -44,13 +44,13 @@ const Hero1 = () => {
               <p className="mt-4 text-base text-white lg:mt-8 sm:text-xl text-center lg:text-left md:text-left sm:text-left xl:text-left">
                 Grow your knowledge fast with right Technology.
               </p>
-               <div className="flex flex-row items-center justify-center lg:justify-start md:justify-start sm:justify-start xl:justify-start">
-              {/* <Link href={"/Signup"}>
+               <div className="flex flex-row items-center justify-center lg:justify-start md:justify-start sm:justify-start xl:justify-start flex-wrap">
+              <Link href={"/Signup"}>
               <motion.button
                  whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
                 
-                className="inline-flex items-center px-6 py-4 mt-8 font-semibold text-white transition-all duration-200 bg-purple-600 rounded-full lg:mt-16 hover:bg-purple-800 w-auto sm:w-auto md:w-auto lg:w-auto xl:w-auto "
+                className="inline-flex items-center px-6 py-4 mt-8 font-semibold text-white transition-all duration-200 bg-purple-600 rounded-full lg:mt-16 hover:bg-purple-800 w-auto sm:w-auto md:w-auto lg:w-auto xl:w-auto s"
                 role="button"
               >
                 Join us
@@ -70,7 +70,7 @@ const Hero1 = () => {
                 </svg>
               </motion.button>
                 
-              </Link> */}
+              </Link>
               <Link href={"/Event"}>
               <motion.button
                  whileHover={{ scale: 1.1 }}
@@ -78,7 +78,7 @@ const Hero1 = () => {
                 className="inline-flex items-center px-6 py-4 mt-8 font-semibold text-white transition-all duration-200 bg-purple-600 rounded-full lg:mt-16 hover:bg-purple-800  mx-4"
                 role="button"
               >
-                Event lineup
+                Events
                 <svg
                   className="w-6 h-6 ml-8 -mr-2"
                   xmlns="http://www.w3.org/2000/svg"

@@ -5,7 +5,6 @@ import User from "../../../models/User";
 const handler = async (req, res) => {
 if(req.method=="POST"){
     let user = await User.findOne({email:req.body.email});
-    console.log(user);
     
     if(user){
         const bytes  = CryptoJS.AES.decrypt(user.password, process.env.AES_SECRET);

@@ -171,7 +171,8 @@ if(localStorage.getItem('innovateUuser')){
     </form>
 </div>
 
-<h1 className='text-center my-4'>Not an account ?<Link href={"/Signup"} className='text-green-400'> Create a new account !</Link></h1>
+<h1 className='text-center my-4'>Not an account ?<Link href={"/Signup"} className='text-green-400'> Create a new account !</Link>
+<Link href={"/forgot"} className='text-purple-500'> Forgot Your Password</Link></h1>
      </motion.section>:<Spinner/>}
     
   </div>
