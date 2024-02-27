@@ -239,7 +239,7 @@ const Footer = () => {
       </div>
     </div>
     <p className="text-xs text-white">
-      © 2023. InnovateU.Org. All rights reserved.
+      © 2024. InnovateU.Org. All rights reserved.
     </p>
   </div>
 </footer>
