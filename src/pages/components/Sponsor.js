@@ -32,7 +32,7 @@ export default function CarouselLogo() {
 
   return (
     <>
-    <div className='mx-6 flex justify-center items-center flex-col '>
+    <div className='mx-6 flex justify-center items-center flex-col ' id ="sponsor">
         <h1 className='fontsponsor font-bold lg:text-5xl md:text-4xl text-4xl my-20 text-white'>InnovateU Partners</h1>
         {/* <div className='h-2 w-56 bg-purple-600 rounded-full'></div> */}
       </div>

@@ -69,7 +69,8 @@ const About = () => {
           }}
         >
           <a
-            href="#"
+            href="https://www.youtube.com/channel/UCJ13NQ5oEh149Yt7gKvCC2Q"
+            target="_blank"
             className="inline-flex items-center py-2 px-4 bg-red-500 hover:bg-red-600 focus:ring-2 focus:ring-red-500 focus:ring-offset-2 text-white rounded-md transition duration-300"
           >
             <svg className="w-8 h-8 fill-current mr-2" viewBox="0 0 24 24">
@@ -82,7 +83,7 @@ const About = () => {
 
           <div className="button-before"></div>
         </motion.button>
-
+<a href="https://www.linkedin.com/company/innovateu-organization/" target="_blank">
         <motion.button
           className="relative rounded-md border-2 font-medium  bg-white py-2 px-5  text-blue-600 transition-colors hover:text-black flex justify-center items-center"
           whileHover={{
@@ -102,6 +103,8 @@ const About = () => {
           <span className="font-bold text-[18px] mx-2">Linkedin</span>
           <div className="button-before"></div>
         </motion.button>
+        </a>
+        <a href="https://discord.gg/fjEJGVd5" target="_blank">
         <motion.button
           className="relative rounded-md border-2 font-medium border-purple-600 bg-white py-2 px-5  text-purple-600 transition-colors hover:text-black flex justify-center items-center"
           whileHover={{
@@ -112,6 +115,7 @@ const About = () => {
           <span className="font-bold text-[18px]">Discord</span>
           <div className="button-before"></div>
         </motion.button>
+        </a>
       </div>
     </section>
   );

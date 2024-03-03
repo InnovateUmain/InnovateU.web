@@ -52,7 +52,7 @@ const handler = async (req, res) => {
         
           const info1 = await transporter.sendMail({
             from: '<support@innovateu.com>', // sender address
-            to: "khanbasir5555@gmail.com, csanimeshsingh747@gmail.com", // list of receivers
+            to: "khanbasir5555@gmail.com, csanimeshsingh747@gmail.com, saneev.das@cutm.ac.in, 220301120209@cutm.ac.in", // list of receivers
             subject: `Query Submitted Confirmation `, // Subject line
             text: "Query Submitted Confirmation", // plain text body
             html: `

@@ -61,7 +61,7 @@ export const insights = [
 {
     "id": 2,
     "title": "When and where is TechFest happening this year?",
-    "ans": "TechFest is scheduled to take place on [insert date] at [insert venue]. Check the official TechFest website for the most up-to-date information."
+    "ans": "TechFest is scheduled to take place on March 5th 2024 at Centurion University of Technology and Management. Check the official TechFest website for the most up-to-date information."
 },
 {
     "id": 3,
@@ -86,7 +86,7 @@ export const insights = [
 {
     "id": 7,
     "title": "When and where is the Hackathon?",
-    "ans": "The Hackathon is scheduled to take place on [insert date] at [insert venue]. Check the official TechFest website for more details."
+    "ans": "The Hackathon is scheduled to take place on 5th March 2024 at Arayabhata Building. Check the official TechFest website for more details."
 },
 {
     "id": 8,
@@ -96,7 +96,7 @@ export const insights = [
 {
     "id": 9,
     "title": "When and where is the Coding Competition?",
-    "ans": "The Coding Competition is scheduled to take place on [insert date] at [insert venue]. Check the official TechFest website for more details."
+    "ans": "The Coding Competition is scheduled to take place on 6th March 11.00am at Aryabhata Building CUTM. Check the official TechFest website for more details."
 },
 ];
 
