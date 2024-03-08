@@ -4,6 +4,7 @@ var jwt = require('jsonwebtoken');
 var CryptoJS = require("crypto-js");
 const nodemailer = require("nodemailer");
 const handler = async (req, res) => {
+    var quickemailverification = require('quickemailverification').client(process.env.EMAIL_VERIFY_API).quickemailverification();
     const transporter = await nodemailer.createTransport({
         host: "smtp-relay.brevo.com",
         port: 587,
@@ -26,6 +27,30 @@ else if(muser.length>0){
     console.log(muser);
 }
 else{
+    // Email verification
+    async function verifyEmail(email) {
+        return new Promise((resolve, reject) => {
+            quickemailverification.verify(email, function (err, response) {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(response);
+                }
+            });
+        });
+    }
+    
+    try {
+        const response = await verifyEmail(req.body.email);
+        if (response.body.result === 'invalid') {
+            res.status(400).json({ success: false, message: "This email is invalid ! Please try again with a valid email address." });
+            return;
+        }
+    } catch (error) {
+        console.error("Email verification error:", error);
+        res.status(500).json({ success: false, message: "Internal server error" });
+    }
+// Email verification ends here
     let user = new Admin({
         name:req.body.name,
         email:req.body.email,

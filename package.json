@@ -31,6 +31,7 @@
     "nodemailer": "^6.9.7",
     "preline": "^2.0.2",
     "qrcode": "^1.5.3",
+    "quickemailverification": "^1.0.3",
     "razorpay": "^2.9.2",
     "react": "^18",
     "react-apexcharts": "^1.4.1",

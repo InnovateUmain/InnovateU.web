@@ -3378,6 +3378,13 @@ queue-microtask@^1.2.2:
   resolved "https://registry.npmjs.org/queue-microtask/-/queue-microtask-1.2.3.tgz"
   integrity sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==
 
+quickemailverification@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.npmjs.org/quickemailverification/-/quickemailverification-1.0.3.tgz"
+  integrity sha512-tHuFZ8Qbw2JlWGQzL8NSYAmLPvsuD0A35CPqMG9hBdbphMFDLetwimtY3JL4L2En9p1KmTDAZbYTH1PjL9a9Ew==
+  dependencies:
+    request "2.x.x"
+
 raf@^3.4.1:
   version "3.4.1"
   resolved "https://registry.npmjs.org/raf/-/raf-3.4.1.tgz"
@@ -3652,7 +3659,7 @@ request-promise@^4.2.6:
     stealthy-require "^1.1.1"
     tough-cookie "^2.3.3"
 
-request@^2.34, request@^2.88.0:
+request@^2.34, request@^2.88.0, request@2.x.x:
   version "2.88.2"
   resolved "https://registry.npmjs.org/request/-/request-2.88.2.tgz"
   integrity sha512-MsvtOrfG9ZcrOwAW+Qi+F6HbD0CWXEh9ou77uOb7FM2WPhwT7smM833PzanhJLsgXjN89Ir6V2PczXNnMpwKhw==
