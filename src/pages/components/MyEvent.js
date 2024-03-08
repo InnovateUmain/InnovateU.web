@@ -153,7 +153,7 @@ const MyEvent = () => {
         </div>
         
         <h1 className="lg:text-4xl md:text-4xl sm:text-2xl font-semibold text-gray-800 mb-4 font text-2xl">OOPS ! 🤭🤭🤭</h1>
-        <p className="text-lg text-gray-600 mb-4 font"> You have not register for any event.</p>
+        <p className="text-lg text-gray-600 mb-4 font"> You do not have register for any event.</p>
         <p className="text-lg text-gray-600 mb-2 font">If you wish to see your event please register for an event. .</p>
         <Link href="/Event" className="bg-blue-600 hover:bg-blue-800 text-white font-semibold py-2 px-4 rounded-full inline-block mx-2 my-4 ">Register for an Event </Link>
         <br/>
