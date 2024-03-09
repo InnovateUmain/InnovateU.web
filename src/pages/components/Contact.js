@@ -18,6 +18,7 @@ const Contact = () => {
         }
     }
 const handleSubmit=async()=>{
+    const regex = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
 if(name.length<3){
     toast.error('Name must be atleast 3 characters long')
 }
@@ -26,6 +27,12 @@ else if(email.includes('@')==false||email.includes('.')==false){
 }
 else if(message.length<10){
     toast.error('Message must be atleast 10 characters long')
+}
+else if(regex.test(name)){
+    toast.error('Name must contain only alphabets and numbers')
+}
+else if(regex.test(message)){
+    toast.error('Message must contain only alphabets and numbers')
 }
 else{
     setLoading(true)
@@ -44,10 +51,10 @@ else{
             setEmail('')
             setMessage('')
 
-            toast.success('Message sent successfully')
+            toast.success('Message sent successfully . We will get back to you soon.')
         }
         else{
-            toast.error('Something went wrong')
+            toast.error(`${response.message}`);
         }
 }
 }
