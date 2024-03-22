@@ -322,7 +322,7 @@ const Navbar = ({logout,user}) => {
                     )}
                   </motion.li>
                   </Link>
-                <Link href={"/#sponsor"}>
+                <Link href={"/CodeCraft"}>
                   <motion.li
                     className="px-3 py-2 mx-3 mt-2  transition-colors duration-300 transform rounded-md lg:mt-0 text-white navfont list-none
                     text-lg lg:text-base md:text-base sm:text-lg
@@ -338,7 +338,7 @@ const Navbar = ({logout,user}) => {
                     onClick={() =>setIsOpen(false)}
                   
                   >
-                    Sponsors
+                    Tests
                     {data5 && (
                       <motion.div
                         className="h-1 bg-purple-600 rounded-full "

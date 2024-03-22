@@ -41,12 +41,12 @@ export default function CarouselLogo() {
         {/* <!-- Slides --> */}
         <div data-glide-el="track">
           <ul className="whitespace-no-wrap flex-no-wrap [backface-visibility: hidden] [transform-style: preserve-3d] [touch-action: pan-Y] [will-change: transform] relative flex w-full overflow-hidden p-0">
-            <li>
+            {/* <li>
               <img
                 src="https://res.cloudinary.com/dst73auvn/image/upload/v1708706777/cutm_fx3suh.png"
                 className="m-auto h-20 max-h-full w-auto max-w-full"
               />
-            </li>
+            </li> */}
             <li>
               <img
                 src="https://res.cloudinary.com/dst73auvn/image/upload/v1708706562/GeeksforGeekslogo_xeopue.png"
