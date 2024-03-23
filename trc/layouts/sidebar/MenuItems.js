@@ -41,9 +41,9 @@ const Menuitems = [
     href: "/admin/AdminTest",
   },
   {
-    title: "Faqs",
-    icon: "help-circle",
-    href: "/admin",
+    title: "Test Results",
+    icon: "code",
+    href: "/admin/TestResult",
   },
   {
     title: "Reviews",

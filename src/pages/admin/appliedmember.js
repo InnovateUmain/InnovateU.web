@@ -8,7 +8,7 @@ import { IoMdCloseCircle } from "react-icons/io";
 import toast,{Toaster} from "react-hot-toast";
 const excel = require("exceljs");
 import { saveAs } from 'file-saver'
-import { set } from "mongoose";
+
 import Head from "next/head";
 const Appliedmember = () => {
   //all state
@@ -187,7 +187,7 @@ const Appliedmember = () => {
     fetchevent();
   }, []);
   //search;
-  console.log(tabledata);
+
   const handleSearch = async () => {
     console.log(eventname, eventdate, eventstatus, eventtype);
     if(eventname==""&&eventdate==""&&eventstatus==""&&eventtype==""){

@@ -10,7 +10,9 @@ import { useDispatch } from "react-redux";
 import { addUserData } from "@/appstore/userData";
 import { IoMdCloseCircle } from "react-icons/io";
 import { useRouter } from 'next/router';
+import toast, { Toaster } from "react-hot-toast";
 import BlogSkeleton from './components/skeleton/BlogSkeleton';
+import { set } from 'mongoose';
 const CodeCraft = () => {
   const [timeUp , setTimeUp] = useState(false);
   const dispatch = useDispatch();
@@ -59,8 +61,6 @@ const CodeCraft = () => {
     setClg(userinfo.clg);
     setLinkedin(userinfo.linkedin);
     setGithub(userinfo.github);
-    setTitle(userinfo.title);
-    setImage(userinfo.img);
     }
    else{
   handleOpenoops();
@@ -78,8 +78,7 @@ const CodeCraft = () => {
   const [clg, setClg] = useState("");
   const [linkedin, setLinkedin] = useState("");
   const [github, setGithub] = useState("");
-  const [title, setTitle] = useState("");
-  const [img, setImage] = useState("");
+  const [testid, setTestid] = useState("");
   const router = useRouter();
   let targetDate;
       useEffect(()=>{
@@ -101,6 +100,7 @@ const CodeCraft = () => {
           if(data.tests.length!=0){
             targetDate = new Date(data.tests[0].testdate).getTime();
             setTestname(data.tests[0].testname);
+            setTestid(data.tests[0]._id);
           }
           setTests(data.tests);
           setLoading(false);
@@ -133,9 +133,7 @@ const CodeCraft = () => {
           setLinkedin(e.target.value);
         } else if (e.target.name === "github") {
           setGithub(e.target.value);
-        } else if (e.target.name === "title") {
-          setTitle(e.target.value);
-        }
+        } 
       };
       //end here
   const [countDownTime, setCountDownTime] = useState({
@@ -195,11 +193,36 @@ const CodeCraft = () => {
     startCountDown();
     return () => clearInterval(timerInterval); // Cleanup the interval on unmount
   }, [startCountDown]);
+  //test registration related operations starts here
+  const handleSubmit = async (e) => {
+    setLoading(true);
+    const data ={name,email,phone,clg,github,linkedin,testid,testname,status:"reg"};
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_HOST}/api/Test/testreg`,
+      {
+        method: "POST", // or 'PUT'
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }
+    );
+    const result = await res.json();
+    setLoading(false);
+    if(result.success){
+      toast.success(result.message);
+      handleCloseEnroll();
+    }
+    else{
+      toast.error(result.message);
+    }
+  }
   return (
     <div className='min-h-screen text-white  bg-[conic-gradient(at_bottom_right,_var(--tw-gradient-stops))] from-slate-900 via-purple-900 to-slate-900'>
       <Head>
         <title>{tests.length!=0?tests[0].testname:"Tests Section"}</title>
       </Head>
+      <Toaster position="top-center" reverseOrder={false} />
       {loading?<div className='mt-20'><BlogSkeleton/></div>:<>
       {tests.length!=0&&<>
       <div className='mt-20'>
@@ -309,6 +332,9 @@ const CodeCraft = () => {
           {timeUp&&<button
             className="inline-flex items-center lg:px-8 md:px-8 px-4 py-4 lg:text-lg text-md font-bold text-white transition-all duration-200 bg-green-600 border border-transparent rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 font-pj justif-center hover:bg-gray-600 lg:mx-0 mx-2 my-2"
             role="button"
+            onClick={()=>{
+              router.push(`/components/Tests/TestPage?id=${testid}`);
+            }}
           >
             
             Start Test
@@ -430,7 +456,7 @@ const CodeCraft = () => {
                       target="_blank"
                     >
                       {" "}
-                      MyProfile
+                      My Profile
                     </Link>
                   </p>
                 </div>
@@ -475,7 +501,8 @@ const CodeCraft = () => {
                           onChange={handleChange}
                           name="email"
                           className="py-3 px-4 block w-full border-gray-400 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600 border-2"
-                          placeholder="example@gmail.com"
+                          placeholder="example@gmail.com" 
+                          readOnly
                         />
                       </div>
                     </div>
@@ -523,25 +550,6 @@ const CodeCraft = () => {
                     </div>
                     {/* End Form Group */}
                     {/* Form Group */}
-                    <div>
-                      <label
-                        htmlFor="title"
-                        className="block text-sm mb-2 dark:text-white"
-                      >
-                        Title/Role
-                      </label>
-                      <div className="relative">
-                        <input
-                          type="text"
-                          id="title"
-                          name="title"
-                          value={title}
-                          onChange={handleChange}
-                          className="py-3 px-4 block w-full border-gray-400 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600 border-2"
-                          placeholder="Enter your title/role. ex:- student,developer,etc."
-                        />
-                      </div>
-                    </div>
                     {/* End Form Group */}
                     {/* Checkbox */}
                     <div>
@@ -591,7 +599,7 @@ const CodeCraft = () => {
                       <button
                         type="submit"
                         className="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
-                        onClick={handleCloseEnroll}
+                        onClick={handleSubmit}
                       >
                         Register Now
                       </button>
@@ -646,7 +654,9 @@ While you are here, why not explore some of our past tests or learn more about t
        
       
         <p className="text-lg text-gray-600 mb-2 navfont">Test is live now . Click on the Start the test button to continue.</p>
-        <Link href="/" className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-full block mx-2 my-4 ">Start the Test</Link>
+        <Link href={`/components/Tests/TestPage?id=${testid}`} className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-full block mx-2 my-4 "
+         
+        >Start the Test</Link>
        
     </div>
   </Box>
