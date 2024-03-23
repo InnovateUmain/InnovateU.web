@@ -4,9 +4,9 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
 },
-env: {
-  NEXT_PUBLIC_HOST: 'https://innovateu.org.in',
-},
+// env: {
+//   NEXT_PUBLIC_HOST: 'https://innovateu.org.in',
+// },
 
 }
 

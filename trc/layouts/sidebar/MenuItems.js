@@ -36,9 +36,9 @@ const Menuitems = [
     href: `/admin/AddAdmin`,
   },
   {
-    title: "All Projects",
+    title: "Tests",
     icon: "file-text",
-    href: "/admin",
+    href: "/admin/AdminTest",
   },
   {
     title: "Faqs",

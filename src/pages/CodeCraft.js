@@ -4,6 +4,7 @@ import { AiOutlineLogin } from "react-icons/ai";
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Link from 'next/link';
+import Head from 'next/head';
 import { IoMdCloseCircle } from "react-icons/io";
 const CodeCraft = () => {
   const [timeUp , setTimeUp] = useState(false);
@@ -96,6 +97,9 @@ const CodeCraft = () => {
 
   return (
     <div className='min-h-screen text-white  bg-[conic-gradient(at_bottom_right,_var(--tw-gradient-stops))] from-slate-900 via-purple-900 to-slate-900'>
+      <Head>
+        <title>Code Craft - for Developers</title>
+      </Head>
       <div className='mt-20'>
       <section className="relative py-12 sm:py-16 lg:pt-20 lg:pb-36">
   <div className="px-4 mx-auto sm:px-6 lg:px-8 max-w-7xl">
@@ -250,9 +254,7 @@ const CodeCraft = () => {
               Why you should choose Code Craft?
             </h2>
             <p className="text-white navfont">
-              Besides working with start-up enterprises as a partner for
-              digitalization, we have built enterprise products for common pain
-              points that we have encountered in various products and projects.
+            At Code Craft, we offer more than just a developer test; we provide an unparalleled experience tailored to meet the needs of both budding and seasoned developers aiming to join InnovateU. Here is why you should opt for Code Craft:
             </p>
           </div>
           {/* End Title */}
