@@ -84,7 +84,7 @@ const handleChange = (e) => {
     }
     else if(e.target.name =='testdate'){
         setTestDate(e.target.value);
-        setActualTestDate(testdate+'T'+time+':00');
+        setActualTestDate(e.target.value+'T'+time+':00');
     }
     else if(e.target.name =='testtitle'){
         setTestTitle(e.target.value);
@@ -94,7 +94,8 @@ const handleChange = (e) => {
     }
     else if(e.target.name =='time'){
         setTime(e.target.value);
-        setActualTestDate(testdate+'T'+time+':00');
+        console.log(time);
+        setActualTestDate(testdate+'T'+e.target.value+':00');
     }  
     else if(e.target.name =='testbenefits'){
         setTestBChild(e.target.value);
@@ -141,6 +142,7 @@ const handleAddEvent =async()=>{
       setActualTestDate('');
       setTestBChild('');
       handleClose();
+      fetchAllTests();
     }
     else{
       toast.error(result.message);
@@ -194,7 +196,7 @@ const update =(item)=>{
     handleOpen();
 }
 const handleUpdateTest = async()=>{
-    setActualTestDate(testdate+'T'+time+':00');
+  setActualTestDate(testdate+'T'+time+':00');
     setLoading(true);
     let data = {testname,testtype:testype,testdate:actualTestDate,time,testtitle,testdescription,testbenefits,status:"updateTest",id};
     const res = await fetch(
