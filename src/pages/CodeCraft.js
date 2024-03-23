@@ -340,6 +340,8 @@ const CodeCraft = () => {
             Start Test
             <AiOutlineLogin className='mx-2'/>
           </button>}
+          <Link href={"/CodeCraft#explore"}>
+         
           <button
             className="inline-flex items-center  lg:px-8 md:px-8 px-4 py-4 lg:text-lg text-md font-bold text-white transition-all duration-200 bg-purple-600 border border-transparent rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 font-pj justif-center hover:bg-gray-600 mx-2 my-2"
            
@@ -347,6 +349,7 @@ const CodeCraft = () => {
             
            Explore More
           </button>
+          </Link>
         </div>
       </div>
      
@@ -363,7 +366,7 @@ const CodeCraft = () => {
 <section>
 <>
   {/* Features */}
-  <div className="max-w-[85rem] px-4 py-4 sm:px-6 lg:px-8 lg:py-14 mx-auto">
+  <div className="max-w-[85rem] px-4 py-4 sm:px-6 lg:px-8 lg:py-14 mx-auto" id='explore'>
     {/* Grid */}
     <div className="md:grid md:grid-cols-2 md:items-center md:gap-12 xl:gap-32">
       <div>
@@ -406,7 +409,7 @@ const CodeCraft = () => {
                 </svg>
               </span>
               <span className="text-sm sm:text-base text-white navfont">
-                <span className="font-bold">{item} fast</span> 
+                <span className="font-bold">{item}</span> 
               </span>
             </li>))}
            
