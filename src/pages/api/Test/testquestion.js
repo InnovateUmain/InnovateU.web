@@ -6,6 +6,7 @@ const handler = async (req, res) => {
     if(req.method==="POST"){
         //if for add endpoint
         if(req.body.status=="add"){
+            console.log(req.body);
             try{
                 let testq = new Testq({
                    testid:req.body.testid,
@@ -25,6 +26,7 @@ const handler = async (req, res) => {
         }//end of if method post endpoint
         //else for update endpoint
         else if(req.body.status=="update"){
+            console.log(req.body);
            try{
                 let testq = await Testq.findByIdAndUpdate({_id:req.body.id},{
                     testname:req.body.testname,
@@ -70,7 +72,14 @@ const handler = async (req, res) => {
     }
     //else for get for get request
     else{
-        res.status(400).json({success:false,message:"This method is not allowed"})
+        try{
+            let data = await Testq.find({});
+            res.status(200).json({data,success:true});
+        }
+        catch(err){
+            res.status(200).json({ success:false,message:"Something went wrong. Please try again later"});
+            console.log(err);
+        }
     }
 }
 export default connectDb(handler);
