@@ -66,7 +66,7 @@ else{
     
     
         const info = await transporter.sendMail({
-            from: '<support@InnovateU.com>', // sender address
+            from: '<support@Innovateu.org.in>', // sender address
             to: `${req.body.email}`, // list of receivers
             subject: `🎉 Welcome to InnovateU! Your Account is Ready 🚀`, // Subject line
             text: "Account Created Successfully", // plain text body

@@ -1,6 +1,8 @@
 import connectDb from "@/middleware/mongoose";
+
 const nodemailer = require("nodemailer");
 import Test from "../../../../models/Test";
+
 const handler = async (req, res) => {
 //add a new Test to the database
 //if for the post method
@@ -36,6 +38,7 @@ else if(req.body.status=="updateTest"){
             testdescription: req.body.testdescription,
             testbenefits: req.body.testbenefits,
         });
+
         res.status(200).json({success:true,message:"Test updated successfully"});
     }
     catch(error){

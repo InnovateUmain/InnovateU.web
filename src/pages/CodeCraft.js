@@ -46,12 +46,15 @@ const CodeCraft = () => {
   //for modal code start here
   const [width,setWidth]= useState(0);
   const [open, setOpen] = useState(false);
+  const [openNotTRegTest, setOpenNotTRegTest] = useState(false);
   const [openEnroll, setOpenEnroll] = useState(false);
   const [openoops, setOopenoops] = useState(false);
   const handlecloseoops = () => setOopenoops(false);
   const handleOpenoops = () => setOopenoops(true);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const handleOpenNotTRegTest = () => setOpenNotTRegTest(true);
+  const handleCloseNotTRegTest = () => setOpenNotTRegTest(false);
   const handleOpenEnroll = () => {
     if (localStorage.getItem("innovateUuser")) {
       setOpenEnroll(true);
@@ -79,6 +82,8 @@ const CodeCraft = () => {
   const [linkedin, setLinkedin] = useState("");
   const [github, setGithub] = useState("");
   const [testid, setTestid] = useState("");
+  const [isRegistered, setIsRegistered] = useState(false);
+  
   const router = useRouter();
   let targetDate;
       useEffect(()=>{
@@ -104,6 +109,10 @@ const CodeCraft = () => {
           }
           setTests(data.tests);
           setLoading(false);
+          //checking for the above session exist or not
+          if(localStorage.getItem("innovateUTestSession")){
+            setIsRegistered(true);
+          }
         })()
        },[])
        const style = {
@@ -211,11 +220,23 @@ const CodeCraft = () => {
     setLoading(false);
     if(result.success){
       toast.success(result.message);
+      localStorage.setItem("innovateUTestSession",JSON.stringify({token:result.token}));
       handleCloseEnroll();
+      setIsRegistered(true);
     }
     else{
       toast.error(result.message);
     }
+  }
+  //start test function starts here
+  const StartTest = async()=>{
+  if(localStorage.getItem("innovateUTestSession")){
+    router.push(`/components/Tests/TestPage?id=${testid}`);
+  }
+  else{
+    handleClose();
+handleOpenNotTRegTest();
+  }
   }
   return (
     <div className='min-h-screen text-white  bg-[conic-gradient(at_bottom_right,_var(--tw-gradient-stops))] from-slate-900 via-purple-900 to-slate-900'>
@@ -321,7 +342,7 @@ const CodeCraft = () => {
         </div>
         
         <div className="mt-8 sm:flex sm:items-center sm:justify-center lg:justify-start sm:space-x-5 lg:mt-12">
-          {!timeUp&&<button
+          {!timeUp&&!isRegistered&&<button
             className="inline-flex items-center lg:px-8 md:px-8 px-4 py-4 lg:text-lg text-md font-bold text-white transition-all duration-200 bg-green-600 border border-transparent rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 font-pj justif-center hover:bg-gray-600 lg:mx-0 mx-2 my-2"
            onClick={handleOpenEnroll}
           >
@@ -332,12 +353,21 @@ const CodeCraft = () => {
           {timeUp&&<button
             className="inline-flex items-center lg:px-8 md:px-8 px-4 py-4 lg:text-lg text-md font-bold text-white transition-all duration-200 bg-green-600 border border-transparent rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 font-pj justif-center hover:bg-gray-600 lg:mx-0 mx-2 my-2"
             role="button"
-            onClick={()=>{
-              router.push(`/components/Tests/TestPage?id=${testid}`);
-            }}
+            onClick={StartTest}
           >
             
             Start Test
+            <AiOutlineLogin className='mx-2'/>
+          </button>}
+          {isRegistered&&!timeUp&&<button
+            className="inline-flex items-center lg:px-8 md:px-8 px-4 py-4 lg:text-lg text-md font-bold text-white transition-all duration-200 bg-green-600 border border-transparent rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 font-pj justif-center hover:bg-gray-600 lg:mx-0 mx-2 my-2"
+            role="button"
+            onClick={()=>{
+             toast.error("You have already registered for this test");
+            }}
+          >
+            
+            Enrolled
             <AiOutlineLogin className='mx-2'/>
           </button>}
           <Link href={"/CodeCraft#explore"}>
@@ -657,8 +687,8 @@ While you are here, why not explore some of our past tests or learn more about t
        
       
         <p className="text-lg text-gray-600 mb-2 navfont">Test is live now . Click on the Start the test button to continue.</p>
-        <Link href={`/components/Tests/TestPage?id=${testid}`} className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-full block mx-2 my-4 "
-         
+        <Link href={""} className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-full block mx-2 my-4 "
+         onClick={StartTest}
         >Start the Test</Link>
        
     </div>
@@ -686,6 +716,32 @@ While you are here, why not explore some of our past tests or learn more about t
         <Link href="/Signup" className="bg-blue-600 hover:bg-blue-800 text-white font-semibold py-2 px-4 rounded-full inline-block mx-2 my-4 ">Create an Account</Link>
         <br/>
         <Link href="/Login" className="bg-blue-600 hover:bg-blue-800 text-white font-semibold py-2 px-4 rounded-full inline-block">Login Now</Link>
+    </div>
+  </Box>
+</Modal>
+<Modal
+  open={openNotTRegTest}
+  onClose={handleCloseNotTRegTest}
+  aria-labelledby="modal-modal-title"
+  aria-describedby="modal-modal-description"
+>
+  <Box sx={style}>
+  <div className='absolute top-2 right-2 text-purple-600' onClick={handleCloseNotTRegTest}>
+    <IoMdCloseCircle className='text-4xl'/>
+    </div>
+  <div className="bg-white p-8 rounded-lg text-center max-h-[80vh] overflow-y-scroll">
+        <div className="animate-tickScale inline-block bg-green-600 rounded-full">
+    
+           <img src="/v1.svg" alt="no data img" className="h-52 w-52"/>
+        </div>
+        
+        <h1 className="lg:text-4xl md:text-4xl sm:text-2xl font-semibold text-black mb-4 font text-2xl navfont ">OOPS ! 🤭🤭🤭</h1>
+        <p className=" text-black mb-4 font navfont font-bold text-xl"> You donot have registered for this test </p>
+        <p className="text-lg text-gray-600 mb-2 font navfont">It appears you have not registered for this particular test. We regret to inform you that registration for this coding test has already closed. Unfortunately, we are unable to accommodate late registrations as the deadline has passed.
+We appreciate your interest and encourage you to stay tuned for future opportunities. In the meantime, consider exploring other resources and events on our platform.</p>
+        <Link href="/" className="bg-blue-600 hover:bg-blue-800 text-white font-semibold py-2 px-4 rounded-full inline-block mx-2 my-4 ">Go back to home</Link>
+        <br/>
+        {/* <Link href="/Event" className="bg-blue-600 hover:bg-blue-800 text-white font-semibold py-2 px-4 rounded-full inline-block">Register For Event</Link> */}
     </div>
   </Box>
 </Modal>
