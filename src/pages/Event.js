@@ -59,8 +59,27 @@ const onChange=(e)=>{
     <Head>
       <title>InnovateU - Events</title>
     </Head>
+    {event&&event.length==0&&<div className='flex justify-center items-center'><div className="bg-white p-8 rounded-lg shadow-lg text-center w-full mt-24 mb-28 mx-4">
+        <div className="animate-tickScale inline-block bg-green-600 rounded-full">
+    
+           <img src="/v2.svg" alt="no data img" className="h-60 w-60"/>
+        </div>
+        <div className='flex flex-col justify-center items-center'>
+   
+        <h1 className="lg:text-4xl md:text-4xl sm:text-2xl font-semibold text-gray-800 mb-4 font text-2xl navfont">OOPS ! 🤭🤭🤭</h1>
+        <p className=" text-black mb-4 font-bold navfont text-xl"> Currently, there are no events scheduled. Please check back later for updates or contact us for more information </p>
+        <p className="text-lg text-black mb-2 font lg:w-[70vw] md:w-[80vw] w-[80vw] ">We are constantly working to bring you exciting events opportunities, but it seems like we donot have any scheduled at the moment. Not to worry though, we are always updating our schedule!
+
+While you are here, why not explore some of our past tests or learn more about the types of tests we typically offer? If you have any questions or would like to inquire about future test dates, feel free to reach out to us. We are here to help!</p>
+       
+</div>
+        <Link href="/" className="bg-blue-600 hover:bg-blue-800 text-white font-semibold py-2 px-4 rounded-full inline-block mx-2 my-4 ">Go Back to Home</Link>
+        <br/>
+       
+    </div></div>}
     {loading?<div className='min-h-screen my-20'><Cardskeleton/></div>:<div className=' my-20  bg-gradient-to-b from-gray-900 to-gray-600 bg-gradient-to-r'>
   <div className=''>
+    
   <div className=" flex justify-center items-center  bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 flex-col mb-10 h-full">
   <div
         className="bg-white items-center justify-between flex rounded shadow-lg my-4 lg:w-[80vw] w-[90vw]"
@@ -208,12 +227,15 @@ const onChange=(e)=>{
 </div>
 
     </div>}
+    
     {
       error&&<>
       <Error/>
+      
     </>
     
     }
+    
     </>
   )
 }
