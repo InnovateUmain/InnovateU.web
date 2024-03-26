@@ -208,7 +208,7 @@ const handleChange4 = (e)=>{
       localStorage.removeItem("innovateUTestSession");
       // router.push('/dashboard');
       setCurrentStage(0);
-      router.push('/');
+      router.push('/components/Tests/Thankyou');
     }
     else{
       toast.error(result.message);
@@ -300,7 +300,7 @@ let imgarrreal = JSON.parse(localStorage.getItem("imgarr"));
     localStorage.removeItem("innovateUTestSession");
     // router.push('/dashboard');
     setCurrentStage(0);
-    router.push('/');
+    router.push('/components/Tests/Thankyou');
   }
   else{
     toast.error(result.message);
@@ -367,24 +367,40 @@ const oncopycontent=(event)=> {
   toast.error("Terminating the session due to malpractice")
   router.push('/CodeCraft');
 }
-window.onkeydown = function (event) {
-  if (event.ctrlKey && (event.key === "c" || event.key === "C")) {
-    toast.error("Copy and paste is strictly prohibited during this exam; any attempt to do so will result in immediate disqualification and your session will be terminated.");
-    toast.error("Terminating the session due to malpractice")
-    router.push('/CodeCraft');
-  }
-  else if(event.ctrlKey && (event.key === "v" || event.key === "V")){
-    toast.error("Copy and paste is strictly prohibited during this exam; any attempt to do so will result in immediate disqualification and your session will be terminated.");
-    toast.error("Terminating the session due to malpractice")
-    router.push('/CodeCraft');
-  }
-  else if(event.ctrlKey && (event.key === "x" || event.key === "X")){
-    toast.error("Copy and paste is strictly prohibited during this exam; any attempt to do so will result in immediate disqualification and your session will be terminated.");
-    toast.error("Terminating the session due to malpractice")
-    router.push('/CodeCraft');
-  }
-  
+
+//tab change event 
+let once = false;
+
+// Execute the code at least once
+if (!once) {
+ 
 }
+
+useEffect(() => {
+  const handleBlur = () => {
+    toast.error("You are not allowed to change the tab during the exam; any attempt to do so will result in immediate disqualification and your session will be terminated.");
+    toast.error("Terminating the session due to malpractice");
+    router.push('/CodeCraft');
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.ctrlKey && (event.key === "c" || event.key === "C" || event.key === "v" || event.key === "V" || event.key === "x" || event.key === "X")) {
+      toast.error("Copy and paste is strictly prohibited during this exam; any attempt to do so will result in immediate disqualification and your session will be terminated.");
+      toast.error("Terminating the session due to malpractice");
+      router.push('/CodeCraft');
+    }
+  };
+
+  window.addEventListener("blur", handleBlur);
+  window.addEventListener("keydown", handleKeyDown);
+
+  // Cleanup: Remove event listeners
+  return () => {
+    window.removeEventListener("blur", handleBlur);
+    window.removeEventListener("keydown", handleKeyDown);
+  };
+}, []); 
+
 console.log(imgarr)
   return (
     <>
