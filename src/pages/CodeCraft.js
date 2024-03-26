@@ -112,6 +112,9 @@ const CodeCraft = () => {
           if(localStorage.getItem("innovateUTestSession")){
             setIsRegistered(true);
           }
+          else{
+            setIsRegistered(false);
+          }
         })()
        },[])
        const style = {
@@ -223,6 +226,7 @@ const CodeCraft = () => {
       localStorage.setItem("innovateUTestSession",JSON.stringify({token:result.token}));
       handleCloseEnroll();
       setIsRegistered(true);
+      localStorage.removeItem("IsFinish");
     }
     else{
       toast.error(result.message);

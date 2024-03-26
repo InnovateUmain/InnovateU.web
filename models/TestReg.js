@@ -13,6 +13,11 @@ const TestRegSchema = new mongoose.Schema({
     status:{type:String,default:'registered'},
     scorestatus:{type:String,default:'not checked'},
     selected:{type:String,default:'pending'},
+    question1answer:[{type:Object,default:''}],
+    question2answer:[{type:Object,default:''}],
+    question3answer:[{type:Object,default:''}],
+    question4answer:[{type:Object,default:''}],
+    imgarr:[{type:String,default:''}],
 }, { timestamps: true });
 mongoose.models = {};
 export default mongoose.model('TestReg', TestRegSchema);

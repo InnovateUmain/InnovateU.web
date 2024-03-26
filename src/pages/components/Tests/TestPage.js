@@ -5,7 +5,7 @@ import toast, { Toaster } from "react-hot-toast";
 import BlogSkeleton from '../skeleton/BlogSkeleton';
 import Webcam from 'react-webcam';
 import Spinner from '../Spinner';
-import { set } from 'mongoose';
+import { get, set } from 'mongoose';
 import Link from 'next/link';
 const TestPage = () => {
   const router = useRouter();
@@ -16,6 +16,16 @@ const TestPage = () => {
   const [img , setImg] = useState("");
   const [isEligibleStartTest, setIsEligibleStartTest] = useState(false);
   const [currentSatge,setCurrentStage] = useState(0);
+  const [allAnswers,setAllAnswers] = useState([]);
+  const [email,setEmail] = useState("");
+  const [question1Answer,setQuestion1Answer] = useState({});
+  const [question2Answer,setQuestion2Answer] = useState({});
+  const [question3Answer,setQuestion3Answer] = useState({});
+  const [question4Answer,setQuestion4Answer] = useState({});
+  const [imgarr,setImgarr] = useState([]);
+
+  const [isStart,setIsStart] = useState(false);
+
 const webcamRef = useRef("");
 //fetch request for getting the test questions'
 const getQuestion = async()=>{
@@ -42,11 +52,40 @@ const getQuestion = async()=>{
     }
 
 }
+//getting user submit the test or not
 let targetDate ;
   useEffect(()=>{
 getQuestion();
+let question1 = JSON.parse(localStorage.getItem("question1Answer"));
+let question2 = JSON.parse(localStorage.getItem("question2Answer"));
+let question3 = JSON.parse(localStorage.getItem("question3Answer"));
+let question4 = JSON.parse(localStorage.getItem("question4Answer"));
+
+if(question3!=null){
+  setQuestion3Answer(question3);
+}
+if(question4!=null){
+  setQuestion4Answer(question4);
+}
+if(question1!=null){
+  setQuestion1Answer(question1);
+}
+if(question2!=null){
+  setQuestion2Answer(question2);
+}
 if(localStorage.getItem("inispermit")=="true"){
   setIsEligibleStartTest(true);
+}
+//if exam is started then set the current stage
+if(localStorage.getItem("isstart")=="true"){
+  setCurrentStage(1);
+}
+if(localStorage.getItem("IsFinish")=="true"){
+setIsEligibleStartTest(false);
+}
+if(localStorage.getItem("innovateUuser")){
+  let a = JSON.parse(localStorage.getItem("innovateUuser")).email;
+  setEmail(a);
 }
 //TEST API DATA
 (async()=>{
@@ -56,10 +95,121 @@ if(localStorage.getItem("inispermit")=="true"){
   if(data.tests.length!=0){
     targetDate = new Date(data.tests[0].testenddate).getTime();
   }
-  
 })()
-  },[router.query])
+//handle r
+// // Function to handle the event
+// const handleRightClick = (event) => {
+//   event.preventDefault();
+// };
 
+// // Adding the event listener
+// document.addEventListener('contextmenu', handleRightClick);
+
+// // Cleanup function to remove the event listener
+// return () => {
+//   document.removeEventListener('contextmenu', handleRightClick);
+// };
+// //right click disable
+  },[router.query])
+  ///all aplication handle changes
+const handleChange = (e)=>{
+  testQuestions.question1.map((item,index)=>{
+    if(e.target.name==index){
+      setQuestion1Answer({...question1Answer,
+      [index]:e.target.value
+    });
+    let setvar = {...question1Answer,
+      [index]:e.target.value};
+    localStorage.setItem("question1Answer",JSON.stringify(setvar));
+  }
+  })
+}
+const handleChange2 = (e)=>{
+  testQuestions.question2.map((item,index)=>{
+    if(e.target.name==index){
+      setQuestion2Answer({...question2Answer,
+      [index]:e.target.value
+    });
+    let setvar = {...question2Answer,
+      [index]:e.target.value};
+    localStorage.setItem("question2Answer",JSON.stringify(setvar));
+  }
+  })
+}
+const handleChange3 = (e)=>{
+  testQuestions.question3.map((item,index)=>{
+    if(e.target.name==index){
+      setQuestion3Answer({...question3Answer,
+      [index]:e.target.value
+    });
+    let setvar = {...question3Answer,
+      [index]:e.target.value};
+    localStorage.setItem("question3Answer",JSON.stringify(setvar));
+  }
+  })
+}
+const handleChange4 = (e)=>{
+  testQuestions.question4.map((item,index)=>{
+    if(e.target.name==index){
+      setQuestion4Answer({...question4Answer,
+      [index]:e.target.value
+    });
+    let setvar = {...question4Answer,
+      [index]:e.target.value};
+    localStorage.setItem("question4Answer",JSON.stringify(setvar));
+  }
+  })
+}
+  //handle submit function
+  const handleSubmit = async(e)=>{
+    let emailuser = JSON.parse(localStorage.getItem("innovateUuser")).email;
+    setLoading(true);
+    if(!localStorage.getItem("isstart")){
+      setLoading(false);
+      setIsEligibleStartTest(false);
+      return;
+    }
+    const data = {
+      testid:router.query.id,
+      email:emailuser,
+      question1:question1Answer,
+      question2:question2Answer,
+      question3:question3Answer,
+      question4:question4Answer,
+      imgarr:imgarr,
+      status:"submitTest"
+    }
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_HOST}/api/Test/testreg`,
+      {
+        method: "POST", // or 'PUT'
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }
+    );
+    const result = await res.json();
+    setLoading(false);
+    if(result.success){
+      toast.success(result.message);
+      localStorage.removeItem("isstart");
+      localStorage.removeItem("question1Answer");
+      localStorage.removeItem("question2Answer");
+      localStorage.removeItem("question3Answer");
+      localStorage.removeItem("question4Answer");
+      localStorage.removeItem("inispermit");
+      localStorage.setItem("IsFinish",true);
+      localStorage.removeItem("innovateUTestSession");
+      // router.push('/dashboard');
+      setCurrentStage(0);
+      router.push('/');
+    }
+    else{
+      toast.error(result.message);
+    }
+   
+  }
 //TIMER FUNCTION STARTS FROM HERE;
 const [countDownTime, setCountDownTime] = useState({
   days: "00",
@@ -98,10 +248,58 @@ const getTimeDifference = () => {
   }
 };
 
-const handleCountdownEnd = () => {
-  console.log("Time's up!"); 
-  
-  // You can replace this with any action you want to perform when the countdown ends
+const handleCountdownEnd = async() => {
+  let question1Answerl = JSON.parse(localStorage.getItem("question1Answer"));
+  let question2Answerl = JSON.parse(localStorage.getItem("question2Answer"));
+  let question3Answerl = JSON.parse(localStorage.getItem("question3Answer"));
+  let question4Answerl = JSON.parse(localStorage.getItem("question4Answer"));
+let imgarrreal = JSON.parse(localStorage.getItem("imgarr"));
+  let emailuser = JSON.parse(localStorage.getItem("innovateUuser")).email;
+  setLoading(true);
+  if(!localStorage.getItem("isstart")){
+    setLoading(false);
+    setIsEligibleStartTest(false);
+    return;
+  }
+  const data = {
+    testid:router.query.id,
+    email:emailuser,
+    question1:question1Answerl,
+    question2:question2Answerl,
+    question3:question3Answerl,
+    question4:question4Answerl,
+    imgarr:imgarrreal,
+    status:"submitTest"
+  }
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_HOST}/api/Test/testreg`,
+    {
+      method: "POST", // or 'PUT'
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    }
+  );
+  const result = await res.json();
+  setLoading(false);
+  if(result.success){
+    toast.success(result.message);
+    localStorage.removeItem("isstart");
+    localStorage.removeItem("question1Answer");
+    localStorage.removeItem("question2Answer");
+    localStorage.removeItem("question3Answer");
+    localStorage.removeItem("question4Answer");
+    localStorage.removeItem("inispermit");
+    localStorage.setItem("IsFinish",true);
+    localStorage.removeItem("innovateUTestSession");
+    // router.push('/dashboard');
+    setCurrentStage(0);
+    router.push('/');
+  }
+  else{
+    toast.error(result.message);
+  }
 };
 
 const startCountDown = useCallback(() => {
@@ -117,22 +315,30 @@ useEffect(() => {
   startCountDown();
   return () => clearInterval(timerInterval); // Cleanup the interval on unmount
 }, [startCountDown]);
+useEffect(() => {
+  const intervalId = setInterval(() => {
+    getScreenshot();
+  }, 10000); // 10 seconds
 
-// useEffect(() => {
-//   const intervalId = setInterval(() => {
-//     getScreenshot();
-//   }, 10000); // 10 seconds
-
-//   return () => clearInterval(intervalId); // Cleanup interval on unmount
-// }, []); // Run only once after initial render
+  return () => clearInterval(intervalId); // Cleanup interval on unmount
+}, []); // Run only once after initial render
 
 const getScreenshot = () => {
   if (webcamRef.current) {
     let img = webcamRef.current.getScreenshot();
     setImg(img);
+    setImgarr([...imgarr,img]);
+    localStorage.setItem("imgarr",JSON.stringify(imgarr));
   }
 };
 // setInterval(getScreenshot, 10000);
+const startexam = ()=>{
+  localStorage.setItem("isstart","true");
+  setIsStart(true);
+  if(currentSatge<4){
+    setCurrentStage(currentSatge+1);
+  }
+}
 const prev = ()=>{
   if(currentSatge>1){
     setCurrentStage(currentSatge-1);
@@ -143,10 +349,38 @@ const prev = ()=>{
      setCurrentStage(currentSatge+1);
    }
  }
+ //handle paste functions
  const preventPaste = (e) => {
   e.preventDefault();
   toast.error("Pasting is strictly prohibited during this exam; any attempt to do so will result in immediate disqualification and your session will be terminated.");
+  toast.error("Terminating the session due to malpractice")
+  router.push('/CodeCraft');
 };
+const oncopycontent=(event)=> {
+  event.preventDefault();
+  toast.error("Copy and paste is strictly prohibited during this exam; any attempt to do so will result in immediate disqualification and your session will be terminated.");
+  toast.error("Terminating the session due to malpractice")
+  router.push('/CodeCraft');
+}
+window.onkeydown = function (event) {
+  if (event.ctrlKey && (event.key === "c" || event.key === "C")) {
+    toast.error("Copy and paste is strictly prohibited during this exam; any attempt to do so will result in immediate disqualification and your session will be terminated.");
+    toast.error("Terminating the session due to malpractice")
+    router.push('/CodeCraft');
+  }
+  else if(event.ctrlKey && (event.key === "v" || event.key === "V")){
+    toast.error("Copy and paste is strictly prohibited during this exam; any attempt to do so will result in immediate disqualification and your session will be terminated.");
+    toast.error("Terminating the session due to malpractice")
+    router.push('/CodeCraft');
+  }
+  else if(event.ctrlKey && (event.key === "x" || event.key === "X")){
+    toast.error("Copy and paste is strictly prohibited during this exam; any attempt to do so will result in immediate disqualification and your session will be terminated.");
+    toast.error("Terminating the session due to malpractice")
+    router.push('/CodeCraft');
+  }
+  
+}
+console.log(imgarr)
   return (
     <>
     <style jsx>
@@ -163,10 +397,10 @@ const prev = ()=>{
          {isEligibleStartTest&&<div>
     {loading?<div className='mt-20'><BlogSkeleton/></div>:<div className='min-h-screen bg-[conic-gradient(at_bottom_right,_var(--tw-gradient-stops))] from-slate-900 via-purple-900 to-slate-900 mt-20 '>
       <div className='lg:absolute right-0  relative flex justify-center items-center md:absolute'>
-      {/* <div className='w-52 h-52 rounded'>
+      <div className='w-52 h-52 rounded'>
       <Webcam audio={false} ref={webcamRef} screenshotFormat="image/jpeg" />
       <img src={img} alt="" className='w-52 h-52 rounded my-2 hidden lg:block'/>
-    </div> */}
+    </div>
       </div>
     <section className='flex justify-start  sticky top-20 '>
    
@@ -250,7 +484,7 @@ const prev = ()=>{
         </div>
 
         <button className="w-full py-3 bg-green-600 text-white rounded-md hover:bg-green-800 transition duration-300"
-        onClick={next}
+        onClick={startexam}
         >
           Start Exam
         </button>
@@ -265,100 +499,119 @@ const prev = ()=>{
    {currentSatge==1&& <div className='flex justify-center items-center'>
       <div className='lg:w-[60vw] w-[90vw]  bg-white text-black px-8 py-4 m-4 rounded-lg'>
         <h1 className='navfont text-2xl font-bold my-4 text-gray-600' >QUESTION ROUND 1</h1>
-      <div className='bg-green-300 p-4 rounded '>
+      {testQuestions&&testQuestions.question1.map((item,index)=>(<div className='bg-green-300 p-4 rounded my-4' key={index}>
       <h1 className='navfont text-2xl font-bold'>
-        Q1. What is your name and your father name ?
+        Q{index+1}. {item.question} 
    
        </h1>
        <div className='flex items-center my-4'>
-       <input type="radio" name='selectone' value={"hello"} className='h-6 w-6'/>
-        <label htmlFor="selectone" className='navfont mx-2 text-lg font-bold'>A. Hello</label>
+       <input type="radio" name={index} value={`option1`} className='h-6 w-6' onChange={handleChange}
+       checked={question1Answer[index]=="option1"}
+       />
+        <label htmlFor={index} className='navfont mx-2 text-lg font-bold' >A. {item.option1}</label>
        </div>
        <div className='flex items-center my-4'>
-       <input type="radio" name='selectone' value={"hello"} className='h-6 w-6'/>
-        <label htmlFor="selectone" className='navfont mx-2 text-lg font-bold'>B. Hello</label>
+       <input type="radio" name={index} value={`option2`} className='h-6 w-6' onChange={handleChange}
+       checked={question1Answer[index]=="option2"}
+       />
+        <label htmlFor={index} className='navfont mx-2 text-lg font-bold'>B. {item.option2} </label>
        </div>
        <div className='flex items-center my-4'>
-       <input type="radio" name='selectone' value={"hello"} className='h-6 w-6'/>
-        <label htmlFor="selectone" className='navfont mx-2 text-lg font-bold'>C. Hello</label>
+       <input type="radio" name={index} value={`option3`} className='h-6 w-6' onChange={handleChange}
+       checked={question1Answer[index]=="option3"}
+       />
+        <label htmlFor={index} className='navfont mx-2 text-lg font-bold'>C. {item.option3} </label>
        </div>
        <div className='flex items-center my-4'>
-       <input type="radio" name='selectone' value={"hello"} className='h-6 w-6'/>
-        <label htmlFor="selectone" className='navfont mx-2 text-lg font-bold'>D. Hello</label>
+       <input type="radio" name={index} value={`option4`} className='h-6 w-6' onChange={handleChange}
+       checked={question1Answer[index]=="option4"}
+       />
+        <label htmlFor={index} className='navfont mx-2 text-lg font-bold'>D. {item.option4}</label>
        </div>
       
-      </div>
+      </div>))}
       </div>
       </div>}
       {/* // */}
       {currentSatge==2&&<div className='flex justify-center items-center'>
       <div className='lg:w-[60vw] w-[90vw]  bg-white text-black px-8 py-4 m-4 rounded-lg'>
         <h1 className='navfont text-2xl font-bold my-4 text-gray-600' >QUESTION ROUND 2</h1>
-      <div className='bg-green-300 p-4 rounded '>
+      {testQuestions.question2.map((item,index)=>(<div className='bg-green-300 p-4 rounded my-4' key={index}>
       <h1 className='navfont text-2xl font-bold'>
-        Q1. What is your name and your father name ?
+        Q{index+1}. {item.question} 
    
        </h1>
        <div className='flex items-center my-4'>
-       <input type="radio" name='selectone' value={"hello"} className='h-6 w-6'/>
-        <label htmlFor="selectone" className='navfont mx-2 text-lg font-bold'>A. Hello</label>
+       <input type="radio" name={index} value={`option1`} className='h-6 w-6' onChange={handleChange2}
+       checked={question2Answer[index]=="option1"}
+       />
+        <label htmlFor={index} className='navfont mx-2 text-lg font-bold' >A. {item.option1}</label>
        </div>
        <div className='flex items-center my-4'>
-       <input type="radio" name='selectone' value={"hello"} className='h-6 w-6'/>
-        <label htmlFor="selectone" className='navfont mx-2 text-lg font-bold'>B. Hello</label>
+       <input type="radio" name={index} value={`option2`} className='h-6 w-6' onChange={handleChange2}
+       checked={question2Answer[index]=="option2"}
+       />
+        <label htmlFor={index} className='navfont mx-2 text-lg font-bold'>B. {item.option2} </label>
        </div>
        <div className='flex items-center my-4'>
-       <input type="radio" name='selectone' value={"hello"} className='h-6 w-6'/>
-        <label htmlFor="selectone" className='navfont mx-2 text-lg font-bold'>C. Hello</label>
+       <input type="radio" name={index} value={`option3`} className='h-6 w-6' onChange={handleChange2}
+       checked={question2Answer[index]=="option3"}
+       />
+        <label htmlFor={index} className='navfont mx-2 text-lg font-bold'>C. {item.option3} </label>
        </div>
        <div className='flex items-center my-4'>
-       <input type="radio" name='selectone' value={"hello"} className='h-6 w-6'/>
-        <label htmlFor="selectone" className='navfont mx-2 text-lg font-bold'>D. Hello</label>
+       <input type="radio" name={index} value={`option4`} className='h-6 w-6' onChange={handleChange2}
+       checked={question2Answer[index]=="option4"}
+       />
+        <label htmlFor={index} className='navfont mx-2 text-lg font-bold'>D. {item.option4}</label>
        </div>
       
-      </div>
+      </div>))}
       </div>
       </div>}
       {/* //round 3 */}
      { currentSatge==3&&<div className='flex justify-center items-center'>
       <div className='lg:w-[60vw] w-[90vw]  bg-white text-black px-8 py-4 m-4 rounded-lg'>
         <h1 className='navfont text-2xl font-bold my-4 text-gray-600' >QUESTION ROUND 3</h1>
-      <div className='bg-green-300 p-4 rounded '>
+      {testQuestions.question3.map((item,index)=>(<div className='bg-green-300 p-4 rounded ' key={index}>
       <h1 className='navfont text-2xl font-bold'>
-        Q1. What is your name and your father name ?
+        Q{index+1}. {item.question}
    
        </h1>
        <div className='flex flex-col my-4'>
        <label htmlFor="selectone" className='navfont mx-2 text-lg font-bold'>Answer here</label>
-       <textarea name="textarea" id="round3" cols="110" rows="10" placeholder='Enter Your Answer Here'
-       className='navfont text-lg  p-4' onPaste={preventPaste}
+       <textarea name={index} id="round3" cols="110" rows="10" placeholder='Enter Your Answer Here'
+       
+       className='navfont text-lg  p-4' onPaste={preventPaste} onChange={handleChange3}
+       value={question3Answer[index]}
+       onCopy={oncopycontent}
        ></textarea>
         
        </div>
        
       
-      </div>
+      </div>))}
       </div>
       </div>}
       {/* round 4 */}
       {currentSatge==4&&<div className='flex justify-center items-center'>
       <div className='lg:w-[60vw] w-[90vw]  bg-white text-black px-8 py-4 m-4 rounded-lg'>
         <h1 className='navfont text-2xl font-bold my-4 text-gray-600' >QUESTION ROUND 4 - CODING ROUND</h1>
-      <div className='bg-green-300 p-4 rounded '>
+      {testQuestions.question4.map((item,index)=>(<div className='bg-green-300 p-4 rounded my-4' key={index}>
       <h1 className='navfont text-2xl font-bold'>
-        Q1. What is your name and your father name ?
-   
+        Q{index+1}. {item.question}
        </h1>
        <div className='flex flex-col my-4'>
-       <label htmlFor="selectone" className='navfont mx-2 text-lg font-bold'>Answer here</label>
-       <textarea name="textarea" id="round3" cols="110" rows="10" placeholder='Enter Your Answer Here'
-       className='navfont text-lg  p-4' onPaste={preventPaste}
+       <label htmlFor="selectone" className='navfont mx-2 text-lg font-bold '>Answer here</label>
+       <textarea name={index} id="round3" cols="110" rows="10" placeholder='Enter Your Answer Here'
+       className='navfont text-lg  p-4 rounded' onPaste={preventPaste} onChange={handleChange4} value={question4Answer[index]}
+       onCopy={oncopycontent}
        ></textarea>
         
        </div>
        
       
-      </div>
+      </div>))}
       </div>
       </div>}
     {  currentSatge>=1&&<div className='lg:w-[60vw] w-[95vw] flex justify-end items-center flex-wrap  mb-10 '>
@@ -376,7 +629,7 @@ const prev = ()=>{
           Next
         </button>}
         {currentSatge==4&& <button className=' w-[29vw] lg:w-[20vw] py-3 bg-green-600 text-white rounded-md hover:bg-green-800 transition duration-300 my-2 navfont'
-        onClick={next}
+        onClick={handleSubmit}
         >
           Submit Now
         </button>}
@@ -398,8 +651,8 @@ const prev = ()=>{
         <div className='flex flex-col justify-center items-center'>
    
         <h1 className="lg:text-4xl md:text-4xl sm:text-2xl font-semibold text-gray-800 mb-4 font text-2xl navfont">OOPS ! 🤭🤭🤭</h1>
-        <p className=" text-black mb-4 font-bold navfont text-xl"> You are not permitted to start the test </p>
-        <p className="text-lg text-black mb-2 font lg:w-[70vw] md:w-[80vw] w-[80vw] ">Upon accessing the test exam page, users encounter a notification indicating that the test cannot be commenced presently and are advised to reach out to the administrator for additional support or information. This will happen due to early access of exam page .</p>
+        <p className=" text-black mb-4 font-bold navfont text-xl"> You are not permitted to start the test or you are already submit the test or Times Up</p>
+        <p className="text-lg text-black mb-2 font lg:w-[70vw] md:w-[80vw] w-[80vw] ">Upon accessing the test exam page, users encounter a notification indicating that the test cannot be commenced presently and are advised to reach out to the administrator for additional support or information. This will happen due to early access of exam page or already submit the test .For more information contact us at <a href='mailto:techinnovateu@gmail.com' className='font-bold text-blue-600 navfont' target='_blank'>techinnovateu@gmail.com</a> .</p>
        
 </div>
         <Link href="/" className="bg-blue-600 hover:bg-blue-800 text-white font-semibold py-2 px-4 rounded-full inline-block mx-2 my-4 ">Go Back To Home </Link>

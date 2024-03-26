@@ -118,6 +118,46 @@ const handler = async (req, res) => {
         }
      }
      //end of post method route for checking if user is registered for test
+     //post method for getting test details
+     if(req.body.status=="submitTest"){
+        console.log(req.body);
+      try{
+    let a = await TestReg.findOne({email:req.body.email,testid:req.body.testid});
+    //if user is registered for test
+    if(a){
+        console.log("gonee")
+        await a.updateOne({
+            question1answer:req.body.question1,
+            question2answer:req.body.question2,
+            question3answer:req.body.question3,
+            question4answer:req.body.question4,
+            imgarr:req.body.imgarr,
+            status:'submitted'
+        });
+        res.status(200).json({ success:true,message:"Test Submitted Successfully"});
+    }
+    //if user is not registered for test
+    else{
+        res.status(200).json({ success:false,message:"You have not registered for this test"});
+    }
+      }
+      catch(err){
+        res.status(200).json({ success:false,message:"Something went wrong. Please try again later"});
+      }
+
+     }//end of post method route for submitting test details
+     if(req.body.status=="getTestDetails"){
+        console.log(req.body.status,req.body.email);
+        try{
+            let a = await TestReg.findOne({email:req.body.email});
+            res.status(200).json({ success:true,data:a});
+        }
+        catch(err){
+            console.log(err);
+            res.status(200).json({ success:false,message:"Something went wrong. Please try again later"});
+        }
+     }
+//end of the post method route for getting test details
     }
     else{
         try{
