@@ -1076,7 +1076,7 @@ const Myaccount = () => {
                                 </p>
 
                                 <p className="text-sm text-gray-600 dark:text-gray-400">
-                                  {testData.length} of {testData.length}
+                                  {questionData.length} of {questionData.length}
                                 </p>
                               </div>
                               <div>
@@ -1223,7 +1223,7 @@ const Myaccount = () => {
                             htmlFor="status"
                             className="text-stone-600 text-sm font-medium"
                           >
-                            Test Time
+                            Test End Time
                           </label>
                           <input
                             id="status"

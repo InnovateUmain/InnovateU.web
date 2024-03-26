@@ -53,7 +53,18 @@ const handler = async (req, res) => {
                 res.status(200).json({ success:false,message:"Something went wrong. Please try again later"});
                 console.log(err);
             }
-        }//else for delete endpoint ended
+        }
+        else if(req.body.status=="getone"){
+            try{
+                let data = await Testq.find({});
+                res.status(200).json({data,success:true});
+            }
+            catch(err){
+                res.status(200).json({ success:false,message:"Something went wrong. Please try again later"});
+                console.log(err);
+            }
+        }
+        //else for delete endpoint ended
         //else for getting questions added
         else{
             if(req.headers['authorization']==process.env.AUTH_KEY){

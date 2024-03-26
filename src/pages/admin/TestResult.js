@@ -5,24 +5,109 @@ import { ThemeProvider } from "@mui/material/styles";
 import { saveAs } from 'file-saver';
 const excel = require("exceljs");
 import Head from 'next/head';
+import Box from '@mui/material/Box';
+import Modal from '@mui/material/Modal';
+import { IoMdCloseCircle } from "react-icons/io";
+import Spinner from '../components/Spinner';
+import toast, { Toaster } from "react-hot-toast";
+import { set } from 'mongoose';
 const Myaccount = () => {
+  //modal starts from here
+  const [width,setWidth]= useState(0);
+    const [open, setOpen] = useState(false);
+    const [question1,setQuestion1]=useState([]);
+    const [question2,setQuestion2]=useState([]);
+    const [question3, setQuestion3] = useState([]);
+    const [question4, setQuestion4] = useState([]);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+        useEffect(()=>{
+          var w = window.innerWidth;
+         if(w>=500){
+          setWidth(800);
+         }
+         else{
+          setWidth(350);
+         }
+          
+         },[])
+         const style = {
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: {width},
+          bgcolor: 'background.paper',
+          border: '2px solid purple',
+          boxShadow: 24,
+          borderRadius: "6px",
+          p: 4,
+        };
     // State to store all the data
     const [data, setData] = useState([]);
     const [ticketstatus, setTicketstatus] = useState("");
     const [searchquery, setSearchquery] = useState("");
+    const [testQuestion,SetTestQuestion]=useState([]);
     const [count, setCount] = useState(6);
     const [intialcount, setIntialcount] = useState(0);
     const [isSearch, setIsSearch] = useState(false);
     const [searcharray, setSearcharray] = useState([]);
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [phone, setPhone] = useState("");
+    const [testname, setTestname] = useState("");
+    const [testid, setTestid] = useState("");
+    const [status, setStatus] = useState("");
+    const [score, setScore] = useState("");
+    const [scorestatus, setScorestatus] = useState("");
+    const [selected,setSelected]=useState("");
+    const [linkedin,setLinkedin]=useState("");
+    const [github,setGithub]=useState("");
+    const [clg,setClg]=useState("");
+    const [answer1,setAnswer1]=useState([{0:"HELLO"}]);
+    const [answer2,setAnswer2]=useState([{0:"HELLO"}]);
+    const [answer3,setAnswer3]=useState([{0:"HELLO"}]);
+    const [answer4,setAnswer4]=useState([{0:"HELLO"}]);
+    const [loading, setLoading] = useState(false);
+   
     // Fetching all data from the database
     const fetchalldata = async () => {
+      setLoading(true);
        const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/Test/testreg`);
        const data = await res.json();
+        setLoading(false);
          setData(data.data);
+     }
+     const fetchtestquestion = async () => {
+      setLoading(true);
+      let data = { status: "getone"};
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_HOST}/api/Test/testquestion`,
+        {
+          method: "POST", // or 'PUT'
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
+      const result = await res.json();
+      setLoading(false);
+      if (result.success) {
+        SetTestQuestion(result.data[0]);
+        setQuestion1(result.data[0].question1);
+        setQuestion2(result.data[0].question2);
+        setQuestion3(result.data[0].question3);
+        setQuestion4(result.data[0].question4);
+      }
+      else{
+       toast.error(result.message);
+      }
      }
     //USEeFFECT 
     useEffect(() => {
       fetchalldata();
+      fetchtestquestion();
     }, [])
 //HANDLE CHANGE
 const handleChange = (e) => {
@@ -39,7 +124,42 @@ const handleChange = (e) => {
       );
       setSearcharray(res);
     }
-
+    else if(e.target.name=="name"){
+      setName(e.target.value);
+    }
+    else if(e.target.name=="email"){
+      setEmail(e.target.value);
+    }
+    else if(e.target.name=="phone"){
+      setPhone(e.target.value);
+    }
+    else if(e.target.name=="testname"){
+      setTestname(e.target.value);
+    }
+    else if(e.target.name=="testid"){
+      setTestid(e.target.value);
+    }
+    else if(e.target.name=="status"){
+      setStatus(e.target.value);
+    }
+    else if(e.target.name=="score"){
+      setScore(e.target.value);
+    }
+    else if(e.target.name=="scorestatus"){
+      setScorestatus(e.target.value);
+    }
+    else if(e.target.name=="linkedin"){
+      setLinkedin(e.target.value);
+    }
+    else if(e.target.name=="github"){
+      setGithub(e.target.value);
+    }
+    else if(e.target.name=="clg"){
+      setClg(e.target.value);
+    }
+    else if(e.target.value=="selected"){
+      setSelected(e.target.value);
+    }
 
   };
   //EXPORT EXCEL
@@ -78,6 +198,50 @@ const handleChange = (e) => {
   
     saveAs(new Blob([buf]), 'Testregdetails.xlsx')
    }
+    const scoreChecker = ()=>{
+      let totalscore  =0;
+      question1.map((item,index)=>{
+        if(item.answer==answer1[0][index]){
+          console.log("Correct Answer");
+          totalscore++;
+        }
+        else{
+          console.log("Wrong Answer");
+        }
+      });
+      question2.map((item,index)=>{
+        if(item.answer==answer2[0][index]){
+          console.log("Correct Answer");
+          totalscore++;
+        }
+        else{
+          console.log("Wrong Answer");
+        }
+      });
+      setScore(totalscore);
+    }
+   const update = (item)=>{
+   setName(item.name);
+    setEmail(item.email);
+    setPhone(item.phone);
+    setTestname(item.testname);
+    setTestid(item.testid);
+    setStatus(item.status);
+    setScore(item.score);
+    setScorestatus(item.scorestatus);
+    setLinkedin(item.linkedin);
+    setGithub(item.github);
+    setClg(item.clg);
+    setAnswer1(item.question1answer);
+    setAnswer2(item.question2answer);
+    setAnswer3(item.question3answer);
+    setAnswer4(item.question4answer);
+    setSelected(item.selected);
+    handleOpen();
+    scoreChecker();
+   }
+console.log(answer3)
+
   return (
       <ThemeProvider theme={theme}>
        <FullLayout>
@@ -93,6 +257,8 @@ const handleChange = (e) => {
         <title>Test Result | Mange your users test result and registration</title>
         <meta name="description" content="Test Result | Mange your users test result and registration" />
       </Head>
+      <Toaster position="top-center" />
+      {loading?<div className='min-h-screen flex justify-center items-center'><Spinner/></div>:<>
        <>
         {/* Table Section */}
         <div className="max-w-[85rem] px-4 py-2 sm:px-6 lg:px-8  mx-auto">
@@ -269,7 +435,7 @@ const handleChange = (e) => {
                                       id=""
                                       type="button"
                                       className="py-1.5 px-2 inline-flex justify-center items-center gap-2 rounded-lg text-gray-700 align-middle focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-sm dark:text-gray-400 dark:hover:text-white dark:focus:ring-offset-gray-800"
-                                      
+                                      onClick={()=>{update(item)}}
                                     >
                                       <svg
                                         className="flex-shrink-0 w-4 h-4"
@@ -401,7 +567,7 @@ const handleChange = (e) => {
                                       id=""
                                       type="button"
                                       className="py-1.5 px-2 inline-flex justify-center items-center gap-2 rounded-lg text-gray-700 align-middle focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-sm dark:text-gray-400 dark:hover:text-white dark:focus:ring-offset-gray-800"
-                                      
+                                      onClick={handleOpen}
                                     >
                                       <svg
                                         className="flex-shrink-0 w-4 h-4"
@@ -540,6 +706,256 @@ const handleChange = (e) => {
             </div>
             {/* End Table Section */}
           </>
+          <Modal
+  open={open}
+  onClose={handleClose}
+  aria-labelledby="modal-modal-title"
+  aria-describedby="modal-modal-description"
+>
+  <Box sx={style}>
+  <div className='absolute top-2 right-2 text-purple-600' onClick={handleClose}>
+    <IoMdCloseCircle className='text-4xl'/>
+    </div>
+    <div className="m-2 w-full px-4 lg:px-8 py-4 mx-auto overflow-scroll max-h-[80vh]">
+                    <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-lg">
+                      <h2 className="text-stone-700 text-xl font-bold">
+                        Result Details
+                      </h2>
+                      <p className="mt-1 text-sm">Result - Add, Modify,Delete , Hire etc.</p>
+                      <div className="mt-8">
+                        <div className="flex flex-col">
+                          <label
+                            htmlFor="status"
+                            className="text-stone-600 text-sm font-medium"
+                          >
+                            User Name
+                          </label>
+                          <input
+                            id="status"
+                            name="name"
+                            type="text"
+                            value={name}
+                            onChange={handleChange}
+                            className="mt-2 block w-full rounded-md border border-gray-200 px-2 py-3 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                          />
+                        </div>
+                        <div className="flex flex-col my-2">
+                          <label
+                            htmlFor="status"
+                            className="text-stone-600 text-sm font-medium"
+                          >
+                            User Email
+                          </label>
+                          <input
+                            id="status"
+                            name="email"
+                            value={email}
+                            type="email"
+                            onChange={handleChange}
+                            className="mt-2 block w-full rounded-md border border-gray-200 px-2 py-3 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 "
+                          />
+                        </div>
+                        <div className="flex flex-col my-2">
+                          <label
+                            htmlFor="status"
+                            className="text-stone-600 text-sm font-medium"
+                          >
+                            Test Name
+                          </label>
+                          <input
+                            id="status"
+                            name="testname"
+                            value={testname}
+                            type="text"
+                            onChange={handleChange}
+                            className="mt-2 block w-full rounded-md border border-gray-200 px-2 py-3 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 "
+                          />
+                        </div>
+                        <div className="flex flex-col my-2">
+                          <label
+                            htmlFor="status"
+                            className="text-stone-600 text-sm font-medium"
+                          >
+                            User LinkedIn
+                          </label>
+                          <input
+                            id="status"
+                            name="linkedin"
+                            value={linkedin}
+                            type="text"
+                            onChange={handleChange}
+                            className="mt-2 block w-full rounded-md border border-gray-200 px-2 py-3 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 "
+                          />
+                        </div>
+                        <div className="flex flex-col my-2">
+                          <label
+                            htmlFor="status"
+                            className="text-stone-600 text-sm font-medium"
+                          >
+                            User GitHub
+                          </label>
+                          <input
+                            id="status"
+                            name="github"
+                            value={github}
+                            type="text"
+                            onChange={handleChange}
+                            className="mt-2 block w-full rounded-md border border-gray-200 px-2 py-3 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 "
+                          />
+                        </div>
+
+                        <div className="flex flex-col my-2">
+                          <label
+                            htmlFor="status"
+                            className="text-stone-600 text-sm font-medium"
+                          >
+                           Status
+                          </label>
+                          <select
+                            id="status"
+                            name="status"
+                            value={status}
+                            onChange={handleChange}
+                            className="mt-2 block w-full rounded-md border border-gray-200 px-2 py-3 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 "
+                          >
+                            <option>Select</option>
+                            <option value="registered">Registered</option>
+                            <option value="submitted">Submitted</option>
+                            <option value="done">Done</option>
+                          </select>
+                        </div>
+                        <div className="flex flex-col my-2">
+                          <label
+                            htmlFor="status"
+                            className="text-stone-600 text-sm font-medium"
+                          >
+                           Score Status
+                          </label>
+                          <select
+                            id="status"
+                            name="scorestatus"
+                            value={scorestatus}
+                            onChange={handleChange}
+                            className="mt-2 block w-full rounded-md border border-gray-200 px-2 py-3 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 "
+                          >
+                            <option>Select</option>
+                            <option value="not checked">Not Checked</option>
+                            <option value="checked">Checked </option>
+                            <option value="mp">MalPractice(MP)</option>
+                          </select>
+                        </div>
+                        <div className="flex flex-col my-2">
+                          <label
+                            htmlFor="status"
+                            className="text-stone-600 text-sm font-medium"
+                          >
+                           Selection Status
+                          </label>
+                          <select
+                            id="status"
+                            name="selected"
+                            value={selected}
+                            onChange={handleChange}
+                            className="mt-2 block w-full rounded-md border border-gray-200 px-2 py-3 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 "
+                          >
+                            <option>Select</option>
+                            <option value="pending">Pending</option>
+                            <option value="selected">Selected</option>
+                            <option value="not selected">Not Selected</option>
+                          </select>
+                        </div>
+                      </div>
+                      
+                      <div className="mt-8 ">
+                        <div className="flex flex-col">
+                          <label
+                            htmlFor="status"
+                            className="text-stone-600 text-sm font-medium"
+                          >
+                            Total Score
+                          </label>
+                          <input
+                            id="status"
+                            name="score"
+                            type="text"
+                            value={score}
+                            onChange={handleChange}
+                            className="mt-2 block w-full rounded-md border border-gray-200 px-2 py-3 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 my-2"
+                          />
+                        </div>
+                       
+                       
+                      </div>
+
+                      <div className="mt-8 ">
+                        <h1 className='font-bold navfont p-4 text-xl'>Round 3 answer</h1>
+                        {question3.map((item,index)=>(<div className="flex flex-col" key={index}>
+                          <label
+                            htmlFor="status"
+                            className="text-black font-bold text-sm navfont text-lg"
+                          >
+                            Q{index+1}. {item.question}
+                          </label>
+                          <textarea
+                            id="status"
+                            name="question3"
+                            onChange={handleChange}
+                            value={answer3[0][index]}
+                            className="mt-2 block w-full rounded-md border border-gray-200 px-2 py-3 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                            rows="10"
+                            cols="30"
+                          ></textarea>
+                        </div>))}
+                      </div>
+                      <div className="mt-8 ">
+                        <h1 className='font-bold navfont p-4 text-xl'>Round 4 answer</h1>
+                        {question4.map((item,index)=>(<div className="flex flex-col" key={index}>
+                          <label
+                            htmlFor="status"
+                            className="text-black font-bold navfont text-lg"
+                          >
+                            Q{index+1}. {item.question}
+                          </label>
+                          <textarea
+                            id="status"
+                            name="question4"
+                            onChange={handleChange}
+                            value={answer4[0][index]}
+                            className="mt-2 block w-full rounded-md border border-gray-200 px-2 py-3 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                            rows="10"
+                            cols="30"
+                          ></textarea>
+                        </div>))}
+                      </div>
+                      <div className="mt-6 grid w-full grid-cols-2 justify-end space-x-4 md:flex">
+                        <button
+                          className="active:scale-95 rounded-lg bg-gray-200 px-8 py-2 font-medium text-gray-600 outline-none focus:ring hover:opacity-90 navfont"
+                          onClick={handleClose}
+                        >
+                          Cancel
+                        </button>
+                  
+                          <button
+                            className="active:scale-95 rounded-lg bg-blue-600 px-8 py-2 font-medium text-white outline-none focus:ring hover:opacity-90 navfont"
+                          
+                          >
+                            Add Test
+                          </button>
+          
+                          <button
+                            className="active:scale-95 rounded-lg bg-green-600 px-8 py-2 font-medium text-white outline-none focus:ring hover:opacity-90 navfont"
+                            
+                          >
+                            Update Test
+                          </button>
+                    
+                      </div>
+                    </div>
+                  </div>
+
+  </Box>
+</Modal>
+</>}
        </FullLayout>
       </ThemeProvider> 
  

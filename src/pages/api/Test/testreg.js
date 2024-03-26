@@ -134,44 +134,44 @@ const handler = async (req, res) => {
             imgarr:req.body.imgarr,
             status:'submitted'
         });
-        const info = await transporter.sendMail({
-            from: '<support@Innovateu.org.in>', // sender address
-            to: `${a.email}`, // list of receivers
-            subject: ` 📝 Test Submission Acknowledgement: Thank You!`, // Subject line
-            text: "Test Submission Acknowledgement: Thank You!", // plain text body
-            html: `
-            <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f4f4f4;">
-    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
-        <tr>
-            <td align="center" style="padding: 20px;">
-                <table role="presentation" width="600px" cellspacing="0" cellpadding="0" border="0" style="background-color: #ffffff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-                    <tr>
-                        <td style="padding: 20px;">
-                            <!-- Logo -->
-                            <div style="text-align: center; margin-bottom: 20px;">
-                                <img src="https://res.cloudinary.com/dst73auvn/image/upload/v1698952130/2-removebg-preview_ljkree.png" alt="innovateu Logo" style="max-width: 200px; height: auto;">
-                            </div>
-                            <h1 style="font-size: 24px; font-weight: bold; color: #333333; margin: 0 0 10px;">Thank You for Submitting the Test ${a.testname} </h1>
-                            <p style="font-size: 16px; color: #666666; margin: 0 0 20px;">We have received your test submission. We will review it carefully and get back to you as soon as possible.</p>
-                            <p style="font-size: 16px; color: #666666; margin: 0 0 20px;">If you have any questions or concerns, feel free to reach out to us at techinnovateu@gmail.com</p>
-                            <p style="font-size: 16px; color: #666666; margin: 0 0 20px;">This is an automated message. Please do not reply. </p>
-                            <p style="font-size: 16px; color: #666666; margin: 0 0 20px;">Warm Regards Team Innovateu.org</p>
-                            <table role="presentation" cellspacing="0" cellpadding="0" border="0">
-                                <tr>
-                                    <td style="border-radius: 4px; background-color: #007bff; padding: 10px 20px;">
-                                        <a href="${process.env.NEXT_PUBLIC_HOST}" style="color: #ffffff; text-decoration: none; font-weight: bold; font-size: 16px;">Return to Website</a>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-    </table>
-</body>
-            `, 
-          });
+//         const info = await transporter.sendMail({
+//             from: '<support@Innovateu.org.in>', // sender address
+//             to: `${a.email}`, // list of receivers
+//             subject: ` 📝 Test Submission Acknowledgement: Thank You!`, // Subject line
+//             text: "Test Submission Acknowledgement: Thank You!", // plain text body
+//             html: `
+//             <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f4f4f4;">
+//     <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+//         <tr>
+//             <td align="center" style="padding: 20px;">
+//                 <table role="presentation" width="600px" cellspacing="0" cellpadding="0" border="0" style="background-color: #ffffff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+//                     <tr>
+//                         <td style="padding: 20px;">
+//                             <!-- Logo -->
+//                             <div style="text-align: center; margin-bottom: 20px;">
+//                                 <img src="https://res.cloudinary.com/dst73auvn/image/upload/v1698952130/2-removebg-preview_ljkree.png" alt="innovateu Logo" style="max-width: 200px; height: auto;">
+//                             </div>
+//                             <h1 style="font-size: 24px; font-weight: bold; color: #333333; margin: 0 0 10px;">Thank You for Submitting the Test ${a.testname} </h1>
+//                             <p style="font-size: 16px; color: #666666; margin: 0 0 20px;">We have received your test submission. We will review it carefully and get back to you as soon as possible.</p>
+//                             <p style="font-size: 16px; color: #666666; margin: 0 0 20px;">If you have any questions or concerns, feel free to reach out to us at techinnovateu@gmail.com</p>
+//                             <p style="font-size: 16px; color: #666666; margin: 0 0 20px;">This is an automated message. Please do not reply. </p>
+//                             <p style="font-size: 16px; color: #666666; margin: 0 0 20px;">Warm Regards Team Innovateu.org</p>
+//                             <table role="presentation" cellspacing="0" cellpadding="0" border="0">
+//                                 <tr>
+//                                     <td style="border-radius: 4px; background-color: #007bff; padding: 10px 20px;">
+//                                         <a href="${process.env.NEXT_PUBLIC_HOST}" style="color: #ffffff; text-decoration: none; font-weight: bold; font-size: 16px;">Return to Website</a>
+//                                     </td>
+//                                 </tr>
+//                             </table>
+//                         </td>
+//                     </tr>
+//                 </table>
+//             </td>
+//         </tr>
+//     </table>
+// </body>
+//             `, 
+//           });
         res.status(200).json({ success:true,message:"Test Submitted Successfully"});
     }
     //if user is not registered for test
@@ -181,6 +181,7 @@ const handler = async (req, res) => {
       }
       catch(err){
         res.status(200).json({ success:false,message:"Something went wrong. Please try again later"});
+        console.log(err);
       }
 
      }//end of post method route for submitting test details
