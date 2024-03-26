@@ -95,8 +95,29 @@ const handler = async (req, res) => {
             console.log(err);
         }
      }
+    
+    
      }
      //end of post method route for test registration
+     //post method for checking if user is registered for test
+     if(req.body.status=="check"){
+       
+        try{
+            let a  = await TestReg.findOne({email:req.body.email,testid:req.body.testid});
+            
+            if(a){
+                const token = jwt.sign({email:req.body.email,testid:req.body.testid}, process.env.JWT_SECRET);
+                res.status(200).json({ success:true,message:"You have already registered for this test",token:token});
+            }
+            else{
+                res.status(200).json({ success:false,message:"You have not registered for this test"});
+            }
+        }
+        catch(err){
+            res.status(200).json({ success:false,message:"Something went wrong. Please try again later"});
+        }
+     }
+     //end of post method route for checking if user is registered for test
     }
     else{
         try{

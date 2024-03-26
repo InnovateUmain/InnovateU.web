@@ -58,7 +58,7 @@ const handler = async (req, res) => {
         else{
             if(req.headers['authorization']==process.env.AUTH_KEY){
                 try{
-                    const data = await Testq.find({testid:req.body.testid});
+                    const data = await Testq.findOne({testid:req.body.testid});
                     res.status(200).json({data,success:true})
                 }
                 catch(err){

@@ -83,7 +83,6 @@ const CodeCraft = () => {
   const [github, setGithub] = useState("");
   const [testid, setTestid] = useState("");
   const [isRegistered, setIsRegistered] = useState(false);
-  
   const router = useRouter();
   let targetDate;
       useEffect(()=>{
@@ -186,6 +185,7 @@ const CodeCraft = () => {
     console.log("Time's up!"); 
     setTimeUp(true);
     handleOpen();
+    localStorage.setItem("inispermit","true");
     // You can replace this with any action you want to perform when the countdown ends
   };
 
@@ -234,10 +234,32 @@ const CodeCraft = () => {
     router.push(`/components/Tests/TestPage?id=${testid}`);
   }
   else{
-    handleClose();
+ let emailuser = JSON.parse(localStorage.getItem("innovateUuser")).email;
+
+const data ={email:emailuser,testid,status:"check"};
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_HOST}/api/Test/testreg`,
+      {
+        method: "POST", // or 'PUT'
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }
+    );
+    const result = await res.json();
+    if(result.success){
+      localStorage.setItem("innovateUTestSession",JSON.stringify({token:result.token}));
+      router.push(`/components/Tests/TestPage?id=${testid}`);
+    }
+    else{
+      toast.error(result.message);
+          handleClose();
 handleOpenNotTRegTest();
+    }
   }
   }
+
   return (
     <div className='min-h-screen text-white  bg-[conic-gradient(at_bottom_right,_var(--tw-gradient-stops))] from-slate-900 via-purple-900 to-slate-900'>
       <Head>
@@ -687,9 +709,9 @@ While you are here, why not explore some of our past tests or learn more about t
        
       
         <p className="text-lg text-gray-600 mb-2 navfont">Test is live now . Click on the Start the test button to continue.</p>
-        <Link href={""} className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-full block mx-2 my-4 "
+        <button  className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-full block mx-2 my-4 w-full"
          onClick={StartTest}
-        >Start the Test</Link>
+        >Start the Test</button>
        
     </div>
   </Box>

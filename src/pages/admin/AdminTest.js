@@ -100,6 +100,9 @@ const Myaccount = () => {
   const [testdescription, setTestDescription] = useState("");
   const [testbenefits, setTestBenefits] = useState([]);
   const [testbchild, setTestBChild] = useState("");
+  const [testEndDate,setTestEndDate] = useState("");
+  const [testEndTime,setTestEndTime] = useState("");
+  const [testactualenddate,setTestActualEndDate] = useState("");
   const [actualTestDate, setActualTestDate] = useState("");
   const [testUpdate, setTestUpdate] = useState(false);
   const [id, setId] = useState("");
@@ -153,6 +156,14 @@ const Myaccount = () => {
     } else if (e.target.name == "answer") {
       setAnswer(e.target.value);
     }
+    else if(e.target.name=="testEndDate"){
+      setTestEndDate(e.target.value);
+      setTestActualEndDate(e.target.value + "T" + testEndTime + ":00");
+    }
+    else if(e.target.name=="testEndTime"){
+      setTestEndTime(e.target.value);
+      setTestActualEndDate(testEndDate + "T" + e.target.value + ":00");
+    }
   };
   //add test states end here
   //test benefits pushing into array start here
@@ -173,6 +184,7 @@ const Myaccount = () => {
       testname,
       testtype: testype,
       testdate: actualTestDate,
+      testenddate:testactualenddate,
       time,
       testtitle,
       testdescription,
@@ -246,10 +258,13 @@ const Myaccount = () => {
     setTestType(item.testtype);
     setTestDate(item.testdate.slice(0, 10));
     setTime(item.testdate.slice(11, 16));
+    setTestEndDate(item.testenddate.slice(0, 10));
+    setTestEndTime(item.testenddate.slice(11, 16));
     setTestTitle(item.testtitle);
     setTestDescription(item.testdescription);
     setTestBenefits(item.testbenefits);
     setActualTestDate(item.testdate);
+    setTestActualEndDate(item.testenddate);
     setId(item._id);
     handleOpen();
   };
@@ -260,6 +275,7 @@ const Myaccount = () => {
       testname,
       testtype: testype,
       testdate: actualTestDate,
+      testenddate:testactualenddate,
       time,
       testtitle,
       testdescription,
@@ -1181,6 +1197,38 @@ const Myaccount = () => {
                             id="status"
                             name="time"
                             value={time}
+                            type="time"
+                            onChange={handleChange}
+                            className="mt-2 block w-full rounded-md border border-gray-200 px-2 py-3 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 "
+                          />
+                        </div>
+                        <div className="flex flex-col my-2">
+                          <label
+                            htmlFor="status"
+                            className="text-stone-600 text-sm font-medium"
+                          >
+                            Test End Date
+                          </label>
+                          <input
+                            id="status"
+                            name="testEndDate"
+                            value={testEndDate}
+                            type="date"
+                            onChange={handleChange}
+                            className="mt-2 block w-full rounded-md border border-gray-200 px-2 py-3 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 "
+                          />
+                        </div>
+                        <div className="flex flex-col my-2">
+                          <label
+                            htmlFor="status"
+                            className="text-stone-600 text-sm font-medium"
+                          >
+                            Test Time
+                          </label>
+                          <input
+                            id="status"
+                            name="testEndTime"
+                            value={testEndTime}
                             type="time"
                             onChange={handleChange}
                             className="mt-2 block w-full rounded-md border border-gray-200 px-2 py-3 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 "
