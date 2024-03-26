@@ -60,6 +60,11 @@ let question1 = JSON.parse(localStorage.getItem("question1Answer"));
 let question2 = JSON.parse(localStorage.getItem("question2Answer"));
 let question3 = JSON.parse(localStorage.getItem("question3Answer"));
 let question4 = JSON.parse(localStorage.getItem("question4Answer"));
+let imgarr = JSON.parse(localStorage.getItem("imgarr"));
+//retriving all cahes data from local storage
+if(imgarr!=null){
+  setImgarr(imgarr);
+}
 
 if(question3!=null){
   setQuestion3Answer(question3);
