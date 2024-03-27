@@ -1,8 +1,13 @@
 import React from 'react'
 import Link from 'next/link'
+import Head from 'next/head'
 const Thankyou = () => {
   return (
     <div className='min-h-screen mt-24'>
+      <Head>
+        <title>Thank You!- for submiting the test</title>
+        <meta name="description" content="Thank you for submitting the test. We will review your submission promptly and get back to you as soon as possible." />
+      </Head>
       <main className="flex flex-col items-center justify-center w-full flex-1 text-center bg-slate-800">
         <svg
           xmlns="http://www.w3.org/2000/svg"

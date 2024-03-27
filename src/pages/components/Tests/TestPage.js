@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 import toast, { Toaster } from "react-hot-toast";
 import BlogSkeleton from '../skeleton/BlogSkeleton';
 import Webcam from 'react-webcam';
+import Head from 'next/head';
 import Spinner from '../Spinner';
 import { get, set } from 'mongoose';
 import Link from 'next/link';
@@ -102,19 +103,19 @@ if(localStorage.getItem("innovateUuser")){
   }
 })()
 //handle r
-// // Function to handle the event
-// const handleRightClick = (event) => {
-//   event.preventDefault();
-// };
+// Function to handle the event
+const handleRightClick = (event) => {
+  event.preventDefault();
+};
 
-// // Adding the event listener
-// document.addEventListener('contextmenu', handleRightClick);
+// Adding the event listener
+document.addEventListener('contextmenu', handleRightClick);
 
-// // Cleanup function to remove the event listener
-// return () => {
-//   document.removeEventListener('contextmenu', handleRightClick);
-// };
-// //right click disable
+// Cleanup function to remove the event listener
+return () => {
+  document.removeEventListener('contextmenu', handleRightClick);
+};
+//right click disable
   },[router.query])
   ///all aplication handle changes
 const handleChange = (e)=>{
@@ -381,30 +382,30 @@ if (!once) {
  
 }
 
-// useEffect(() => {
-//   const handleBlur = () => {
-//     toast.error("You are not allowed to change the tab during the exam; any attempt to do so will result in immediate disqualification and your session will be terminated.");
-//     toast.error("Terminating the session due to malpractice");
-//     router.push('/CodeCraft');
-//   };
+useEffect(() => {
+  const handleBlur = () => {
+    toast.error("You are not allowed to change the tab during the exam; any attempt to do so will result in immediate disqualification and your session will be terminated.");
+    toast.error("Terminating the session due to malpractice");
+    router.push('/CodeCraft');
+  };
 
-//   const handleKeyDown = (event) => {
-//     if (event.ctrlKey && (event.key === "c" || event.key === "C" || event.key === "v" || event.key === "V" || event.key === "x" || event.key === "X")) {
-//       toast.error("Copy and paste is strictly prohibited during this exam; any attempt to do so will result in immediate disqualification and your session will be terminated.");
-//       toast.error("Terminating the session due to malpractice");
-//       router.push('/CodeCraft');
-//     }
-//   };
+  const handleKeyDown = (event) => {
+    if (event.ctrlKey && (event.key === "c" || event.key === "C" || event.key === "v" || event.key === "V" || event.key === "x" || event.key === "X")) {
+      toast.error("Copy and paste is strictly prohibited during this exam; any attempt to do so will result in immediate disqualification and your session will be terminated.");
+      toast.error("Terminating the session due to malpractice");
+      router.push('/CodeCraft');
+    }
+  };
 
-//   window.addEventListener("blur", handleBlur);
-//   window.addEventListener("keydown", handleKeyDown);
+  window.addEventListener("blur", handleBlur);
+  window.addEventListener("keydown", handleKeyDown);
 
-//   // Cleanup: Remove event listeners
-//   return () => {
-//     window.removeEventListener("blur", handleBlur);
-//     window.removeEventListener("keydown", handleKeyDown);
-//   };
-// }, []); 
+  // Cleanup: Remove event listeners
+  return () => {
+    window.removeEventListener("blur", handleBlur);
+    window.removeEventListener("keydown", handleKeyDown);
+  };
+}, []); 
 
 console.log(imgarr)
   return (
@@ -419,6 +420,11 @@ console.log(imgarr)
 }
 `}
     </style>
+    <Head>
+        <title>Test Page - CodeCraft</title>
+        <meta name="description" content="Test Page - CodeCraft" />
+        
+    </Head>
          <Toaster position="top-right" reverseOrder={false} />
          {isEligibleStartTest&&<div>
     {loading?<div className='mt-20'><BlogSkeleton/></div>:<div className='min-h-screen bg-[conic-gradient(at_bottom_right,_var(--tw-gradient-stops))] from-slate-900 via-purple-900 to-slate-900 mt-20 '>
