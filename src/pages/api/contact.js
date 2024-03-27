@@ -8,8 +8,8 @@ const handler = async (req, res) => {
         port: 587,
         secure: false,
         auth: {
-            user: "thebasirkhanofficial@gmail.com",
-            pass: "bOTLR5E0phXVM2qm",
+            user: process.env.NEXT_PUBLIC_EMAIL_USER_NAME,
+            pass: process.env.NEXT_PUBLIC_EMAIL_PASSWORD,
         }
       });
       

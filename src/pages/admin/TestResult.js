@@ -69,6 +69,9 @@ const Myaccount = () => {
     const [answer3,setAnswer3]=useState([{0:"HELLO"}]);
     const [answer4,setAnswer4]=useState([{0:"HELLO"}]);
     const [loading, setLoading] = useState(false);
+    const [imgarr, setImgarr] = useState([]);
+    const [id,setId]=useState("");
+    const [imgintial,setImgintial]=useState(2);
    
     // Fetching all data from the database
     const fetchalldata = async () => {
@@ -157,7 +160,7 @@ const handleChange = (e) => {
     else if(e.target.name=="clg"){
       setClg(e.target.value);
     }
-    else if(e.target.value=="selected"){
+    else if(e.target.name=="selected"){
       setSelected(e.target.value);
     }
 
@@ -237,10 +240,79 @@ const handleChange = (e) => {
     setAnswer3(item.question3answer);
     setAnswer4(item.question4answer);
     setSelected(item.selected);
+    setImgarr(item.imgarr);
+    setId(item._id);
     handleOpen();
-    scoreChecker();
    }
-console.log(answer3)
+const updateTestResult = async()=>{
+  setLoading(true);
+  if(selected=="selected"){
+    let data = { status: "selected",id:id,score:score,scorestatus:scorestatus,selected:selected,email:email,statuses:status};
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_HOST}/api/Test/testresult`,
+      {
+        method: "POST", // or 'PUT'
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }
+    );
+    setLoading(false);
+    const result = await res.json();
+    if (result.success) {
+      toast.success(result.message);
+      fetchalldata();
+      handleClose();
+    } else {
+      toast.error(result.message);
+    }
+  }
+  else if(selected=="rejected"){
+    let data = { status: "rejected",id:id,score:score,scorestatus:scorestatus,selected:selected,email:email,statuses:status};
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_HOST}/api/Test/testresult`,
+      {
+        method: "POST", // or 'PUT'
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }
+    );
+    setLoading(false);
+    const result = await res.json();
+    if (result.success) {
+      toast.success(result.message);
+      fetchalldata();
+      handleClose();
+    } else {
+      toast.error(result.message);
+    }
+  }
+  else{
+    let data = { status: "checked",id:id,score:score,scorestatus:scorestatus,email:email,statuses:status};
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_HOST}/api/Test/testresult`,
+      {
+        method: "POST", // or 'PUT'
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }
+    );
+    setLoading(false);
+    const result = await res.json();
+    if (result.success) {
+      toast.success(result.message);
+      fetchalldata();
+      handleClose();
+    } else {
+      toast.error(result.message);
+    }
+  }
+}
 
   return (
       <ThemeProvider theme={theme}>
@@ -785,6 +857,8 @@ console.log(answer3)
                             type="text"
                             onChange={handleChange}
                             className="mt-2 block w-full rounded-md border border-gray-200 px-2 py-3 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 "
+                            onDoubleClick={()=>{window.open(linkedin,'_blank')}}
+                            
                           />
                         </div>
                         <div className="flex flex-col my-2">
@@ -801,6 +875,8 @@ console.log(answer3)
                             type="text"
                             onChange={handleChange}
                             className="mt-2 block w-full rounded-md border border-gray-200 px-2 py-3 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 "
+                            onDoubleClick={()=>{window.open(github,'_blank')}}
+                           
                           />
                         </div>
 
@@ -861,7 +937,7 @@ console.log(answer3)
                             <option>Select</option>
                             <option value="pending">Pending</option>
                             <option value="selected">Selected</option>
-                            <option value="not selected">Not Selected</option>
+                            <option value="rejected">Rejected</option>
                           </select>
                         </div>
                       </div>
@@ -882,6 +958,9 @@ console.log(answer3)
                             onChange={handleChange}
                             className="mt-2 block w-full rounded-md border border-gray-200 px-2 py-3 shadow-sm outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 my-2"
                           />
+                          <button className='p-4 m-2 navfont bg-green-600 text-white rounded' onClick={scoreChecker}>
+                            Get Mcq Score
+                          </button>
                         </div>
                        
                        
@@ -927,6 +1006,32 @@ console.log(answer3)
                           ></textarea>
                         </div>))}
                       </div>
+                      <div className='mt-4 flex flex-wrap flex-row'>
+                       <h1 className='font-bold navfont'>Photos During the test</h1>
+                       {imgarr.slice(0,imgintial).map((item,index)=>(<div className='m-2' key={item}>
+                       <img src={item} alt="img" className="rounded h-40 w-40 hover:w-52 hover:h-52 transition-all duration-300 ease-in-out"/>
+
+                       </div>))}
+                      
+                      </div>
+                      <button className='p-2 m-2 navfont bg-green-600 text-white rounded ' onClick={()=>{
+                        if(imgintial<imgarr.length){
+                          setImgintial(imgintial+2)
+                        }
+                       }}>
+                            Load More
+                          </button>
+
+                          <button className='p-2 m-2 navfont bg-purple-600 text-white rounded ' onClick={()=>{
+                            setImgintial(imgarr.length);
+                          }}>
+                           Load All 
+                          </button>
+                          <button className='p-2 m-2 navfont bg-red-600 text-white rounded ' onClick={()=>{
+                            setImgintial(2);
+                          }}>
+                            Reset
+                          </button>
                       <div className="mt-6 grid w-full grid-cols-2 justify-end space-x-4 md:flex">
                         <button
                           className="active:scale-95 rounded-lg bg-gray-200 px-8 py-2 font-medium text-gray-600 outline-none focus:ring hover:opacity-90 navfont"
@@ -936,17 +1041,10 @@ console.log(answer3)
                         </button>
                   
                           <button
-                            className="active:scale-95 rounded-lg bg-blue-600 px-8 py-2 font-medium text-white outline-none focus:ring hover:opacity-90 navfont"
-                          
-                          >
-                            Add Test
-                          </button>
-          
-                          <button
                             className="active:scale-95 rounded-lg bg-green-600 px-8 py-2 font-medium text-white outline-none focus:ring hover:opacity-90 navfont"
-                            
+                          onClick={updateTestResult}
                           >
-                            Update Test
+                            Update Result
                           </button>
                     
                       </div>

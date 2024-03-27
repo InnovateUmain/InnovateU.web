@@ -330,10 +330,15 @@ useEffect(() => {
 
 const getScreenshot = () => {
   if (webcamRef.current) {
-    let img = webcamRef.current.getScreenshot();
-    setImg(img);
-    setImgarr([...imgarr,img]);
-    localStorage.setItem("imgarr",JSON.stringify(imgarr));
+    let newImg = webcamRef.current.getScreenshot();
+    setImg(newImg); // Assuming this sets the current image for display
+
+    // Append new image to the array and update both state and localStorage
+    setImgarr(prevImgarr => {
+      const newImgarr = [...prevImgarr, newImg]; // Copy previous array and add new image
+      localStorage.setItem("imgarr", JSON.stringify(newImgarr)); // Update localStorage
+      return newImgarr; // Return updated array to update state
+    });
   }
 };
 // setInterval(getScreenshot, 10000);
@@ -376,30 +381,30 @@ if (!once) {
  
 }
 
-useEffect(() => {
-  const handleBlur = () => {
-    toast.error("You are not allowed to change the tab during the exam; any attempt to do so will result in immediate disqualification and your session will be terminated.");
-    toast.error("Terminating the session due to malpractice");
-    router.push('/CodeCraft');
-  };
+// useEffect(() => {
+//   const handleBlur = () => {
+//     toast.error("You are not allowed to change the tab during the exam; any attempt to do so will result in immediate disqualification and your session will be terminated.");
+//     toast.error("Terminating the session due to malpractice");
+//     router.push('/CodeCraft');
+//   };
 
-  const handleKeyDown = (event) => {
-    if (event.ctrlKey && (event.key === "c" || event.key === "C" || event.key === "v" || event.key === "V" || event.key === "x" || event.key === "X")) {
-      toast.error("Copy and paste is strictly prohibited during this exam; any attempt to do so will result in immediate disqualification and your session will be terminated.");
-      toast.error("Terminating the session due to malpractice");
-      router.push('/CodeCraft');
-    }
-  };
+//   const handleKeyDown = (event) => {
+//     if (event.ctrlKey && (event.key === "c" || event.key === "C" || event.key === "v" || event.key === "V" || event.key === "x" || event.key === "X")) {
+//       toast.error("Copy and paste is strictly prohibited during this exam; any attempt to do so will result in immediate disqualification and your session will be terminated.");
+//       toast.error("Terminating the session due to malpractice");
+//       router.push('/CodeCraft');
+//     }
+//   };
 
-  window.addEventListener("blur", handleBlur);
-  window.addEventListener("keydown", handleKeyDown);
+//   window.addEventListener("blur", handleBlur);
+//   window.addEventListener("keydown", handleKeyDown);
 
-  // Cleanup: Remove event listeners
-  return () => {
-    window.removeEventListener("blur", handleBlur);
-    window.removeEventListener("keydown", handleKeyDown);
-  };
-}, []); 
+//   // Cleanup: Remove event listeners
+//   return () => {
+//     window.removeEventListener("blur", handleBlur);
+//     window.removeEventListener("keydown", handleKeyDown);
+//   };
+// }, []); 
 
 console.log(imgarr)
   return (

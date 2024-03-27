@@ -17,7 +17,7 @@ const TestRegSchema = new mongoose.Schema({
     question2answer:[{type:Object,default:''}],
     question3answer:[{type:Object,default:''}],
     question4answer:[{type:Object,default:''}],
-    imgarr:[{type:String,default:''}],
+    imgarr:[{type:Object,default:''}],
 }, { timestamps: true });
 mongoose.models = {};
 export default mongoose.model('TestReg', TestRegSchema);
