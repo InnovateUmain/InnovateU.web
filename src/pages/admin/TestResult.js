@@ -72,7 +72,6 @@ const Myaccount = () => {
     const [imgarr, setImgarr] = useState([]);
     const [id,setId]=useState("");
     const [imgintial,setImgintial]=useState(2);
-   
     // Fetching all data from the database
     const fetchalldata = async () => {
       setLoading(true);
@@ -941,7 +940,7 @@ const updateTestResult = async()=>{
                           </select>
                         </div>
                       </div>
-                      
+                      {status!="registered"&&<div>
                       <div className="mt-8 ">
                         <div className="flex flex-col">
                           <label
@@ -1046,8 +1045,10 @@ const updateTestResult = async()=>{
                           >
                             Update Result
                           </button>
+                         
                     
                       </div>
+                      </div>}
                     </div>
                   </div>
 

@@ -6,8 +6,11 @@ import BlogSkeleton from '../skeleton/BlogSkeleton';
 import Webcam from 'react-webcam';
 import Head from 'next/head';
 import Spinner from '../Spinner';
-import { get, set } from 'mongoose';
+import Box from '@mui/material/Box';
+import Modal from '@mui/material/Modal';
+import { IoMdCloseCircle } from "react-icons/io";
 import Link from 'next/link';
+import { get } from 'mongoose';
 const TestPage = () => {
   const router = useRouter();
   //all the states
@@ -29,6 +32,86 @@ const TestPage = () => {
 
 const webcamRef = useRef("");
 //fetch request for getting the test questions'
+//modal states
+const [width,setWidth]= useState(0);
+    const [open, setOpen] = useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => {
+      setOpen(false)
+    
+    };
+        useEffect(()=>{
+          var w = window.innerWidth;
+         if(w>=500){
+          setWidth(800);
+         }
+         else{
+          setWidth(350);
+         }
+          
+         },[])
+         const style = {
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: {width},
+          bgcolor: 'background.paper',
+          border: '2px solid purple',
+          boxShadow: 24,
+          borderRadius: "6px",
+          p: 4,
+        };
+        //modal ends here
+        //useeffect for check device is mobile or not
+        useEffect(()=>{
+         const handleResize = () => {
+          if(window.innerWidth<=800){
+            handleOpen();
+            
+            setTimeout(()=>{
+              handleClose();
+              router.push('/CodeCraft');
+              toast.error("You are not allowed to access this page in mobile device; any attempt to do so will result in immediate disqualification and your session will be terminated.");
+            },2000);
+          }
+         }
+         handleResize();
+         // Add event listener
+         if(typeof window !== "undefined"){
+          window.addEventListener("resize", handleResize);
+         }
+         // Remove event listener on cleanup
+         return () => {
+          if (typeof window !== 'undefined') {
+            window.removeEventListener('resize', handleResize);
+          }
+        }
+        },[])
+        //useEffect for testing camera is present or not
+        useEffect(()=>{
+          const gettingPermission = async () => {
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+              navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+                  .then(function(stream) {
+                      if (videoRef.current) {
+                          videoRef.current.srcObject = stream; 
+                      }
+              
+                  })
+                  .catch(function(error) {
+                      toast.error('Error accessing camera and microphone:', error);
+                  
+                      // Handle permission denied error
+                  });
+          } else {
+              toast.error('getUserMedia is not supported by this browser');
+              // Handle unsupported browser error
+          }
+          gettingPermission();
+          }
+        },[webcamRef])
+
 const getQuestion = async()=>{
   setLoading(true);
   const data ={testid:router.query.id};
@@ -54,9 +137,45 @@ const getQuestion = async()=>{
 
 }
 //getting user submit the test or not
+const getTestDetails = async()=>{
+  setLoading(true);
+  if(!localStorage.getItem("innovateUuser")){
+    setLoading(false);
+    toast.error("You are not allowed to access this page; any attempt to do so will result in immediate disqualification and your session will be terminated.");
+    router.push('/CodeCraft');
+    return;
+  }
+  let emailuser = JSON.parse(localStorage.getItem("innovateUuser")).email;
+  const data ={testid:router.query.id,email:emailuser,status:"getTestDetails"};
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_HOST}/api/Test/testreg`,
+      {
+        method: "POST", // or 'PUT'
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }
+    );
+    const result = await res.json();
+    setLoading(false);
+    if(result.success){
+     if(result.data.length!=0){
+       if(result.data.status=="submitted"){
+         setIsEligibleStartTest(false);
+       }
+     }
+      
+    }
+    else{
+    toast.error(result.message);
+    }
+
+}
 let targetDate ;
   useEffect(()=>{
 getQuestion();
+
 let question1 = JSON.parse(localStorage.getItem("question1Answer"));
 let question2 = JSON.parse(localStorage.getItem("question2Answer"));
 let question3 = JSON.parse(localStorage.getItem("question3Answer"));
@@ -86,9 +205,6 @@ if(localStorage.getItem("inispermit")=="true"){
 if(localStorage.getItem("isstart")=="true"){
   setCurrentStage(1);
 }
-if(localStorage.getItem("IsFinish")=="true"){
-setIsEligibleStartTest(false);
-}
 if(localStorage.getItem("innovateUuser")){
   let a = JSON.parse(localStorage.getItem("innovateUuser")).email;
   setEmail(a);
@@ -110,12 +226,13 @@ const handleRightClick = (event) => {
 
 // Adding the event listener
 document.addEventListener('contextmenu', handleRightClick);
-
+getTestDetails();
 // Cleanup function to remove the event listener
 return () => {
   document.removeEventListener('contextmenu', handleRightClick);
 };
 //right click disable
+
   },[router.query])
   ///all aplication handle changes
 const handleChange = (e)=>{
@@ -204,8 +321,8 @@ const handleChange4 = (e)=>{
       localStorage.removeItem("question2Answer");
       localStorage.removeItem("question3Answer");
       localStorage.removeItem("question4Answer");
+      localStorage.removeItem("imgarr");
       localStorage.removeItem("inispermit");
-      localStorage.setItem("IsFinish",true);
       localStorage.removeItem("innovateUTestSession");
       // router.push('/dashboard');
       setCurrentStage(0);
@@ -330,18 +447,35 @@ useEffect(() => {
 }, []); // Run only once after initial render
 
 const getScreenshot = () => {
-  if (webcamRef.current) {
-    let newImg = webcamRef.current.getScreenshot();
-    setImg(newImg); // Assuming this sets the current image for display
+  if (webcamRef.current && webcamRef.current.getScreenshot) {
+    try {
+      let newImg = webcamRef.current.getScreenshot();
 
-    // Append new image to the array and update both state and localStorage
-    setImgarr(prevImgarr => {
-      const newImgarr = [...prevImgarr, newImg]; // Copy previous array and add new image
-      localStorage.setItem("imgarr", JSON.stringify(newImgarr)); // Update localStorage
-      return newImgarr; // Return updated array to update state
-    });
+      if (!newImg) {
+        toast.error("Failed to get screenshot.");
+        toast.error("Terminating the session due to not captuting the screenshot with 3 attempts");
+        return; // exit function if screenshot is not obtained
+      }
+
+      setImg(newImg); // Assuming this sets the current image for display
+
+      // Append new image to the array and update both state and localStorage
+      setImgarr(prevImgarr => {
+        const newImgarr = [...prevImgarr, newImg]; // Copy previous array and add new image
+        localStorage.setItem("imgarr", JSON.stringify(newImgarr)); // Update localStorage
+        return newImgarr; // Return updated array to update state
+      });
+    } catch (error) {
+      toast.error("Error while capturing screenshot:", error);
+      router.push('/CodeCraft');
+    }
+  } else {
+    toast.error("Webcam reference not available or missing getScreenshot method.");
+    toast.error("Failed to get screenshot.");
+    toast.error("Terminating the session due to not captuting the screenshot with 3 attempts");
   }
 };
+
 // setInterval(getScreenshot, 10000);
 const startexam = ()=>{
   localStorage.setItem("isstart","true");
@@ -694,6 +828,31 @@ console.log(imgarr)
    
     </div>
     </>}
+    <Modal
+  open={open}
+  onClose={handleClose}
+  aria-labelledby="modal-modal-title"
+  aria-describedby="modal-modal-description"
+>
+  <Box sx={style}>
+  <div className='absolute top-2 right-2 text-purple-600' onClick={handleClose}>
+    <IoMdCloseCircle className='text-4xl'/>
+    </div>
+    <div className="bg-white p-8 rounded-lg text-center max-h-[80vh] overflow-y-scroll">
+        <div className="animate-tickScale inline-block bg-green-600 rounded-full">
+    
+           <img src="/v1.svg" alt="no data img" className="h-52 w-52"/>
+        </div>
+        
+        <h1 className="lg:text-4xl md:text-4xl sm:text-2xl font-semibold text-black mb-4 font text-2xl navfont ">OOPS ! Mobile view is not supported</h1>
+        <p className=" text-black mb-4 font navfont font-bold text-xl"> Upgrade Your Exam Experience: Laptop Access Required! </p>
+        <p className="text-lg text-gray-600 mb-2 font navfont">Please note that our examination platform is optimized for laptop usage only. Kindly access the exam through a laptop or desktop computer for the best experience.</p>
+        <Link href="/" className="bg-blue-600 hover:bg-blue-800 text-white font-semibold py-2 px-4 rounded-full inline-block mx-2 my-4 ">Go back to home</Link>
+        <br/>
+        {/* <Link href="/Event" className="bg-blue-600 hover:bg-blue-800 text-white font-semibold py-2 px-4 rounded-full inline-block">Register For Event</Link> */}
+    </div>
+  </Box>
+</Modal>
     </>
   )
 }

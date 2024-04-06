@@ -1,5 +1,5 @@
 import React from 'react'
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState,useRef } from "react";
 import { AiOutlineLogin } from "react-icons/ai";
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
@@ -16,7 +16,10 @@ import { set } from 'mongoose';
 const CodeCraft = () => {
   const [timeUp , setTimeUp] = useState(false);
   const dispatch = useDispatch();
+  const videoRef = useRef(null);
   const userinfo = useSelector((state) => state.userData);
+  const [isPermissionGranted, setIsPermissionGranted] = useState(false);
+  const [errorPermission, setErrorPermission] = useState("");
   //get user data for login
   const getUser = async (token) => {
     console.log(token);
@@ -44,6 +47,39 @@ const CodeCraft = () => {
     );
   };
   //for modal code start here
+  //getting video and camera permission
+  const gettingPermission = async () => {
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+      navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+          .then(function(stream) {
+              if (videoRef.current) {
+                  videoRef.current.srcObject = stream; 
+              }
+              setIsPermissionGranted(true);
+          })
+          .catch(function(error) {
+              toast.error('Error accessing camera and microphone:', error);
+              setIsPermissionGranted(false);
+              setErrorPermission("Error accessing camera and microphone or Permission denied. Please grant access to the camera and microphone"+" "+error);
+              // Handle permission denied error
+          });
+  } else {
+      toast.error('getUserMedia is not supported by this browser');
+      setIsPermissionGranted(false);
+      setErrorPermission("getUserMedia is not supported by this browser");
+      // Handle unsupported browser error
+  }
+  }
+  //stop media stream
+  const stopMediaStream = () => {
+    if (videoRef.current && videoRef.current.srcObject) {
+        videoRef.current.srcObject.getTracks().forEach(track => {
+            track.stop(); // Stops each track (both video and audio, if present)
+        });
+        videoRef.current.srcObject = null; // Optionally clear the srcObject after stopping the tracks
+    }
+};
+
   const [width,setWidth]= useState(0);
   const [open, setOpen] = useState(false);
   const [openNotTRegTest, setOpenNotTRegTest] = useState(false);
@@ -52,7 +88,10 @@ const CodeCraft = () => {
   const handlecloseoops = () => setOopenoops(false);
   const handleOpenoops = () => setOopenoops(true);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setOpen(false);
+    stopMediaStream();
+  };
   const handleOpenNotTRegTest = () => setOpenNotTRegTest(true);
   const handleCloseNotTRegTest = () => setOpenNotTRegTest(false);
   const handleOpenEnroll = () => {
@@ -83,6 +122,7 @@ const CodeCraft = () => {
   const [github, setGithub] = useState("");
   const [testid, setTestid] = useState("");
   const [isRegistered, setIsRegistered] = useState(false);
+ 
   const router = useRouter();
   let targetDate;
       useEffect(()=>{
@@ -188,6 +228,7 @@ const CodeCraft = () => {
     console.log("Time's up!"); 
     setTimeUp(true);
     handleOpen();
+    gettingPermission()
     localStorage.setItem("inispermit","true");
     // You can replace this with any action you want to perform when the countdown ends
   };
@@ -238,7 +279,13 @@ const CodeCraft = () => {
     router.push(`/components/Tests/TestPage?id=${testid}`);
   }
   else{
- let emailuser = JSON.parse(localStorage.getItem("innovateUuser")).email;
+    if(!localStorage.getItem("innovateUuser")){
+      toast.error("Please login to continue");
+      handleClose();
+      handleOpenoops();
+      return;
+    }
+  let emailuser = JSON.parse(localStorage.getItem("innovateUuser")).email;
 
 const data ={email:emailuser,testid,status:"check"};
     const res = await fetch(
@@ -377,9 +424,10 @@ handleOpenNotTRegTest();
             <AiOutlineLogin className='mx-2'/>
           </button>}
           {timeUp&&<button
-            className="inline-flex items-center lg:px-8 md:px-8 px-4 py-4 lg:text-lg text-md font-bold text-white transition-all duration-200 bg-green-600 border border-transparent rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 font-pj justif-center hover:bg-gray-600 lg:mx-0 mx-2 my-2"
+            className="inline-flex items-center lg:px-8 md:px-8 px-4 py-4 lg:text-lg text-md font-bold text-white transition-all duration-200 bg-green-600 border border-transparent rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 font-pj justif-center hover:bg-gray-600 lg:mx-0 mx-2 my-2 disabled:opacity-50 disabled:pointer-events-none disabled:cursor-not-allowed"
             role="button"
             onClick={StartTest}
+            disabled={!isPermissionGranted}
           >
             
             Start Test
@@ -700,10 +748,10 @@ While you are here, why not explore some of our past tests or learn more about t
   aria-describedby="modal-modal-description"
 >
   <Box sx={style}>
-  <div className='absolute top-2 right-2 text-purple-600' onClick={handleClose}>
+  <div className='absolute top-2 right-2 text-purple-600 ' onClick={handleClose}>
     <IoMdCloseCircle className='text-4xl' onClick={handleClose}/>
     </div>
-    <div className="bg-white p-8 rounded-lg  text-center">
+    <div className="bg-white p-8 rounded-lg  text-center max-h-[80vh] overflow-y-scroll">
         <div className="animate-tickScale inline-block rounded-full">
     
         <img src="/v1.svg" alt="svg" className='w-60'/>
@@ -712,9 +760,21 @@ While you are here, why not explore some of our past tests or learn more about t
         <h1 className="lg:text-4xl md:text-4xl sm:text-2xl font-semibold text-green-600 mb-4 font text-2xl navfont">Test is live now</h1>
        
       
-        <p className="text-lg text-gray-600 mb-2 navfont">Test is live now . Click on the Start the test button to continue.</p>
-        <button  className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-full block mx-2 my-4 w-full"
+        <p className="text-lg text-gray-600 navfont">Test is live now . Click on the Start the test button to continue.</p>
+        <div className='flex justify-center items-center flex-col'>
+       
+        <h1 className='navfont font-bold  text-lg lg:text-xl'>Your Front onScreen View</h1>
+        <video ref={videoRef} autoPlay muted className={`h-44 w-44 rounded-full p-2 m-2 ${!isPermissionGranted?"hidden":""}`}></video> 
+   { !isPermissionGranted&&<p className="text-lg navfont p-2 m-2 text-red-600">{errorPermission}.</p>}
+    
+        
+           
+               
+        </div>
+        <button  className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-full block mx-2 w-full disabled:opacity-50 disabled:pointer-events-none disabled:cursor-not-allowed
+        "
          onClick={StartTest}
+         disabled={!isPermissionGranted}
         >Start the Test</button>
        
     </div>
@@ -763,7 +823,7 @@ While you are here, why not explore some of our past tests or learn more about t
         
         <h1 className="lg:text-4xl md:text-4xl sm:text-2xl font-semibold text-black mb-4 font text-2xl navfont ">OOPS ! 🤭🤭🤭</h1>
         <p className=" text-black mb-4 font navfont font-bold text-xl"> You donot have registered for this test </p>
-        <p className="text-lg text-gray-600 mb-2 font navfont">It appears you have not registered for this particular test. We regret to inform you that registration for this coding test has already closed. Unfortunately, we are unable to accommodate late registrations as the deadline has passed.
+        <p className="text-lg text-gray-600 mb-2 font navfont">It appears you have not registered for this particular test. We regret to inform you that registration for this test has already closed. Unfortunately, we are unable to accommodate late registrations as the deadline has passed.
 We appreciate your interest and encourage you to stay tuned for future opportunities. In the meantime, consider exploring other resources and events on our platform.</p>
         <Link href="/" className="bg-blue-600 hover:bg-blue-800 text-white font-semibold py-2 px-4 rounded-full inline-block mx-2 my-4 ">Go back to home</Link>
         <br/>
