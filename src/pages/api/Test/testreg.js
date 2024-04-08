@@ -198,11 +198,64 @@ const handler = async (req, res) => {
         }
      }
 //end of the post method route for getting test details
+//session starts here
+if(req.body.status=="MakeSessionHandShake"){
+    console.log(req.body);
+    console.log("make session");
+try{
+let a = await TestReg.findOne({email:req.body.email,testid:req.body.testid});
+if(a.status=="registered" || a.status=="inactive"){
+await a.updateOne({
+    status:'active'
+});  
+res.status(200).json({ success:true,message:"Session has been started"});
+return;
+}
+else if(a.status=="active"){
+    res.status(200).json({ success:false,message:"Sorry we can not start the session as it is already active in another device"});
+    return;
+}
+else{
+    return;
+
+}
+}
+catch(err){
+    res.status(200).json({ success:false,message:"Something went wrong. Please try again later"+err});
+    return
+}
+}
+//end of session details
+if(req.body.status=="EndSessionHandShake"){
+    console.log(req.body);
+    console.log("end session");
+    try{
+        let a = await TestReg.findOne({email:req.body.email,testid:req.body.testid});
+        if(a.status=="active"){
+        await a.updateOne({
+            status:'inactive'
+        });  
+        res.status(200).json({ success:true,message:"Session has been ended successfully"});
+        return;
+        }
+        else if(a.status=="inactive"){
+            return;
+        }
+        else{
+            return;
+        }
+        }
+        catch(err){
+            res.status(200).json({ success:false,message:"Something went wrong. Please try again later"+err});
+            return;
+        } 
+}
     }
     else{
         try{
             let testReg = await TestReg.find({});
             res.status(200).json({ success:true,data:testReg});
+            
         }
         catch(err){
             res.status(200).json({ success:false,message:"Something went wrong. Please try again later"});

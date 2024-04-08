@@ -35,6 +35,50 @@ const TestPage = () => {
 const webcamRef = useRef("");
 //fetch request for getting the test questions'
 //modal states
+//all session functions
+const SessionStartedHandShake = async(id ,email)=>{
+  setLoading(true);
+  const data ={status:"MakeSessionHandShake",testid:id,email:email};
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_HOST}/api/Test/testreg`,
+      {
+        method: "POST", // or 'PUT'
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }
+    );
+    const result = await res.json();
+    setLoading(false);
+    if(result.success){
+      toast.success(result.message);
+    }
+    else{
+      setIsEligibleStartTest(false);
+    }
+}
+//end of session handshake
+const SessionEndHandShake = async(id ,email)=>{
+  setLoading(true);
+  const data ={status:"EndSessionHandShake",testid:id,email:email};
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_HOST}/api/Test/testreg`,
+      {
+        method: "POST", // or 'PUT'
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }
+    );
+    const result = await res.json();
+    setLoading(false);
+    if(result.success){
+      toast.success(result.message);
+    }
+}
+
 const [width,setWidth]= useState(0);
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
@@ -50,7 +94,19 @@ const [width,setWidth]= useState(0);
          else{
           setWidth(350);
          }
+         if(localStorage.getItem("innovateUuser")){
+          let a = JSON.parse(localStorage.getItem("innovateUuser")).email;
+          setEmail(a);
+          SessionStartedHandShake(router.query.id,a);
+         }
+       
+         return () => {
+          if(localStorage.getItem("innovateUuser")){
+            let a = JSON.parse(localStorage.getItem("innovateUuser")).email;
+            SessionEndHandShake(router.query.id,a);
+          }
           
+         }
          },[])
          const style = {
           position: 'absolute',
