@@ -10,7 +10,7 @@ import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import { IoMdCloseCircle } from "react-icons/io";
 import Link from 'next/link';
-import { get } from 'mongoose';
+import { get, set } from 'mongoose';
 const TestPage = () => {
   const router = useRouter();
   //all the states
@@ -27,6 +27,8 @@ const TestPage = () => {
   const [question3Answer,setQuestion3Answer] = useState({});
   const [question4Answer,setQuestion4Answer] = useState({});
   const [imgarr,setImgarr] = useState([]);
+  const [count,setCount] = useState(0);
+
 
   const [isStart,setIsStart] = useState(false);
 
@@ -89,28 +91,28 @@ const [width,setWidth]= useState(0);
         }
         },[])
         //useEffect for testing camera is present or not
-        useEffect(()=>{
-          const gettingPermission = async () => {
-            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-              navigator.mediaDevices.getUserMedia({ video: true, audio: true })
-                  .then(function(stream) {
-                      if (videoRef.current) {
-                          videoRef.current.srcObject = stream; 
-                      }
+        // useEffect(()=>{
+        //   const gettingPermission = async () => {
+        //     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        //       navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+        //           .then(function(stream) {
+        //               if (videoRef.current) {
+        //                   videoRef.current.srcObject = stream; 
+        //               }
               
-                  })
-                  .catch(function(error) {
-                      toast.error('Error accessing camera and microphone:', error);
+        //           })
+        //           .catch(function(error) {
+        //               toast.error('Error accessing camera and microphone:', error);
                   
-                      // Handle permission denied error
-                  });
-          } else {
-              toast.error('getUserMedia is not supported by this browser');
-              // Handle unsupported browser error
-          }
-          gettingPermission();
-          }
-        },[webcamRef])
+        //               // Handle permission denied error
+        //           });
+        //   } else {
+        //       toast.error('getUserMedia is not supported by this browser');
+        //       // Handle unsupported browser error
+        //   }
+        //   gettingPermission();
+        //   }
+        // },[])
 
 const getQuestion = async()=>{
   setLoading(true);
@@ -224,13 +226,13 @@ const handleRightClick = (event) => {
   event.preventDefault();
 };
 
-// Adding the event listener
-document.addEventListener('contextmenu', handleRightClick);
-getTestDetails();
-// Cleanup function to remove the event listener
-return () => {
-  document.removeEventListener('contextmenu', handleRightClick);
-};
+// // Adding the event listener
+// document.addEventListener('contextmenu', handleRightClick);
+// getTestDetails();
+// // Cleanup function to remove the event listener
+// return () => {
+//   document.removeEventListener('contextmenu', handleRightClick);
+// };
 //right click disable
 
   },[router.query])
@@ -452,9 +454,13 @@ const getScreenshot = () => {
       let newImg = webcamRef.current.getScreenshot();
 
       if (!newImg) {
-        toast.error("Failed to get screenshot.");
-        toast.error("Terminating the session due to not captuting the screenshot with 3 attempts");
-        return; // exit function if screenshot is not obtained
+          toast.error("Terminating the session due to not accessing the webcam.");
+          router.push('/CodeCraft');
+           toast.error("Failed to get screenshot.");
+        // toast.error("Terminating the session if the screenshot is not captured with 3 attempts.");
+        setCount((prevCount) => prevCount + 1);
+        localStorage.setItem("count", count);
+        return;
       }
 
       setImg(newImg); // Assuming this sets the current image for display
@@ -516,30 +522,31 @@ if (!once) {
  
 }
 
-useEffect(() => {
-  const handleBlur = () => {
-    toast.error("You are not allowed to change the tab during the exam; any attempt to do so will result in immediate disqualification and your session will be terminated.");
-    toast.error("Terminating the session due to malpractice");
-    router.push('/CodeCraft');
-  };
+// useEffect(() => {
+//   const handleBlur = () => {
+//     toast.error("You are not allowed to change the tab during the exam; any attempt to do so will result in immediate disqualification and your session will be terminated.");
+//     toast.error("Terminating the session due to malpractice");
+//     router.push('/CodeCraft');
+//   };
 
-  const handleKeyDown = (event) => {
-    if (event.ctrlKey && (event.key === "c" || event.key === "C" || event.key === "v" || event.key === "V" || event.key === "x" || event.key === "X")) {
-      toast.error("Copy and paste is strictly prohibited during this exam; any attempt to do so will result in immediate disqualification and your session will be terminated.");
-      toast.error("Terminating the session due to malpractice");
-      router.push('/CodeCraft');
-    }
-  };
+//   const handleKeyDown = (event) => {
+//     if (event.ctrlKey && (event.key === "c" || event.key === "C" || event.key === "v" || event.key === "V" || event.key === "x" || event.key === "X")) {
+//       toast.error("Copy and paste is strictly prohibited during this exam; any attempt to do so will result in immediate disqualification and your session will be terminated.");
+//       toast.error("Terminating the session due to malpractice");
+//       router.push('/CodeCraft');
+//     }
+//   };
 
-  window.addEventListener("blur", handleBlur);
-  window.addEventListener("keydown", handleKeyDown);
+//   window.addEventListener("blur", handleBlur);
+//   window.addEventListener("keydown", handleKeyDown);
 
-  // Cleanup: Remove event listeners
-  return () => {
-    window.removeEventListener("blur", handleBlur);
-    window.removeEventListener("keydown", handleKeyDown);
-  };
-}, []); 
+//   // Cleanup: Remove event listeners
+//   return () => {
+//     window.removeEventListener("blur", handleBlur);
+//     window.removeEventListener("keydown", handleKeyDown);
+//   };
+// }, []); 
+console.log(count)
 
 console.log(imgarr)
   return (
@@ -552,7 +559,16 @@ console.log(imgarr)
   -ms-user-select: none; /* Internet Explorer/Edge */
   user-select: none; /* Non-prefixed version, currently supported by Chrome, Opera, and Edge */
 }
+.watermark{
+  color: rgba(0, 0, 0, 0.1);
+  font-weight: 800;
+  z-index: 1;
+  opacity: 0.9;
+  position: absolute;
+}
+ 
 `}
+
     </style>
     <Head>
         <title>Test Page - CodeCraft</title>
@@ -561,7 +577,8 @@ console.log(imgarr)
     </Head>
          <Toaster position="top-right" reverseOrder={false} />
          {isEligibleStartTest&&<div>
-    {loading?<div className='mt-20'><BlogSkeleton/></div>:<div className='min-h-screen bg-[conic-gradient(at_bottom_right,_var(--tw-gradient-stops))] from-slate-900 via-purple-900 to-slate-900 mt-20 '>
+    {loading?<div className='mt-20'><BlogSkeleton/></div>:<div className={`min-h-screen bg-[conic-gradient(at_bottom_right,_var(--tw-gradient-stops))] from-slate-900 via-purple-900 to-slate-900 mt-20 `}>
+      
       <div className='lg:absolute right-0  relative flex justify-center items-center md:absolute'>
       <div className='w-52 h-52 rounded'>
       <Webcam audio={false} ref={webcamRef} screenshotFormat="image/jpeg" />
@@ -662,15 +679,41 @@ console.log(imgarr)
 
 
     <section className='flex justify-center items-center flex-col flex-wrap'>
+  	
    {currentSatge==1&& <div className='flex justify-center items-center'>
-      <div className='lg:w-[60vw] w-[90vw]  bg-white text-black px-8 py-4 m-4 rounded-lg'>
+      <div className='lg:w-[60vw] w-[100vw]  bg-white text-black px-8 py-4 m-4 rounded-l '>
         <h1 className='navfont text-2xl font-bold my-4 text-gray-600' >QUESTION ROUND 1</h1>
       {testQuestions&&testQuestions.question1.map((item,index)=>(<div className='bg-green-300 p-4 rounded my-4' key={index}>
       <h1 className='navfont text-2xl font-bold'>
         Q{index+1}. {item.question} 
    
        </h1>
-       <div className='flex items-center my-4'>
+       <div className='absolute flex flex-wrap'>
+        <div className='flex flex-col'>
+      <p className='navfont  z-10 text-gray-800 font-bold watermark relative top-10 left-20 m-2 p-2 text-4xl lg:text-6xl'>
+        Innovateu
+      </p>
+      <p className='navfont  z-10 text-gray-800 font-bold watermark relative top-10 left-20 m-2 p-2 text-4xl lg:text-6xl'>
+        Innovateu
+      </p>
+      </div>
+     <div className='flex flex-col'>
+     <p className='navfont  z-10 text-gray-800 font-bold watermark relative  rotate-45 m-2 p-2 text-4xl'>
+        Innovateu.org.in
+      </p>
+
+     </div>
+     <div className='flex flex-col'>
+     <p className='navfont  z-10 text-gray-800 font-bold watermark relative  rotate-90 m-2 p-2 text-4xl'>
+        Innovateu.org.in
+      </p>
+     
+     </div>
+     
+      
+      
+       </div>
+       <div className='flex items-center my-4 z-15'>
        <input type="radio" name={index} value={`option1`} className='h-6 w-6' onChange={handleChange}
        checked={question1Answer[index]=="option1"}
        />
@@ -703,6 +746,31 @@ console.log(imgarr)
       <div className='lg:w-[60vw] w-[90vw]  bg-white text-black px-8 py-4 m-4 rounded-lg'>
         <h1 className='navfont text-2xl font-bold my-4 text-gray-600' >QUESTION ROUND 2</h1>
       {testQuestions.question2.map((item,index)=>(<div className='bg-green-300 p-4 rounded my-4' key={index}>
+      <div className='absolute flex flex-wrap'>
+        <div className='flex flex-col'>
+      <p className='navfont  z-10 text-gray-800 font-bold watermark relative top-10 left-20 m-2 p-2 text-4xl lg:text-6xl'>
+        Innovateu
+      </p>
+      <p className='navfont  z-10 text-gray-800 font-bold watermark relative top-10 left-20 m-2 p-2 text-4xl lg:text-6xl'>
+        Innovateu
+      </p>
+      </div>
+     <div className='flex flex-col'>
+     <p className='navfont  z-10 text-gray-800 font-bold watermark relative  rotate-45 m-2 p-2 text-4xl'>
+        Innovateu.org.in
+      </p>
+
+     </div>
+     <div className='flex flex-col'>
+     <p className='navfont  z-10 text-gray-800 font-bold watermark relative  rotate-90 m-2 p-2 text-4xl'>
+        Innovateu.org.in
+      </p>
+     
+     </div>
+     
+      
+      
+       </div>
       <h1 className='navfont text-2xl font-bold'>
         Q{index+1}. {item.question} 
    
@@ -740,6 +808,31 @@ console.log(imgarr)
       <div className='lg:w-[60vw] w-[90vw]  bg-white text-black px-8 py-4 m-4 rounded-lg'>
         <h1 className='navfont text-2xl font-bold my-4 text-gray-600' >QUESTION ROUND 3</h1>
       {testQuestions.question3.map((item,index)=>(<div className='bg-green-300 p-4 rounded ' key={index}>
+      <div className='absolute flex flex-wrap'>
+        <div className='flex flex-col'>
+      <p className='navfont  z-10 text-gray-800 font-bold watermark relative top-10 left-20 m-2 p-2 text-4xl lg:text-6xl'>
+        Innovateu
+      </p>
+      <p className='navfont  z-10 text-gray-800 font-bold watermark relative top-10 left-20 m-2 p-2 text-4xl lg:text-6xl'>
+        Innovateu
+      </p>
+      </div>
+     <div className='flex flex-col'>
+     <p className='navfont  z-10 text-gray-800 font-bold watermark relative  rotate-45 m-2 p-2 text-4xl'>
+        Innovateu.org.in
+      </p>
+
+     </div>
+     <div className='flex flex-col'>
+     <p className='navfont  z-10 text-gray-800 font-bold watermark relative  rotate-90 m-2 p-2 text-4xl'>
+        Innovateu.org.in
+      </p>
+     
+     </div>
+     
+      
+      
+       </div>
       <h1 className='navfont text-2xl font-bold'>
         Q{index+1}. {item.question}
    
@@ -764,6 +857,31 @@ console.log(imgarr)
       <div className='lg:w-[60vw] w-[90vw]  bg-white text-black px-8 py-4 m-4 rounded-lg'>
         <h1 className='navfont text-2xl font-bold my-4 text-gray-600' >QUESTION ROUND 4 - CODING ROUND</h1>
       {testQuestions.question4.map((item,index)=>(<div className='bg-green-300 p-4 rounded my-4' key={index}>
+      <div className='absolute flex flex-wrap'>
+        <div className='flex flex-col'>
+      <p className='navfont  z-10 text-gray-800 font-bold watermark relative top-10 left-20 m-2 p-2 text-4xl lg:text-6xl'>
+        Innovateu
+      </p>
+      <p className='navfont  z-10 text-gray-800 font-bold watermark relative top-10 left-20 m-2 p-2 text-4xl lg:text-6xl'>
+        Innovateu
+      </p>
+      </div>
+     <div className='flex flex-col'>
+     <p className='navfont  z-10 text-gray-800 font-bold watermark relative  rotate-45 m-2 p-2 text-4xl'>
+        Innovateu.org.in
+      </p>
+
+     </div>
+     <div className='flex flex-col'>
+     <p className='navfont  z-10 text-gray-800 font-bold watermark relative  rotate-90 m-2 p-2 text-4xl'>
+        Innovateu.org.in
+      </p>
+     
+     </div>
+     
+      
+      
+       </div>
       <h1 className='navfont text-2xl font-bold'>
         Q{index+1}. {item.question}
        </h1>
