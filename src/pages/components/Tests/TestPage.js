@@ -1,4 +1,6 @@
+"use client"
 import React, { useRef } from 'react'
+
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from 'next/router'
 import toast, { Toaster } from "react-hot-toast";
@@ -10,7 +12,7 @@ import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import { IoMdCloseCircle } from "react-icons/io";
 import Link from 'next/link';
-import { get, set } from 'mongoose';
+import { set } from 'mongoose';
 const TestPage = () => {
   const router = useRouter();
   //all the states
@@ -26,16 +28,27 @@ const TestPage = () => {
   const [question2Answer,setQuestion2Answer] = useState({});
   const [question3Answer,setQuestion3Answer] = useState({});
   const [question4Answer,setQuestion4Answer] = useState({});
+  const [isSessionThere,setIsSessionThere] = useState(false)
   const [imgarr,setImgarr] = useState([]);
   const [count,setCount] = useState(0);
-
-
+  const [initial,setIntial] = useState(0);
+  const [atMost,setAtMost] = useState(1);
+  const [isSubmit,setIsSubmit] = useState(false);
+  const [isPrev,setIsPrev] = useState(false);
   const [isStart,setIsStart] = useState(false);
 
 const webcamRef = useRef("");
 //fetch request for getting the test questions'
 //modal states
 //all session functions
+const stopMediaStream = () => {
+  if (webcamRef.current && webcamRef.current.srcObject) {
+      webcamRef.current.srcObject.getTracks().forEach(track => {
+          track.stop(); // Stops each track (both video and audio, if present)
+      });
+      webcamRef.current.srcObject = null; // Optionally clear the srcObject after stopping the tracks
+  }
+}
 const SessionStartedHandShake = async(id ,email)=>{
   setLoading(true);
   const data ={status:"MakeSessionHandShake",testid:id,email:email};
@@ -51,11 +64,12 @@ const SessionStartedHandShake = async(id ,email)=>{
     );
     const result = await res.json();
     setLoading(false);
-    if(result.success){
+    if(result.success==true){
       toast.success(result.message);
     }
-    else{
+    else if(result.success==false){
       setIsEligibleStartTest(false);
+      setIsSessionThere(true);
     }
 }
 //end of session handshake
@@ -76,6 +90,7 @@ const SessionEndHandShake = async(id ,email)=>{
     setLoading(false);
     if(result.success){
       toast.success(result.message);
+      setIsSessionThere(false);
     }
 }
 
@@ -99,13 +114,24 @@ const [width,setWidth]= useState(0);
           setEmail(a);
           SessionStartedHandShake(router.query.id,a);
          }
-       
-         return () => {
+
+         const handleUnload = () => {
           if(localStorage.getItem("innovateUuser")){
             let a = JSON.parse(localStorage.getItem("innovateUuser")).email;
             SessionEndHandShake(router.query.id,a);
           }
-          
+        };
+    
+        window.addEventListener('unload', handleUnload);
+    
+    
+         return () => {
+          window.removeEventListener('unload', handleUnload);
+          if(localStorage.getItem("innovateUuser")){
+            let a = JSON.parse(localStorage.getItem("innovateUuser")).email;
+              SessionEndHandShake(router.query.id,a);
+          }
+          stopMediaStream();
          }
          },[])
          const style = {
@@ -152,8 +178,8 @@ const [width,setWidth]= useState(0);
         //     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
         //       navigator.mediaDevices.getUserMedia({ video: true, audio: true })
         //           .then(function(stream) {
-        //               if (videoRef.current) {
-        //                   videoRef.current.srcObject = stream; 
+        //               if (webcamRef.current) {
+        //                   webcamRef.current.srcObject = stream; 
         //               }
               
         //           })
@@ -283,13 +309,14 @@ const handleRightClick = (event) => {
 };
 
 // // Adding the event listener
-// document.addEventListener('contextmenu', handleRightClick);
-// getTestDetails();
-// // Cleanup function to remove the event listener
-// return () => {
-//   document.removeEventListener('contextmenu', handleRightClick);
-// };
+document.addEventListener('contextmenu', handleRightClick);
+getTestDetails();
+// Cleanup function to remove the event listener
+return () => {
+  document.removeEventListener('contextmenu', handleRightClick);
+};
 //right click disable
+//
 
   },[router.query])
   ///all aplication handle changes
@@ -384,6 +411,7 @@ const handleChange4 = (e)=>{
       localStorage.removeItem("innovateUTestSession");
       // router.push('/dashboard');
       setCurrentStage(0);
+      stopMediaStream();
       router.push('/components/Tests/Thankyou');
     }
     else{
@@ -496,13 +524,7 @@ useEffect(() => {
   startCountDown();
   return () => clearInterval(timerInterval); // Cleanup the interval on unmount
 }, [startCountDown]);
-useEffect(() => {
-  const intervalId = setInterval(() => {
-    getScreenshot();
-  }, 10000); // 10 seconds
 
-  return () => clearInterval(intervalId); // Cleanup interval on unmount
-}, []); // Run only once after initial render
 
 const getScreenshot = () => {
   if (webcamRef.current && webcamRef.current.getScreenshot) {
@@ -531,14 +553,21 @@ const getScreenshot = () => {
       toast.error("Error while capturing screenshot:", error);
       router.push('/CodeCraft');
     }
-  } else {
-    toast.error("Webcam reference not available or missing getScreenshot method.");
-    toast.error("Failed to get screenshot.");
-    toast.error("Terminating the session due to not captuting the screenshot with 3 attempts");
+  }
+  else{
+    toast.error("Terminating the session due to not accessing the webcam.");
+    router.push('/CodeCraft');
+  
   }
 };
 
-// setInterval(getScreenshot, 10000);
+useEffect(() => {
+  const intervalId = setInterval(() => {
+    getScreenshot();
+  }, 10000); // 10 seconds
+
+  return () => clearInterval(intervalId); // Cleanup interval on unmount
+}, []); // Run only once after initial render
 const startexam = ()=>{
   localStorage.setItem("isstart","true");
   setIsStart(true);
@@ -547,15 +576,67 @@ const startexam = ()=>{
   }
 }
 const prev = ()=>{
-  if(currentSatge>1){
-    setCurrentStage(currentSatge-1);
-   }
+if(isPrev){
+  setIntial(initial-1);
+  setAtMost(atMost-1);
+}
  }
- const next = ()=>{
-   if(currentSatge<4){
-     setCurrentStage(currentSatge+1);
-   }
+ const next1 = ()=>{
+   let a = testQuestions.question1.length;
+  if(atMost<a){
+    setIntial(initial+1);
+    setAtMost(atMost+1);
+    setIsPrev(true);
+    setTimeout(()=>{
+      setIsPrev(false);
+    },10000) 
+  }
+  else if (atMost==a){
+      setCurrentStage(2);
+      setIntial(0);
+      setAtMost(1);
+    
+  }
  }
+ const next2 = ()=>{
+  let a = testQuestions.question2.length;
+ if(atMost<a){
+   setIntial(initial+1);
+   setAtMost(atMost+1);
+ 
+ }
+ else if (atMost==a){
+   setCurrentStage(3);
+  setIntial(0);
+  setAtMost(1);
+ }
+ 
+}
+const next3 = ()=>{
+  let a = testQuestions.question3.length;
+ if(atMost<a){
+   setIntial((initial)=>initial+1);
+   setAtMost((atMost)=>atMost+1);
+ 
+ }
+ else if (atMost==a){
+     setCurrentStage(4);
+      setIntial(0);
+      setAtMost(1); 
+ }
+}
+const next4 = ()=>{
+  let a = testQuestions.question4.length;
+ if(atMost<a){
+  setIntial((initial)=>initial+1);
+  setAtMost((atMost)=>atMost+1);
+ 
+ }
+ else if (atMost==a){
+     setIsSubmit(true);
+     toast.success("You have reached the end of the test. Please click the Submit button to submit your answers.");
+ }
+}
  //handle paste functions
  const preventPaste = (e) => {
   e.preventDefault();
@@ -602,9 +683,9 @@ if (!once) {
 //     window.removeEventListener("keydown", handleKeyDown);
 //   };
 // }, []); 
+
 console.log(count)
 
-console.log(imgarr)
   return (
     <>
     <style jsx>
@@ -629,7 +710,6 @@ console.log(imgarr)
     <Head>
         <title>Test Page - CodeCraft</title>
         <meta name="description" content="Test Page - CodeCraft" />
-        
     </Head>
          <Toaster position="top-right" reverseOrder={false} />
          {isEligibleStartTest&&<div>
@@ -739,32 +819,32 @@ console.log(imgarr)
    {currentSatge==1&& <div className='flex justify-center items-center'>
       <div className='lg:w-[60vw] w-[100vw]  bg-white text-black px-8 py-4 m-4 rounded-l '>
         <h1 className='navfont text-2xl font-bold my-4 text-gray-600' >QUESTION ROUND 1</h1>
-      {testQuestions&&testQuestions.question1.map((item,index)=>(<div className='bg-green-300 p-4 rounded my-4' key={index}>
+      {testQuestions&&testQuestions.question1.slice(initial,atMost).map((item,index)=>(<section className='bg-green-300 p-4 rounded my-4' key={index}>
       <h1 className='navfont text-2xl font-bold'>
-        Q{index+1}. {item.question} 
+        Q{atMost}. {item.question} 
    
        </h1>
        <div className='absolute flex flex-wrap'>
-        <div className='flex flex-col'>
+        <span className='flex flex-col'>
       <p className='navfont  z-10 text-gray-800 font-bold watermark relative top-10 left-20 m-2 p-2 text-4xl lg:text-6xl'>
         Innovateu
       </p>
       <p className='navfont  z-10 text-gray-800 font-bold watermark relative top-10 left-20 m-2 p-2 text-4xl lg:text-6xl'>
         Innovateu
       </p>
-      </div>
-     <div className='flex flex-col'>
+      </span>
+     <span className='flex flex-col'>
      <p className='navfont  z-10 text-gray-800 font-bold watermark relative  rotate-45 m-2 p-2 text-4xl'>
         Innovateu.org.in
       </p>
 
-     </div>
-     <div className='flex flex-col'>
+     </span>
+     <span className='flex flex-col'>
      <p className='navfont  z-10 text-gray-800 font-bold watermark relative  rotate-90 m-2 p-2 text-4xl'>
         Innovateu.org.in
       </p>
      
-     </div>
+     </span>
      
       
       
@@ -794,41 +874,61 @@ console.log(imgarr)
         <label htmlFor={index} className='navfont mx-2 text-lg font-bold'>D. {item.option4}</label>
        </div>
       
-      </div>))}
+      </section>
+    
+    ))}
+     {  currentSatge>=1&&<div className='lg:w-[52vw] w-[95vw] flex justify-end items-center flex-wrap  mb-10 '>
+
+<button className='w-[20vw] py-3 bg-green-600 text-white rounded-md hover:bg-green-800 transition duration-300 mx-2 my-2 navfont
+disabled:opacity-70 disabled:bg-green-500 disabled:cursor-not-allowed'
+
+onClick={prev} disabled={!isPrev}
+>
+  Prev
+</button>
+{currentSatge!=5&& <button className=' w-[20vw] py-3 bg-green-600 text-white rounded-md hover:bg-green-800 transition duration-300 my-2 navfont'
+onClick={next1}
+>
+  Next
+</button>}
+
+
+
+</div>}
       </div>
       </div>}
       {/* // */}
       {currentSatge==2&&<div className='flex justify-center items-center'>
       <div className='lg:w-[60vw] w-[90vw]  bg-white text-black px-8 py-4 m-4 rounded-lg'>
         <h1 className='navfont text-2xl font-bold my-4 text-gray-600' >QUESTION ROUND 2</h1>
-      {testQuestions.question2.map((item,index)=>(<div className='bg-green-300 p-4 rounded my-4' key={index}>
+      {testQuestions.question2.slice(initial,atMost).map((item,index)=>(<section className='bg-green-300 p-4 rounded my-4' key={index}>
       <div className='absolute flex flex-wrap'>
-        <div className='flex flex-col'>
+        <span className='flex flex-col'>
       <p className='navfont  z-10 text-gray-800 font-bold watermark relative top-10 left-20 m-2 p-2 text-4xl lg:text-6xl'>
         Innovateu
       </p>
       <p className='navfont  z-10 text-gray-800 font-bold watermark relative top-10 left-20 m-2 p-2 text-4xl lg:text-6xl'>
         Innovateu
       </p>
-      </div>
-     <div className='flex flex-col'>
+      </span>
+     <span className='flex flex-col'>
      <p className='navfont  z-10 text-gray-800 font-bold watermark relative  rotate-45 m-2 p-2 text-4xl'>
         Innovateu.org.in
       </p>
 
-     </div>
-     <div className='flex flex-col'>
+     </span>
+     <span className='flex flex-col'>
      <p className='navfont  z-10 text-gray-800 font-bold watermark relative  rotate-90 m-2 p-2 text-4xl'>
         Innovateu.org.in
       </p>
      
-     </div>
+     </span>
      
       
       
        </div>
       <h1 className='navfont text-2xl font-bold'>
-        Q{index+1}. {item.question} 
+        Q{atMost}. {item.question} 
    
        </h1>
        <div className='flex items-center my-4'>
@@ -856,41 +956,57 @@ console.log(imgarr)
         <label htmlFor={index} className='navfont mx-2 text-lg font-bold'>D. {item.option4}</label>
        </div>
       
-      </div>))}
+      </section>))}
+      {  currentSatge>=1&&<div className='lg:w-[52vw] w-[95vw] flex justify-end items-center flex-wrap  mb-10 '>
+
+<button className='w-[20vw] py-3 bg-green-600 text-white rounded-md hover:bg-green-800 transition duration-300 mx-2 my-2 navfont
+disabled:opacity-70 disabled:bg-green-500 disabled:cursor-not-allowed'
+
+onClick={prev} disabled={currentSatge==1}
+>
+  Prev
+</button>
+{currentSatge!=5&& <button className=' w-[20vw] py-3 bg-green-600 text-white rounded-md hover:bg-green-800 transition duration-300 my-2 navfont'
+onClick={next2}
+>
+  Next
+</button>}
+</div>}
       </div>
       </div>}
       {/* //round 3 */}
      { currentSatge==3&&<div className='flex justify-center items-center'>
       <div className='lg:w-[60vw] w-[90vw]  bg-white text-black px-8 py-4 m-4 rounded-lg'>
         <h1 className='navfont text-2xl font-bold my-4 text-gray-600' >QUESTION ROUND 3</h1>
-      {testQuestions.question3.map((item,index)=>(<div className='bg-green-300 p-4 rounded ' key={index}>
+      {testQuestions.question3.slice(initial
+        ,atMost).map((item,index)=>(<section className='bg-green-300 p-4 rounded ' key={index}>
       <div className='absolute flex flex-wrap'>
-        <div className='flex flex-col'>
+        <span className='flex flex-col'>
       <p className='navfont  z-10 text-gray-800 font-bold watermark relative top-10 left-20 m-2 p-2 text-4xl lg:text-6xl'>
         Innovateu
       </p>
       <p className='navfont  z-10 text-gray-800 font-bold watermark relative top-10 left-20 m-2 p-2 text-4xl lg:text-6xl'>
         Innovateu
       </p>
-      </div>
-     <div className='flex flex-col'>
+      </span>
+     <span className='flex flex-col'>
      <p className='navfont  z-10 text-gray-800 font-bold watermark relative  rotate-45 m-2 p-2 text-4xl'>
         Innovateu.org.in
       </p>
 
-     </div>
-     <div className='flex flex-col'>
+     </span>
+     <span className='flex flex-col'>
      <p className='navfont  z-10 text-gray-800 font-bold watermark relative  rotate-90 m-2 p-2 text-4xl'>
         Innovateu.org.in
       </p>
      
-     </div>
+     </span>
      
       
       
        </div>
       <h1 className='navfont text-2xl font-bold'>
-        Q{index+1}. {item.question}
+        Q{atMost}. {item.question}
    
        </h1>
        <div className='flex flex-col my-4'>
@@ -905,41 +1021,56 @@ console.log(imgarr)
        </div>
        
       
-      </div>))}
+      </section>))}
+      {  currentSatge>=1&&<div className='lg:w-[52vw] w-[95vw] flex justify-end items-center flex-wrap  mb-10 '>
+
+<button className='w-[20vw] py-3 bg-green-600 text-white rounded-md hover:bg-green-800 transition duration-300 mx-2 my-2 navfont
+disabled:opacity-70 disabled:bg-green-500 disabled:cursor-not-allowed'
+
+onClick={prev} disabled={currentSatge==1}
+>
+  Prev
+</button>
+{currentSatge!=5&& <button className=' w-[20vw] py-3 bg-green-600 text-white rounded-md hover:bg-green-800 transition duration-300 my-2 navfont'
+onClick={next3}
+>
+  Next
+</button>}
+</div>}
       </div>
       </div>}
       {/* round 4 */}
       {currentSatge==4&&<div className='flex justify-center items-center'>
       <div className='lg:w-[60vw] w-[90vw]  bg-white text-black px-8 py-4 m-4 rounded-lg'>
         <h1 className='navfont text-2xl font-bold my-4 text-gray-600' >QUESTION ROUND 4 - CODING ROUND</h1>
-      {testQuestions.question4.map((item,index)=>(<div className='bg-green-300 p-4 rounded my-4' key={index}>
+      {testQuestions.question4.slice(initial,atMost).map((item,index)=>(<section className='bg-green-300 p-4 rounded my-4' key={index}>
       <div className='absolute flex flex-wrap'>
-        <div className='flex flex-col'>
+        <span className='flex flex-col'>
       <p className='navfont  z-10 text-gray-800 font-bold watermark relative top-10 left-20 m-2 p-2 text-4xl lg:text-6xl'>
         Innovateu
       </p>
       <p className='navfont  z-10 text-gray-800 font-bold watermark relative top-10 left-20 m-2 p-2 text-4xl lg:text-6xl'>
         Innovateu
       </p>
-      </div>
-     <div className='flex flex-col'>
+      </span>
+     <span className='flex flex-col'>
      <p className='navfont  z-10 text-gray-800 font-bold watermark relative  rotate-45 m-2 p-2 text-4xl'>
         Innovateu.org.in
       </p>
 
-     </div>
-     <div className='flex flex-col'>
+     </span>
+     <span className='flex flex-col'>
      <p className='navfont  z-10 text-gray-800 font-bold watermark relative  rotate-90 m-2 p-2 text-4xl'>
         Innovateu.org.in
       </p>
      
-     </div>
+     </span>
      
       
       
        </div>
       <h1 className='navfont text-2xl font-bold'>
-        Q{index+1}. {item.question}
+        Q{atMost}. {item.question}
        </h1>
        <div className='flex flex-col my-4'>
        <label htmlFor="selectone" className='navfont mx-2 text-lg font-bold '>Answer here</label>
@@ -951,31 +1082,30 @@ console.log(imgarr)
        </div>
        
       
-      </div>))}
+      </section>))}
+      {  currentSatge>=1&&<div className='lg:w-[52vw] w-[95vw] flex justify-end items-center flex-wrap  mb-10 '>
+
+<button className='w-[20vw] py-3 bg-green-600 text-white rounded-md hover:bg-green-800 transition duration-300 mx-2 my-2 navfont
+disabled:opacity-70 disabled:bg-green-500 disabled:cursor-not-allowed'
+
+onClick={prev} disabled={currentSatge==1}
+>
+  Prev
+</button>
+{!isSubmit&& <button className=' w-[20vw] py-3 bg-green-600 text-white rounded-md hover:bg-green-800 transition duration-300 my-2 navfont'
+onClick={next4}
+>
+  Next
+</button>}
+{isSubmit&& <button className=' w-[29vw] lg:w-[20vw] py-3 bg-green-600 text-white rounded-md hover:bg-green-800 transition duration-300 my-2 navfont'
+onClick={handleSubmit}
+>
+  Submit Now
+</button>}
+</div>}
       </div>
       </div>}
-    {  currentSatge>=1&&<div className='lg:w-[60vw] w-[95vw] flex justify-end items-center flex-wrap  mb-10 '>
-
-        <button className='w-[20vw] py-3 bg-green-600 text-white rounded-md hover:bg-green-800 transition duration-300 mx-2 my-2 navfont
-        disabled:opacity-70 disabled:bg-green-500 disabled:cursor-not-allowed'
-        
-        onClick={prev} disabled={currentSatge==1}
-        >
-          Prev
-        </button>
-       {currentSatge!=4&& <button className=' w-[20vw] py-3 bg-green-600 text-white rounded-md hover:bg-green-800 transition duration-300 my-2 navfont'
-        onClick={next}
-        >
-          Next
-        </button>}
-        {currentSatge==4&& <button className=' w-[29vw] lg:w-[20vw] py-3 bg-green-600 text-white rounded-md hover:bg-green-800 transition duration-300 my-2 navfont'
-        onClick={handleSubmit}
-        >
-          Submit Now
-        </button>}
-       
-    
-      </div>}
+   
      
     </section>
     
